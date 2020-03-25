@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<menu xmlns:android="http://schemas.android.com/apk/res/android">  
+  
+  <!-- Add menu Item 1 -->  
+  <item android:id="@+id/menuItem1"  
+        android:title="Add Group"/>  
+    
+  <!-- Add menu Item 2 -->  
+  <item android:id="@+id/menuItem2"  
+         android:title="New Training"/>
+
+  <!-- Add menu Item 3 -->
+  <item android:id="@+id/menuItem3"
+      android:title="Add Student"/>
+  
+    <!-- Add menu Item 4 -->  
+  <item android:id="@+id/menuItem4"  
+        android:title="Show Groups"/>  
+
+  <!-- Add menu Item 5 -->  
+  <item android:id="@+id/menuItem5"  
+        android:title="Log-out"/>  
+  
+</menu>   

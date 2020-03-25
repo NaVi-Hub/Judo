@@ -1,0 +1,342 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.Graphics;
+using Android.OS;
+using Android.Runtime;
+using Android.Text;
+using Android.Views;
+using Android.Views.InputMethods;
+using Android.Widget;
+using Firebase.Firestore;
+using Java.Util;
+using Newtonsoft.Json;
+
+namespace MyLittleClub
+{
+    [Activity(Label = "AddStudentActivity")]
+    public class AddStudentActivity : Activity
+    {
+        public static Admin1 admin;
+        LinearLayout ButtonSendToMainPageLayout, OverAllAddStudentLayout, NameAddStudentLayout, PhoneNumAddStudentLayout, Parent1NameAddStudentLayout, Parent2NameAddStudentLayout, ButtonAddStudentLayout, AddStudentExplenationETLayout, LabelAddStudentLayout, EmailAddStudentLayout, CompetetiveRadioStudentLayout, AddStudentExplenationLayout;
+        TextView LabelAddStudentTV, LabelAddStudentTV1, NameAddStudentTV, PhoneNumAddStudentTV, Parent1NameAddStudentTV, Parent2NameAddStudentTV, EmailAddStudentTV, AddStudentExplenationTV;
+        EditText NameAddStudentET, PhoneNumAddStudentET, Parent1NameAddStudentET, Parent2NameAddStudentET, EmailAddStudentET, AddStudentExplenationET;
+        Button AddStudentButton, SendBackToMainButton;
+        LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
+        LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(530, 180);
+        LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
+        FirebaseFirestore database;
+        Student student;
+        protected override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            SetContentView(Resource.Layout.AddStudentsLayout);
+            database = OpenActivity.database;
+            admin = MainPageActivity.admin1;
+            BuildAddStudentScreen();
+            // Create your application here
+        }
+
+        void BuildAddStudentScreen()
+        {
+            //Defining the parent layout
+            OverAllAddStudentLayout = (LinearLayout)FindViewById(Resource.Id.AddStudentl);
+            OverAllAddStudentLayout.Orientation = Orientation.Vertical;
+            OverAllAddStudentLayout.SetGravity(Android.Views.GravityFlags.CenterHorizontal);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            //Defining the Label AddStudent Layout
+            LabelAddStudentLayout = new LinearLayout(this);
+            LabelAddStudentLayout.LayoutParameters = WrapContParams;
+            LabelAddStudentLayout.Orientation = Orientation.Vertical;
+            LabelAddStudentLayout.SetGravity(Android.Views.GravityFlags.Center);
+            //Defining the Label AddStudent TextView
+            LabelAddStudentTV = new TextView(this);
+            LabelAddStudentTV.LayoutParameters = WrapContParams;
+            LabelAddStudentTV.Text = "New Student";
+            LabelAddStudentTV.TextSize = 60;
+            LabelAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            LabelAddStudentTV.SetTextColor(Android.Graphics.Color.DarkRed);
+            LabelAddStudentLayout.AddView(LabelAddStudentTV);
+            OverAllAddStudentLayout.AddView(LabelAddStudentLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            //Defining the Name AddStudent layout
+            NameAddStudentLayout = new LinearLayout(this);
+            NameAddStudentLayout.LayoutParameters = WrapContParams;
+            NameAddStudentLayout.Orientation = Orientation.Horizontal;
+            //Defining the Name AddStudent TextView
+            NameAddStudentTV = new TextView(this);
+            NameAddStudentTV.LayoutParameters = WrapContParams;
+            NameAddStudentTV.Text = "Name: ";
+            NameAddStudentTV.TextSize = 30;
+            NameAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            //Defining the Name AddStudent EditText
+            NameAddStudentET = new EditText(this);
+            NameAddStudentET.LayoutParameters = OneTwentyParams;
+            NameAddStudentET.Hint = "Full Name";
+            NameAddStudentET.TextSize = 30;
+            NameAddStudentET.FirstBaselineToTopHeight = 10;
+            //Adding views to layout
+            NameAddStudentLayout.AddView(NameAddStudentTV);
+            NameAddStudentLayout.AddView(NameAddStudentET);
+            OverAllAddStudentLayout.AddView(NameAddStudentLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            //Defining PhoneNum AddStudent Layout
+            PhoneNumAddStudentLayout = new LinearLayout(this);
+            PhoneNumAddStudentLayout.LayoutParameters = WrapContParams;
+            PhoneNumAddStudentLayout.Orientation = Orientation.Horizontal;
+            //Defining the PhoneNum AddStudent TextView
+            PhoneNumAddStudentTV = new TextView(this);
+            PhoneNumAddStudentTV.LayoutParameters = WrapContParams;
+            PhoneNumAddStudentTV.Text = "Phone # ";
+            PhoneNumAddStudentTV.TextSize = 30;
+            PhoneNumAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
+            PhoneNumAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            //Defining the PhoneNum AddStudent EditText
+            PhoneNumAddStudentET = new EditText(this);
+            PhoneNumAddStudentET.LayoutParameters = OneTwentyParams;
+            PhoneNumAddStudentET.Text = "05";
+            PhoneNumAddStudentET.TextSize = 30;
+            PhoneNumAddStudentET.SetSingleLine();
+            PhoneNumAddStudentET.InputType = InputTypes.ClassPhone;
+            //Adding views to layout
+            PhoneNumAddStudentLayout.AddView(PhoneNumAddStudentTV);
+            PhoneNumAddStudentLayout.AddView(PhoneNumAddStudentET);
+            OverAllAddStudentLayout.AddView(PhoneNumAddStudentLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            // Defining MaxStudetns AddStudentLayout
+            EmailAddStudentLayout = new LinearLayout(this);
+            EmailAddStudentLayout.LayoutParameters = WrapContParams;
+            EmailAddStudentLayout.Orientation = Orientation.Horizontal;
+            //Defining the Email AddStudent TextView
+            EmailAddStudentTV = new TextView(this);
+            EmailAddStudentTV.LayoutParameters = WrapContParams;
+            EmailAddStudentTV.Text = "Enter Email: ";
+            EmailAddStudentTV.TextSize = 30;
+            EmailAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
+            EmailAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            //Defining the Email AddStudent EditText
+            EmailAddStudentET = new EditText(this);
+            EmailAddStudentET.LayoutParameters = OneTwentyParams;
+            EmailAddStudentET.Hint = "Email";
+            EmailAddStudentET.InputType = InputTypes.TextVariationEmailAddress;
+            EmailAddStudentET.TextSize = 30;
+            EmailAddStudentET.SetSingleLine();
+            //Adding views to layout
+            EmailAddStudentLayout.AddView(EmailAddStudentTV);
+            EmailAddStudentLayout.AddView(EmailAddStudentET);
+            OverAllAddStudentLayout.AddView(EmailAddStudentLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            //Defining Parent1NameAddStudentLayout
+            Parent1NameAddStudentLayout = new LinearLayout(this);
+            Parent1NameAddStudentLayout.LayoutParameters = WrapContParams;
+            Parent1NameAddStudentLayout.Orientation = Orientation.Horizontal;
+            //Defining the Parent1Name AddStudent TextView
+            Parent1NameAddStudentTV = new TextView(this);
+            Parent1NameAddStudentTV.LayoutParameters = WrapContParams;
+            Parent1NameAddStudentTV.Text = "Parent1 Name: ";
+            Parent1NameAddStudentTV.TextSize = 30;
+            Parent1NameAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
+            Parent1NameAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            //Defining the Parent1Name AddStudent EditText
+            Parent1NameAddStudentET = new EditText(this);
+            Parent1NameAddStudentET.LayoutParameters = OneTwentyParams;
+            Parent1NameAddStudentET.Hint = "Parent1";
+            Parent1NameAddStudentET.TextSize = 30;
+            //Adding views to layout
+            Parent1NameAddStudentLayout.AddView(Parent1NameAddStudentTV);
+            Parent1NameAddStudentLayout.AddView(Parent1NameAddStudentET);
+            OverAllAddStudentLayout.AddView(Parent1NameAddStudentLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            //Defining Parent2NameAddStudentLayout
+            Parent2NameAddStudentLayout = new LinearLayout(this);
+            Parent2NameAddStudentLayout.LayoutParameters = WrapContParams;
+            Parent2NameAddStudentLayout.Orientation = Orientation.Horizontal;
+            //Defining the Parent2Name AddStudent TextView
+            Parent2NameAddStudentTV = new TextView(this);
+            Parent2NameAddStudentTV.LayoutParameters = WrapContParams;
+            Parent2NameAddStudentTV.Text = "Parent2 Name: ";
+            Parent2NameAddStudentTV.TextSize = 30;
+            Parent2NameAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
+            Parent2NameAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            //Defining the Parent2Name AddStudent EditText
+            Parent2NameAddStudentET = new EditText(this);
+            Parent2NameAddStudentET.LayoutParameters = OneTwentyParams;
+            Parent2NameAddStudentET.Hint = "Parent2";
+            Parent2NameAddStudentET.TextSize = 30;
+            //Adding views to layout
+            Parent2NameAddStudentLayout.AddView(Parent2NameAddStudentTV);
+            Parent2NameAddStudentLayout.AddView(Parent2NameAddStudentET);
+            OverAllAddStudentLayout.AddView(Parent2NameAddStudentLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            //Defining the AddStudent Explenation layout
+            AddStudentExplenationLayout = new LinearLayout(this);
+            AddStudentExplenationLayout.LayoutParameters = WrapContParams;
+            AddStudentExplenationLayout.Orientation = Orientation.Vertical;
+            //Defining the Explenation AddStudent TextView
+            AddStudentExplenationTV = new TextView(this);
+            AddStudentExplenationTV.LayoutParameters = WrapContParams;
+            AddStudentExplenationTV.Text = "Student Notes: ";
+            AddStudentExplenationTV.TextSize = 30;
+            AddStudentExplenationTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            //Adding views to layout
+            AddStudentExplenationLayout.AddView(AddStudentExplenationTV);
+            OverAllAddStudentLayout.AddView(AddStudentExplenationLayout);
+            //Defining The AddStudent Explenation ET layout
+            AddStudentExplenationETLayout = new LinearLayout(this);
+            AddStudentExplenationETLayout.LayoutParameters = new LinearLayout.LayoutParams(1100, 700);
+            AddStudentExplenationETLayout.Orientation = Orientation.Vertical;
+            AddStudentExplenationETLayout.SetBackgroundResource(Resource.Drawable.BlackOutLine);
+            AddStudentExplenationETLayout.Click += this.AddStudentExplenationETLayout_Click;
+            //Defining the Explenation AddStudent EditText
+            AddStudentExplenationET = new EditText(this);
+            AddStudentExplenationET.SetWidth(LinearLayout.LayoutParams.MatchParent);
+            AddStudentExplenationET.Hint = "Explenation";
+            AddStudentExplenationET.TextSize = 25;
+            AddStudentExplenationET.SetTextIsSelectable(true);
+            AddStudentExplenationET.InputType = InputTypes.TextFlagMultiLine;
+            AddStudentExplenationET.Gravity = GravityFlags.Top;
+            AddStudentExplenationET.SetSingleLine(false);
+            AddStudentExplenationET.SetBackgroundColor(Color.Transparent);
+
+            //Adding viwes to overall layout
+            AddStudentExplenationETLayout.AddView(AddStudentExplenationET);
+            OverAllAddStudentLayout.AddView(AddStudentExplenationETLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            //Defining AddStudent Button Layout
+            ButtonAddStudentLayout = new LinearLayout(this);
+            ButtonAddStudentLayout.LayoutParameters = WrapContParams;
+            ButtonAddStudentLayout.Orientation = Orientation.Horizontal;
+            //Defining AddStudent Button
+            AddStudentButton = new Button(this);
+            AddStudentButton.LayoutParameters = WrapContParams;
+            AddStudentButton.Text = "Add Student";
+            AddStudentButton.TextSize = 40;
+            AddStudentButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            AddStudentButton.Click += this.AddStudentButton_Click;
+            //Adding views
+            ButtonAddStudentLayout.AddView(AddStudentButton);
+            OverAllAddStudentLayout.AddView(ButtonAddStudentLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            //Defining AddStudent Button Layout
+            ButtonSendToMainPageLayout = new LinearLayout(this);
+            ButtonSendToMainPageLayout.LayoutParameters = WrapContParams;
+            ButtonSendToMainPageLayout.Orientation = Orientation.Horizontal;
+            //Defining AddStudent Button
+            SendBackToMainButton = new Button(this);
+            SendBackToMainButton.LayoutParameters = WrapContParams;
+            SendBackToMainButton.Text = "Send Back To\nMain Page";
+            SendBackToMainButton.TextSize = 40;
+            SendBackToMainButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            SendBackToMainButton.SetTextColor(Color.DarkRed);
+            SendBackToMainButton.Click += this.SendBackToMainButton_Click;
+            //Adding views
+            ButtonSendToMainPageLayout.AddView(SendBackToMainButton);
+            OverAllAddStudentLayout.AddView(ButtonSendToMainPageLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            TextView tv = new TextView(this);
+            tv.Text = "Insert Students ScrollView here";
+            OverAllAddStudentLayout.AddView(tv);
+        }
+
+        private void SendBackToMainButton_Click(object sender, EventArgs e)
+        {
+            Intent intent1 = new Intent(this, typeof(MainPageActivity));
+            intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
+            StartActivity(intent1);
+        }
+
+        //Building the AddStudent Screen
+        private void AddStudentButton_Click(object sender, EventArgs e)
+        {
+            if (IsValidName(NameAddStudentET.Text) && isValidEmail(EmailAddStudentET.Text))
+            {
+                if (Parent1NameAddStudentET.Text != "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent1NameAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text); }
+                if (Parent1NameAddStudentET.Text == "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text); }
+                if (Parent1NameAddStudentET.Text != "" && Parent2NameAddStudentET.Text == "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent1NameAddStudentET.Text, AddStudentExplenationET.Text); }
+                if (Parent1NameAddStudentET.Text == "" && Parent2NameAddStudentET.Text == "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, AddStudentExplenationET.Text); }
+
+                HashMap map = new HashMap();
+                map.Put("Name", student.name);
+                map.Put("PhoneNum", student.phoneNumber);
+                map.Put("Email", student.email);
+                map.Put("Parent1", student.parentName1);
+                map.Put("Parent2", student.parentName2);
+                map.Put("Notes", student.notes);
+                DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Students").Document(student.name + " " + student.phoneNumber);
+                docref.Set(map);
+                Toast.MakeText(this, "Student Added Sucesfully", ToastLength.Short).Show();
+                NameAddStudentET.Text = "";
+                PhoneNumAddStudentET.Text = "05";
+                EmailAddStudentET.Text = "";
+                Parent1NameAddStudentET.Text = "";
+                Parent2NameAddStudentET.Text = "";
+                AddStudentExplenationET.Text = "";
+            }
+            else
+            {
+                Toast.MakeText(this, "Input InValid", ToastLength.Short).Show();
+            }
+        }
+        private void AddStudentExplenationETLayout_Click(object sender, EventArgs e)
+        {
+            AddStudentExplenationET.RequestFocus();
+            showSoftKeyboard(this, AddStudentExplenationET);
+            //@Tomer
+            //https://gist.github.com/icalderond/742f98f2f8cda1fae1b0bc877df76bbc @Javier Pardo
+        }
+        //Makes a big EditText
+
+        public void showSoftKeyboard(Activity activity, View view)
+        {
+            InputMethodManager inputMethodManager = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
+            view.RequestFocus();
+            inputMethodManager.ShowSoftInput(view, 0);
+            inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);//personal line added
+        }
+        //Pops up soft keyboard
+
+        public bool isValidEmail(string email)
+        {
+            if (Android.Util.Patterns.EmailAddress.Matcher(email).Matches()) return true;
+            else { Toast.MakeText(this, "MailInvalid", ToastLength.Long).Show(); return false; }
+            //https://www.c-sharpcorner.com/article/how-to-validate-an-email-address-in-xamarin-android-app-using-visual-studio-2015/ @Delpin Susai Raj 
+        }
+        //Email Validaton
+
+        public bool IsValidName(string name)
+        {
+            bool Tr = true;
+            List<string> FN = new List<string>();
+            FN.Add("Dick");
+            FN.Add("69");
+            FN.Add("420");
+            FN.Add("Sex");
+            FN.Add("Pussy");
+            FN.Add("pussy");
+            FN.Add("dick");
+            FN.Add("sex");
+            Tr = name.Length >= 4 && name.Length <= 16;
+            for (int i = 0; i < FN.Count; i++)
+            {
+                if (name.Contains(FN[i])) Tr = false;
+            }
+            if (!Tr) { Toast.MakeText(this, "Name InValid", ToastLength.Long).Show(); return Tr; }
+            else return Tr;
+        }
+        //Name Validation
+    }
+}
