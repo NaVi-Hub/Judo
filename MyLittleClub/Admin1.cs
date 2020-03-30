@@ -14,7 +14,7 @@ namespace MyLittleClub
 {
     public class Admin1 : Person
     {
-        public int age { get; set; }
+        public int age { get; set; } // stam
         public string sport { get; set; }
         public bool LogIn { get; set; }
         //to add later
