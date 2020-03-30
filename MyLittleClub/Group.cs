@@ -22,6 +22,7 @@ namespace MyLittleClub
         public string Location { get; set; }
         private bool GroupFull;
         //Location loc;
+
         public string date { get; set; }
         public string time { get; set; }
 

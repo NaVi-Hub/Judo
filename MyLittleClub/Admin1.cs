@@ -25,11 +25,6 @@ namespace MyLittleClub
             this.sport = sport;
             this.LogIn = l;
         }
-        public void LinkTrainingToGroup(Training training, Group group)
-        {
-            group.Trainings.Add(group.CurrentTraining);
-            group.CurrentTraining = training;
-        }
         public Admin1() { }
     }
 }

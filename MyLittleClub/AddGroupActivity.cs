@@ -291,7 +291,6 @@ namespace MyLittleClub
                 map.Put("Time", group.time);
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Groups").Document(group.Location + " " + group.time + " " + group.age);
                 docref.Set(map);
-                DocumentReference docref2;
                 HashMap map2 = new HashMap();
              
                 Toast.MakeText(this, "Group Added Sucesfully", ToastLength.Short).Show();
@@ -379,12 +378,14 @@ namespace MyLittleClub
             AddGroupTimeAndDateLayout.AddView(AddGroupDateButton);
             OverAllAddGroupLayout.AddView(AddGroupTimeAndDateLayout);
         }
+        //builds time and date selection buttons
         private void AddGroupDateButton_Click(object sender, EventArgs e)
         {
             DateTime today = DateTime.Today;
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, OnDateSet, today.Year, today.Month - 1, today.Day);
             datePickerDialog.Show();
         }
+        //inflates date picker dialog
         private void OnTimeSet(object sender, TimePickerDialog.TimeSetEventArgs e)
         {
             string str;
@@ -395,12 +396,14 @@ namespace MyLittleClub
             else str = e.HourOfDay + ":" + e.Minute;
             AddGroupTimeButton.Text = str;
         }
+        //formats the string in HH:MM format
         private void AddGroupTimeButton_Click(object sender, EventArgs e)
         {
             DateTime today = DateTime.Today;
             TimePickerDialog timePickerDialog = new TimePickerDialog(this, OnTimeSet, today.Hour, today.Minute, true);
             timePickerDialog.Show();
         }
+        //inflates time picker dialog
         private void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
         {
             string txt;
@@ -417,6 +420,7 @@ namespace MyLittleClub
             else
                 Toast.MakeText(this, "InValid Date", ToastLength.Long).Show();
         }
+        //: formats the string in DD/MM/YYYY format
         public bool IsDateLegit(DateTime date)
         {
             if (date.Year < DateTime.Today.Year) return false;
@@ -434,6 +438,7 @@ namespace MyLittleClub
                 }
             }
         }
+        //makes sure the date is in the future
     }
 }
  

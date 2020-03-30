@@ -39,7 +39,6 @@ namespace MyLittleClub
             admin = MainPageActivity.admin1;
             BuildAddTrainingScreen();
         }
-
         public void BuildAddTrainingScreen()
         {
             //OverAll Layout
@@ -184,7 +183,6 @@ namespace MyLittleClub
              */
         }
         //Builds The Screen
-
         private void AddTrainingButton_Click(object sender, EventArgs e)
         {
             double xOrder = 0;
@@ -205,7 +203,6 @@ namespace MyLittleClub
             StartActivity(intent1);
         }
         //Adds the exercise to the database.
-
         private void AddTrainingExplenationETLayout_Click(object sender, EventArgs e)
         {
             AddTrainingExplenationET.RequestFocus();
@@ -215,7 +212,6 @@ namespace MyLittleClub
 
         }
         //Makes a big EditText
-
         public void showSoftKeyboard(Activity activity, View view)
         {
             InputMethodManager inputMethodManager = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);

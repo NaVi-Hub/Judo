@@ -19,6 +19,7 @@ namespace MyLittleClub
     [Activity(Label = "OpenActivity", MainLauncher = true)]
     public class OpenActivity : Activity
     {
+
         public static FirebaseFirestore database;
         Admin1 admin;
         protected override void OnCreate(Bundle savedInstanceState)

@@ -313,6 +313,7 @@ namespace MyLittleClub
                 Toast.MakeText(this, "Input InValid", ToastLength.Short).Show();
             }
         }
+        //intents back to main page
         private void AddStudentExplenationETLayout_Click(object sender, EventArgs e)
         {
             AddStudentExplenationET.RequestFocus();

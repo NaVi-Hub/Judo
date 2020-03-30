@@ -38,7 +38,6 @@ namespace MyLittleClub
             SetContentView(Resource.Layout.RegisterLayout);
             BuildRegisterScreen();
             database = OpenActivity.database;
-            admin = MainPageActivity.admin1;
         }
 
         void BuildRegisterScreen()
@@ -316,12 +315,6 @@ namespace MyLittleClub
         }
         //Sport Validation
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
-        {
-            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
     }
 }
 /* https://www.youtube.com/watch?v=A9rcKZUm0zM

@@ -23,8 +23,8 @@ namespace MyLittleClub
     [Activity(Theme = "@style/AppTheme")]
     public class MainPageActivity : AppCompatActivity, IOnDateChangeListener 
     {
-        LinearLayout MainPageOverallLayout, MainPageTitleLayout, ListViewLayout;
-        TextView MainPageTitleTV, MainPageTitleTV2, HowManyTrainingsTodayTV;
+        LinearLayout MainPageOverallLayout, MainPageTitleLayout;
+        TextView MainPageTitleTV, MainPageTitleTV2;
         LinearLayout.LayoutParams CalendarParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, 1000);
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
         LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
@@ -33,14 +33,11 @@ namespace MyLittleClub
         int abc = 0;
         List<String> dates;
         List<Group> groups;
-        Student[] students1;
         Button MainPageShowGroupsbtn;
-        ListView MainPageLV;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.MainPageLayout);
-            int x = Intent.GetIntExtra("x", -1);
             admin1 = JsonConvert.DeserializeObject<Admin1>(Intent.GetStringExtra("Admin"));//@Itay
             database = OpenActivity.database;
             GetDates();
@@ -90,6 +87,7 @@ namespace MyLittleClub
             MainPageOverallLayout.AddView(MainPageShowGroupsbtn);
             MainPageShowGroupsbtn.Click += this.MainPageShowGroupsbtn_Click;
         }
+        //Build Main Page's Views
         Dialog d;
         private void MainPageShowGroupsbtn_Click(object sender, EventArgs e)
         {
@@ -194,6 +192,7 @@ namespace MyLittleClub
             calendar.LayoutParameters = CalendarParams;
             calendar.SetOnDateChangeListener(this);
         }
+        //builds calendarview
         public void OnSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth)
         {
             abc = 0;
@@ -211,6 +210,7 @@ namespace MyLittleClub
             else
                 MainPageTitleTV2.Text = $"You have {abc} trainings on the {MakeDateString(year, month+1, dayOfMonth)}";
         }
+        //changes the title TextView to show how many trainings are in the inputted date
         public void GetGroups()
         {
             groups = new List<Group>();
