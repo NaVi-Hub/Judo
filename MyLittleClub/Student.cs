@@ -17,24 +17,27 @@ namespace MyLittleClub
         public string parentName1 { get; set; }
         public string parentName2 { get; set; }
         public string notes { get; set; }
-
-        public Student(string name, string phoneNumber, string email, string parentName1, string parentName2, string notees) : base(name, phoneNumber, email)
+        public string group { get; set; }
+        public Student(string name, string phoneNumber, string email, string parentName1, string parentName2, string notees ,string group) : base(name, phoneNumber, email)
         {
             this.parentName1 = parentName1;
             this.parentName2 = parentName2;
             this.notes = notees;
+            this.group = group;
         }
-        public Student(string name, string phoneNumber, string email, string parentName1, string notees) : base(name, phoneNumber, email)
+        public Student(string name, string phoneNumber, string email, string parentName1, string notees, string group) : base(name, phoneNumber, email)
         {
             this.parentName1 = parentName1;
             this.parentName2 = "";
             this.notes = notees;
+            this.group = group;
         }
-        public Student(string name, string phoneNumber, string email, string notees) : base(name, phoneNumber, email)
+        public Student(string name, string phoneNumber, string email, string notees, string group) : base(name, phoneNumber, email)
         {
             this.parentName1 = "";
             this.parentName2 = "";
             this.notes = notees;
+            this.group = group;
         }
         public Student() { }
     }

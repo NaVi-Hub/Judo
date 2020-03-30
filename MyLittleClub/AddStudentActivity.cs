@@ -23,24 +23,27 @@ namespace MyLittleClub
     {
         public static Admin1 admin;
         LinearLayout ButtonSendToMainPageLayout, OverAllAddStudentLayout, NameAddStudentLayout, PhoneNumAddStudentLayout, Parent1NameAddStudentLayout, Parent2NameAddStudentLayout, ButtonAddStudentLayout, AddStudentExplenationETLayout, LabelAddStudentLayout, EmailAddStudentLayout, CompetetiveRadioStudentLayout, AddStudentExplenationLayout;
-        TextView LabelAddStudentTV, LabelAddStudentTV1, NameAddStudentTV, PhoneNumAddStudentTV, Parent1NameAddStudentTV, Parent2NameAddStudentTV, EmailAddStudentTV, AddStudentExplenationTV;
+        TextView LabelAddStudentTV, NameAddStudentTV, PhoneNumAddStudentTV, Parent1NameAddStudentTV, Parent2NameAddStudentTV, EmailAddStudentTV, AddStudentExplenationTV;
         EditText NameAddStudentET, PhoneNumAddStudentET, Parent1NameAddStudentET, Parent2NameAddStudentET, EmailAddStudentET, AddStudentExplenationET;
         Button AddStudentButton, SendBackToMainButton;
         LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
-        LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(530, 180);
+        LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(530, 160);
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
         FirebaseFirestore database;
         Student student;
+        Spinner spin;
+        LinearLayout SpinnerLayout;
+        List<string> groups;
+        string groupname;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddStudentsLayout);
             database = OpenActivity.database;
             admin = MainPageActivity.admin1;
-            BuildAddStudentScreen();
+            groups = GetGroups();
             // Create your application here
         }
-
         void BuildAddStudentScreen()
         {
             //Defining the parent layout
@@ -111,7 +114,7 @@ namespace MyLittleClub
             OverAllAddStudentLayout.AddView(PhoneNumAddStudentLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
-            // Defining MaxStudetns AddStudentLayout
+            // Defining Email AddStudentLayout
             EmailAddStudentLayout = new LinearLayout(this);
             EmailAddStudentLayout.LayoutParameters = WrapContParams;
             EmailAddStudentLayout.Orientation = Orientation.Horizontal;
@@ -194,21 +197,20 @@ namespace MyLittleClub
             OverAllAddStudentLayout.AddView(AddStudentExplenationLayout);
             //Defining The AddStudent Explenation ET layout
             AddStudentExplenationETLayout = new LinearLayout(this);
-            AddStudentExplenationETLayout.LayoutParameters = new LinearLayout.LayoutParams(1100, 700);
+            AddStudentExplenationETLayout.LayoutParameters = new LinearLayout.LayoutParams(1100, 400);
             AddStudentExplenationETLayout.Orientation = Orientation.Vertical;
             AddStudentExplenationETLayout.SetBackgroundResource(Resource.Drawable.BlackOutLine);
             AddStudentExplenationETLayout.Click += this.AddStudentExplenationETLayout_Click;
             //Defining the Explenation AddStudent EditText
             AddStudentExplenationET = new EditText(this);
             AddStudentExplenationET.SetWidth(LinearLayout.LayoutParams.MatchParent);
-            AddStudentExplenationET.Hint = "Explenation";
+            AddStudentExplenationET.Hint = "Notes";
             AddStudentExplenationET.TextSize = 25;
             AddStudentExplenationET.SetTextIsSelectable(true);
             AddStudentExplenationET.InputType = InputTypes.TextFlagMultiLine;
             AddStudentExplenationET.Gravity = GravityFlags.Top;
             AddStudentExplenationET.SetSingleLine(false);
             AddStudentExplenationET.SetBackgroundColor(Color.Transparent);
-
             //Adding viwes to overall layout
             AddStudentExplenationETLayout.AddView(AddStudentExplenationET);
             OverAllAddStudentLayout.AddView(AddStudentExplenationETLayout);
@@ -230,6 +232,22 @@ namespace MyLittleClub
             OverAllAddStudentLayout.AddView(ButtonAddStudentLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
+            //Declare Spinner
+            spin = new Spinner(this);
+            spin.LayoutParameters = OneTwentyParams;
+            spin.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_ItemSelected);
+            var adapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleSpinnerItem, groups);
+            adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            spin.Adapter = adapter;
+            //Defining Spinner Layout
+            SpinnerLayout = new LinearLayout(this);
+            SpinnerLayout.LayoutParameters = WrapContParams;
+            SpinnerLayout.Orientation = Orientation.Horizontal;
+            //Adding Views
+            SpinnerLayout.AddView(spin);
+            OverAllAddStudentLayout.AddView(SpinnerLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
             //Defining AddStudent Button Layout
             ButtonSendToMainPageLayout = new LinearLayout(this);
             ButtonSendToMainPageLayout.LayoutParameters = WrapContParams;
@@ -245,29 +263,31 @@ namespace MyLittleClub
             //Adding views
             ButtonSendToMainPageLayout.AddView(SendBackToMainButton);
             OverAllAddStudentLayout.AddView(ButtonSendToMainPageLayout);
-            //=======================================================================================================================================
-            //=======================================================================================================================================
-            TextView tv = new TextView(this);
-            tv.Text = "Insert Students ScrollView here";
-            OverAllAddStudentLayout.AddView(tv);
         }
-
+        //Building Screen
+        private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            Spinner spinner = (Spinner)sender;
+            string toast = string.Format("Selected Group is {0}", spinner.GetItemAtPosition(e.Position));
+            currGroup = spinner.GetItemAtPosition(e.Position).ToString();
+            Toast.MakeText(this, toast, ToastLength.Long).Show();
+        }
+        string currGroup;
         private void SendBackToMainButton_Click(object sender, EventArgs e)
         {
             Intent intent1 = new Intent(this, typeof(MainPageActivity));
             intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
             StartActivity(intent1);
         }
-
         //Building the AddStudent Screen
         private void AddStudentButton_Click(object sender, EventArgs e)
         {
-            if (IsValidName(NameAddStudentET.Text) && isValidEmail(EmailAddStudentET.Text))
+            if (IsValidName(NameAddStudentET.Text) && isValidEmail(EmailAddStudentET.Text) && spin.SelectedView.ToString() != "Choose Group")
             {
-                if (Parent1NameAddStudentET.Text != "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent1NameAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text); }
-                if (Parent1NameAddStudentET.Text == "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text); }
-                if (Parent1NameAddStudentET.Text != "" && Parent2NameAddStudentET.Text == "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent1NameAddStudentET.Text, AddStudentExplenationET.Text); }
-                if (Parent1NameAddStudentET.Text == "" && Parent2NameAddStudentET.Text == "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, AddStudentExplenationET.Text); }
+                if (Parent1NameAddStudentET.Text != "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent1NameAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text, currGroup); }
+                if (Parent1NameAddStudentET.Text == "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text, currGroup); }
+                if (Parent1NameAddStudentET.Text != "" && Parent2NameAddStudentET.Text == "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent1NameAddStudentET.Text, AddStudentExplenationET.Text, currGroup); }
+                if (Parent1NameAddStudentET.Text == "" && Parent2NameAddStudentET.Text == "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, AddStudentExplenationET.Text, currGroup); }
 
                 HashMap map = new HashMap();
                 map.Put("Name", student.name);
@@ -276,6 +296,7 @@ namespace MyLittleClub
                 map.Put("Parent1", student.parentName1);
                 map.Put("Parent2", student.parentName2);
                 map.Put("Notes", student.notes);
+                map.Put("Group", student.group);
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Students").Document(student.name + " " + student.phoneNumber);
                 docref.Set(map);
                 Toast.MakeText(this, "Student Added Sucesfully", ToastLength.Short).Show();
@@ -285,6 +306,7 @@ namespace MyLittleClub
                 Parent1NameAddStudentET.Text = "";
                 Parent2NameAddStudentET.Text = "";
                 AddStudentExplenationET.Text = "";
+                spin.SetSelection(0);
             }
             else
             {
@@ -299,7 +321,6 @@ namespace MyLittleClub
             //https://gist.github.com/icalderond/742f98f2f8cda1fae1b0bc877df76bbc @Javier Pardo
         }
         //Makes a big EditText
-
         public void showSoftKeyboard(Activity activity, View view)
         {
             InputMethodManager inputMethodManager = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
@@ -308,7 +329,6 @@ namespace MyLittleClub
             inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);//personal line added
         }
         //Pops up soft keyboard
-
         public bool isValidEmail(string email)
         {
             if (Android.Util.Patterns.EmailAddress.Matcher(email).Matches()) return true;
@@ -316,7 +336,6 @@ namespace MyLittleClub
             //https://www.c-sharpcorner.com/article/how-to-validate-an-email-address-in-xamarin-android-app-using-visual-studio-2015/ @Delpin Susai Raj 
         }
         //Email Validaton
-
         public bool IsValidName(string name)
         {
             bool Tr = true;
@@ -338,5 +357,30 @@ namespace MyLittleClub
             else return Tr;
         }
         //Name Validation
+        public List<String> GetGroups()
+        {
+            groups = new List<string>();
+            groups.Add("Choose Group");
+            Query query = database.Collection("Users").Document(admin.email).Collection("Groups");
+            query.Get().AddOnCompleteListener(new QueryListener((task) =>
+            {
+                if (task.IsSuccessful)
+                {
+                    var snapshot = (QuerySnapshot)task.Result;
+                    if (!snapshot.IsEmpty)
+                    {
+                        var document = snapshot.Documents;
+                        foreach (DocumentSnapshot item in document)
+                        {
+                            groupname = (item.GetString("Location")).ToString() + " " + (item.GetString("Time")).ToString() + " " + (item.GetString("Age")).ToString();
+                            groups.Add(groupname); 
+                        }
+                    }
+                }
+                BuildAddStudentScreen();
+            }));
+            return groups;
+        }
+        //Retreiving Groups From FireBase
     }
 }

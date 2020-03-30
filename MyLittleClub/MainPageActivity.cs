@@ -230,10 +230,8 @@ namespace MyLittleClub
                             string date = (item.GetString("Date")).ToString();
                             bool comp = item.GetBoolean("Comp").BooleanValue();
                             string level = (item.GetString("Level")).ToString();
-                            int max = int.Parse(item.GetLong("MaxStudents").ToString());
                             string time = (item.GetString("Time")).ToString();
-                            students1 = new Student[max];
-                            Group group1 = new Group(Age, max, level, comp, loc, date, time);
+                            Group group1 = new Group(Age, level, comp, loc, date, time);
                             groups.Add(group1);
                         }
                     }

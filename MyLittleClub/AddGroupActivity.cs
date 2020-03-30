@@ -21,9 +21,9 @@ namespace MyLittleClub
     public class AddGroupActivity : Activity
     {
         public static Admin1 admin;
-        LinearLayout AddGroupSvLayout, InsideSVLayout, OverSVLayout, AddGroupTimeAndDateLayout, OverAllAddGroupLayout, LocationAddGroupLayout, AgeAddGroupLayout, GroupLevelAddGroupLayout, ButtonAddGroupLayout, LabelAddGroupLayout, MaxStudentsAddGroupLayout, CompetetiveRadioGroupLayout;
-        TextView StudTV, LabelAddGroupTV, LocationAddGroupTV, AgeAddGroupTV, GroupLevelAddGroupTV, MaxStudentsAddGroupTV;
-        EditText LocationAddGroupET, AgeAddGroupET, GroupLevelAddGroupET, MaxStudentsAddGroupET;
+        LinearLayout AddGroupSvLayout, InsideSVLayout, OverSVLayout, AddGroupTimeAndDateLayout, OverAllAddGroupLayout, LocationAddGroupLayout, AgeAddGroupLayout, GroupLevelAddGroupLayout, ButtonAddGroupLayout, LabelAddGroupLayout;
+        TextView StudTV, LabelAddGroupTV, LocationAddGroupTV, AgeAddGroupTV, GroupLevelAddGroupTV;
+        EditText LocationAddGroupET, AgeAddGroupET, GroupLevelAddGroupET;
         Button AddGroupButton, AddGroupTimeButton, AddGroupDateButton;
         LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(530, 180);
@@ -80,6 +80,7 @@ namespace MyLittleClub
             LabelAddGroupTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             LabelAddGroupTV.SetTextColor(Android.Graphics.Color.DarkRed);
             LabelAddGroupLayout.AddView(LabelAddGroupTV);
+            OverAllAddGroupLayout.AddView(LabelAddGroupLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
             //Defining the Location AddGroup layout
@@ -125,29 +126,6 @@ namespace MyLittleClub
             AgeAddGroupLayout.AddView(AgeAddGroupTV);
             AgeAddGroupLayout.AddView(AgeAddGroupET);
             OverAllAddGroupLayout.AddView(AgeAddGroupLayout);
-            //=======================================================================================================================================
-            //=======================================================================================================================================
-            // Defining MaxStudetns AddGroupLayout
-            MaxStudentsAddGroupLayout = new LinearLayout(this);
-            MaxStudentsAddGroupLayout.LayoutParameters = WrapContParams;
-            MaxStudentsAddGroupLayout.Orientation = Orientation.Horizontal;
-            //Defining the MaxStudents AddGroup TextView
-            MaxStudentsAddGroupTV = new TextView(this);
-            MaxStudentsAddGroupTV.LayoutParameters = WrapContParams;
-            MaxStudentsAddGroupTV.Text = "Max Students: ";
-            MaxStudentsAddGroupTV.TextSize = 30;
-            MaxStudentsAddGroupTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
-            MaxStudentsAddGroupTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the MaxStudents AddGroup EditText
-            MaxStudentsAddGroupET = new EditText(this);
-            MaxStudentsAddGroupET.LayoutParameters = OneTwentyParams;
-            MaxStudentsAddGroupET.Hint = "Enter MaxStudents";
-            MaxStudentsAddGroupET.TextSize = 30;
-            MaxStudentsAddGroupET.SetSingleLine();
-            //Adding views to layout
-            MaxStudentsAddGroupLayout.AddView(MaxStudentsAddGroupTV);
-            MaxStudentsAddGroupLayout.AddView(MaxStudentsAddGroupET);
-            OverAllAddGroupLayout.AddView(MaxStudentsAddGroupLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
             //Defining GroupLevelAddGroupLayout
@@ -297,46 +275,25 @@ namespace MyLittleClub
         }
         //Gets all the students from the FireBase
 
-        public static Student[] stus;
         private void AddGroupButton_Click(object sender, EventArgs e)
         {
-            int result = 0;
-            int.TryParse(MaxStudentsAddGroupET.Text, out result);
 
-            if (InputValid(LocationAddGroupET.Text, AgeAddGroupET.Text, GroupLevelAddGroupET.Text, result, c))
+            if (InputValid(LocationAddGroupET.Text, AgeAddGroupET.Text, GroupLevelAddGroupET.Text, c))
             {
-                stus = new Student[int.Parse(MaxStudentsAddGroupET.Text)];
-                int a = 0;
-                for(int i = 0; i<CheckBoxList.Count; i++)
-                {
-                    if (CheckBoxList[i].Checked)
-                    { stus[a] = students[i]; a++; }
-                }
                 //add to firebase
-                Group group = new Group(AgeAddGroupET.Text, result, GroupLevelAddGroupET.Text, CompRBAddGroup.Selected, LocationAddGroupET.Text, stus, AddGroupDateButton.Text, AddGroupTimeButton.Text);
+                Group group = new Group(AgeAddGroupET.Text, GroupLevelAddGroupET.Text, CompRBAddGroup.Selected, LocationAddGroupET.Text, AddGroupDateButton.Text, AddGroupTimeButton.Text);
                 HashMap map = new HashMap();
                 map.Put("Location", group.Location);
                 map.Put("Level", group.geoupLevel);
                 map.Put("Age", group.age);
                 map.Put("Comp", group.competetive);
-                map.Put("MaxStudents", group.maxStudents);
                 map.Put("Date", group.date);
                 map.Put("Time", group.time);
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Groups").Document(group.Location + " " + group.time + " " + group.age);
                 docref.Set(map);
                 DocumentReference docref2;
                 HashMap map2 = new HashMap();
-                if (stus[0] != null)
-                {
-                    for (int i = 0; i < CheckBoxList.Count - 1; i++)
-                    {
-                        map2 = new HashMap();
-                        map2.Put("Refrence", database.Collection("Users").Document(admin.email).Collection("Students").Document(stus[i].name + " " + stus[i].phoneNumber));
-                        docref2 = database.Collection("Users").Document(admin.email).Collection("Groups").Document(group.Location + " " + group.time + " " + group.age).Collection("StudentsInGroup").Document();
-                        docref2.Set(map2);
-                        map.Clear();
-                    }
-                }
+             
                 Toast.MakeText(this, "Group Added Sucesfully", ToastLength.Short).Show();
                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
                 intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
@@ -353,22 +310,22 @@ namespace MyLittleClub
         }
         //Toasts the RadioButton's selection
 
-        private bool InputValid(string location, string ageRange, string grouplvl, int max, bool cb)
+        private bool InputValid(string location, string ageRange, string grouplvl, bool cb)
         {
             int x = -1;
             if (location != "" && ageRange != "" && grouplvl != "" && AddGroupTimeButton.Text != "Select Time" && AddGroupDateButton.Text != "Select Date")
                 return true;
             else
             {
-                if (location == "" && ageRange != "" && grouplvl != "" && max != default && max > 0 && cb)
+                if (location == "" && ageRange != "" && grouplvl != "" && cb)
                     x = 0;
-                else if (location != "" && ageRange == "" && grouplvl != "" && max != default && max > 0 && cb)
+                else if (location != "" && ageRange == "" && grouplvl != "" &&  cb)
                     x = 1;
-                else if (location != "" && ageRange != "" && grouplvl == "" && max != default && max > 0 && cb)
+                else if (location != "" && ageRange != "" && grouplvl == "" &&  cb)
                     x = 2;
-                else if (location != "" && ageRange != "" && grouplvl != "" && max != default && max > 0 && !cb)
+                else if (location != "" && ageRange != "" && grouplvl != "" && !cb)
                     x = 4;
-                else if (location != "" && ageRange != "" && grouplvl != "" && max == 01 && cb)
+                else if (location != "" && ageRange != "" && grouplvl != "" && cb)
                     x = 5;
                 else
                     x = 3;
@@ -389,9 +346,6 @@ namespace MyLittleClub
                     return false;
                 case 4:
                     Toast.MakeText(this, "The Competitivness Was'nt Clicked", ToastLength.Short).Show();
-                    return false;
-                case 5:
-                    Toast.MakeText(this, "Max Students InValid", ToastLength.Short).Show();
                     return false;
                 default:
                     return false;
