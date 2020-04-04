@@ -107,7 +107,7 @@ namespace MyLittleClub
                 txt = string.Format("{0}.{1}.{2}", Day, Month, Year);
             return txt;
         }
-        //Makes the Date string comfterable
+        //Makes the Date string comfortable
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             MenuInflater.Inflate(Resource.Menu.MyLittleMenu, menu);

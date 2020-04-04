@@ -16,9 +16,8 @@ namespace MyLittleClub
     {
         public string name { get; set; }
         public double duration { get; set; }
-        public double order { get; set; }
         public string explenatiotn { get; set; }
-        public Exercise (string name, double duration, double order, string explenation)
+        public Exercise (string name, double duration, string explenation)
         {
             this.name = name;
             this.duration = duration;

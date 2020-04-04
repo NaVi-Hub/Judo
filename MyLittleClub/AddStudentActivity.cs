@@ -272,6 +272,7 @@ namespace MyLittleClub
             currGroup = spinner.GetItemAtPosition(e.Position).ToString();
             Toast.MakeText(this, toast, ToastLength.Long).Show();
         }
+        //Toasts the Selected item from the Spinner and saves it to CurrGroup
         string currGroup;
         private void SendBackToMainButton_Click(object sender, EventArgs e)
         {

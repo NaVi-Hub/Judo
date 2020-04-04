@@ -101,28 +101,6 @@ namespace MyLittleClub
                 AddTrainingDurationLayout.AddView(AddTrainingDurationET);
                 AddTrainingOverAllLayout.AddView(AddTrainingDurationLayout);
             //----------------------------------------------------------------------------------------
-            //Defining the AddTraining Order layout
-                AddTrainingOrderLayout = new LinearLayout(this);
-                AddTrainingOrderLayout.LayoutParameters = WrapContParams;
-                AddTrainingOrderLayout.Orientation = Orientation.Horizontal;
-            //Defining the Order AddTraining TextView
-                AddTrainingOrderTV = new TextView(this);
-                AddTrainingOrderTV.LayoutParameters = WrapContParams;
-                AddTrainingOrderTV.Text = "Exercise Order: ";
-                AddTrainingOrderTV.TextSize = 30;
-                AddTrainingOrderTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Order AddTraining EditText
-                AddTrainingOrderET = new EditText(this);
-                AddTrainingOrderET.LayoutParameters = OneTwentyParams;
-                AddTrainingOrderET.Hint = "Order";
-                AddTrainingOrderET.TextSize = 30;
-                AddTrainingOrderET.InputType = InputTypes.NumberFlagDecimal;
-                AddTrainingOrderET.SetSingleLine();
-            //Adding views to layout
-                AddTrainingOrderLayout.AddView(AddTrainingOrderTV);
-                AddTrainingOrderLayout.AddView(AddTrainingOrderET);
-                AddTrainingOverAllLayout.AddView(AddTrainingOrderLayout);
-            //---------------------------------------------------------------------------------------------------------
             //Defining the AddTraining Explenation layout
                 AddTrainingExplenationLayout = new LinearLayout(this);
                 AddTrainingExplenationLayout.LayoutParameters = WrapContParams;
@@ -185,15 +163,12 @@ namespace MyLittleClub
         //Builds The Screen
         private void AddTrainingButton_Click(object sender, EventArgs e)
         {
-            double xOrder = 0;
-            double.TryParse(AddTrainingOrderET.Text, out xOrder);
             double xDuration = 0;
             double.TryParse(AddTrainingDurationET.Text, out xDuration);
-            Exercise ex = new Exercise(AddTrainingNameET.Text, xDuration, xOrder, AddTrainingExplenationET.Text);
+            Exercise ex = new Exercise(AddTrainingNameET.Text, xDuration, AddTrainingExplenationET.Text);
             HashMap map = new HashMap();
             map.Put("Name", ex.name);
             map.Put("Duration", ex.duration);
-            map.Put("Order", ex.order);
             map.Put("Explenation", ex.explenatiotn);
             DocumentReference DocRef = database.Collection("Exercises").Document(ex.name);
             DocRef.Set(map);
