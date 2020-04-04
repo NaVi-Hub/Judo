@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
-using Android.Runtime;
 using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
@@ -15,6 +9,8 @@ using Android.Widget;
 using Firebase.Firestore;
 using Java.Util;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace MyLittleClub
 {
@@ -333,7 +329,10 @@ namespace MyLittleClub
         //Pops up soft keyboard
         public bool isValidEmail(string email)
         {
-            if (Android.Util.Patterns.EmailAddress.Matcher(email).Matches()) return true;
+            if (Android.Util.Patterns.EmailAddress.Matcher(email).Matches())
+            {
+                return true;
+            }
             else { Toast.MakeText(this, "MailInvalid", ToastLength.Long).Show(); return false; }
             //https://www.c-sharpcorner.com/article/how-to-validate-an-email-address-in-xamarin-android-app-using-visual-studio-2015/ @Delpin Susai Raj 
         }
@@ -353,10 +352,16 @@ namespace MyLittleClub
             Tr = name.Length >= 4 && name.Length <= 16;
             for (int i = 0; i < FN.Count; i++)
             {
-                if (name.Contains(FN[i])) Tr = false;
+                if (name.Contains(FN[i]))
+                {
+                    Tr = false;
+                }
             }
             if (!Tr) { Toast.MakeText(this, "Name InValid", ToastLength.Long).Show(); return Tr; }
-            else return Tr;
+            else
+            {
+                return Tr;
+            }
         }
         //Name Validation
         public List<String> GetGroups()
@@ -375,7 +380,7 @@ namespace MyLittleClub
                         foreach (DocumentSnapshot item in document)
                         {
                             groupname = (item.GetString("Location")).ToString() + " " + (item.GetString("Time")).ToString() + " " + (item.GetString("Age")).ToString();
-                            groups.Add(groupname); 
+                            groups.Add(groupname);
                         }
                     }
                 }

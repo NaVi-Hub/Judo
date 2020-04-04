@@ -1,17 +1,13 @@
 ﻿using Android.App;
-using Android.OS;
-using Android.Support.V7.App;
-using Android.Runtime;
-using Android.Widget;
-using Android.Graphics;
-using Android.Text;
 using Android.Content;
+using Android.Graphics;
+using Android.OS;
+using Android.Text;
+using Android.Widget;
 using Firebase.Firestore;
-using Firebase;
 using Java.Util;
-using System.Collections.Generic;
-using Android.Gms.Tasks;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace MyLittleClub
 {
@@ -238,7 +234,10 @@ namespace MyLittleClub
                 map.Put("Login", keep);
                 DocumentReference DocRef = database.Collection("Users").Document(admin.email);
                 if (keep) //CancelLoginAbilityOnAllUsers();
-                DocRef.Set(map);
+                {
+                    DocRef.Set(map);
+                }
+
                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
                 intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
                 StartActivity(intent1);
@@ -248,7 +247,10 @@ namespace MyLittleClub
 
         public bool isValidEmail(string email)
         {
-            if (Android.Util.Patterns.EmailAddress.Matcher(email).Matches()) return true;
+            if (Android.Util.Patterns.EmailAddress.Matcher(email).Matches())
+            {
+                return true;
+            }
             else { Toast.MakeText(this, "MailInvalid", ToastLength.Long).Show(); return false; }
             //https://www.c-sharpcorner.com/article/how-to-validate-an-email-address-in-xamarin-android-app-using-visual-studio-2015/ @Delpin Susai Raj 
         }
@@ -266,13 +268,19 @@ namespace MyLittleClub
             FN.Add("pussy");
             FN.Add("dick");
             FN.Add("sex");
-            Tr =  name.Length >= 4 && name.Length <= 16;
+            Tr = name.Length >= 4 && name.Length <= 16;
             for (int i = 0; i < FN.Count; i++)
             {
-                if (name.Contains(FN[i])) Tr = false;
+                if (name.Contains(FN[i]))
+                {
+                    Tr = false;
+                }
             }
             if (!Tr) { Toast.MakeText(this, "Name InValid", ToastLength.Long).Show(); return Tr; }
-            else return Tr;
+            else
+            {
+                return Tr;
+            }
         }
         //Name Validation
 
@@ -310,8 +318,11 @@ namespace MyLittleClub
         //Makes sure only one user has Login true
         public bool IsValidSport(string sport)
         {
-            if (sport.Length > 3) return true;
-            else { Toast.MakeText(this, "Sport InValid", ToastLength.Long).Show(); return false;}
+            if (sport.Length > 3)
+            {
+                return true;
+            }
+            else { Toast.MakeText(this, "Sport InValid", ToastLength.Long).Show(); return false; }
         }
         //Sport Validation
 

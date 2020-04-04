@@ -68,6 +68,7 @@
     <Compile Include="AddStudentActivity.cs" />
     <Compile Include="AddTrainingActivity.cs" />
     <Compile Include="Admin1.cs" />
+    <Compile Include="BuildExerciseActivity.cs" />
     <Compile Include="Exercise.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="QueryListener.cs" />
@@ -166,6 +167,11 @@
     <PackageReference Include="Xamarin.Google.Guava">
       <Version>27.1.0.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\BuildGroupLayout.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

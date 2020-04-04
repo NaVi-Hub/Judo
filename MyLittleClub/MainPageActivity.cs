@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
-using Android.Runtime;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using Firebase.Firestore;
-using Java.Sql;
 using Java.Util;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using static Android.Widget.CalendarView;
 
 namespace MyLittleClub
 {
     [Activity(Theme = "@style/AppTheme")]
-    public class MainPageActivity : AppCompatActivity, IOnDateChangeListener 
+    public class MainPageActivity : AppCompatActivity, IOnDateChangeListener
     {
         LinearLayout MainPageOverallLayout, MainPageTitleLayout;
         TextView MainPageTitleTV, MainPageTitleTV2;
@@ -49,37 +44,37 @@ namespace MyLittleClub
             MainPageOverallLayout = FindViewById<LinearLayout>(Resource.Id.MainPageLayout1);
             MainPageOverallLayout.Orientation = Orientation.Vertical;
             MainPageOverallLayout.SetGravity(Android.Views.GravityFlags.CenterHorizontal);
-                BuildCalendar();
+            BuildCalendar();
 
             //Tile layout
-                MainPageTitleLayout = new LinearLayout(this);
-                MainPageTitleLayout.LayoutParameters = WrapContParams;
-                MainPageTitleLayout.Orientation = Orientation.Vertical;
-                MainPageTitleLayout.SetGravity(Android.Views.GravityFlags.Center);
+            MainPageTitleLayout = new LinearLayout(this);
+            MainPageTitleLayout.LayoutParameters = WrapContParams;
+            MainPageTitleLayout.Orientation = Orientation.Vertical;
+            MainPageTitleLayout.SetGravity(Android.Views.GravityFlags.Center);
             //Title TV
-                MainPageTitleTV = new TextView(this);
-                MainPageTitleTV.LayoutParameters = WrapContParams;
-                MainPageTitleTV.Text = $"Welcome, {admin1.name}";
-                MainPageTitleTV.TextSize = 55;
-                MainPageTitleTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-                MainPageTitleTV.SetTextColor(Android.Graphics.Color.DarkRed);
+            MainPageTitleTV = new TextView(this);
+            MainPageTitleTV.LayoutParameters = WrapContParams;
+            MainPageTitleTV.Text = $"Welcome, {admin1.name}";
+            MainPageTitleTV.TextSize = 55;
+            MainPageTitleTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            MainPageTitleTV.SetTextColor(Android.Graphics.Color.DarkRed);
             //Title TV 2
-                MainPageTitleTV2 = new TextView(this);
-                MainPageTitleTV2.LayoutParameters = WrapContParams;
-                int year = int.Parse(DateTime.Today.Year.ToString());
-                int month = int.Parse(DateTime.Today.Month.ToString()) + 1;
-                int day = int.Parse(DateTime.Today.Day.ToString());
-                MainPageTitleTV2.Text = $"You have {abc} trainings on the {MakeDateString(year, month, day)}";
-                MainPageTitleTV2.TextSize = 25;
-                MainPageTitleTV2.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-                MainPageTitleTV2.SetTextColor(Android.Graphics.Color.SaddleBrown);
+            MainPageTitleTV2 = new TextView(this);
+            MainPageTitleTV2.LayoutParameters = WrapContParams;
+            int year = int.Parse(DateTime.Today.Year.ToString());
+            int month = int.Parse(DateTime.Today.Month.ToString()) + 1;
+            int day = int.Parse(DateTime.Today.Day.ToString());
+            MainPageTitleTV2.Text = $"You have {abc} trainings on the {MakeDateString(year, month, day)}";
+            MainPageTitleTV2.TextSize = 25;
+            MainPageTitleTV2.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            MainPageTitleTV2.SetTextColor(Android.Graphics.Color.SaddleBrown);
             //adding to layouts
-                MainPageTitleLayout.AddView(MainPageTitleTV);
-                MainPageTitleLayout.AddView(MainPageTitleTV2);
-                MainPageOverallLayout.AddView(MainPageTitleLayout);
+            MainPageTitleLayout.AddView(MainPageTitleTV);
+            MainPageTitleLayout.AddView(MainPageTitleTV2);
+            MainPageOverallLayout.AddView(MainPageTitleLayout);
             //Calendar
             MainPageOverallLayout.AddView(calendar);
-            OnSelectedDayChange(calendar, int.Parse(DateTime.Today.Year.ToString()), int.Parse(DateTime.Today.Month.ToString()) -1, int.Parse(DateTime.Today.Day.ToString()));
+            OnSelectedDayChange(calendar, int.Parse(DateTime.Today.Year.ToString()), int.Parse(DateTime.Today.Month.ToString()) - 1, int.Parse(DateTime.Today.Day.ToString()));
             //Button
             MainPageShowGroupsbtn = new Button(this);
             MainPageShowGroupsbtn.LayoutParameters = new LinearLayout.LayoutParams(1100, 600);
@@ -98,13 +93,22 @@ namespace MyLittleClub
         {
             string txt;
             if (Month < 10 && Day < 10)
+            {
                 txt = string.Format("0{0}.0{1}.{2}", Day, Month, Year);
+            }
             else if (Month < 10)
+            {
                 txt = string.Format("{0}.0{1}.{2}", Day, Month, Year);
+            }
             else if (Day < 10)
+            {
                 txt = string.Format("0{0}.{1}.{2}", Day, Month, Year);
+            }
             else
+            {
                 txt = string.Format("{0}.{1}.{2}", Day, Month, Year);
+            }
+
             return txt;
         }
         //Makes the Date string comfortable
@@ -116,7 +120,7 @@ namespace MyLittleClub
         //Menu inflator
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
-            switch(item.ItemId)
+            switch (item.ItemId)
             {
                 case Resource.Id.menuItem1:
                     {
@@ -171,7 +175,7 @@ namespace MyLittleClub
                                 HashMap map = new HashMap();
                                 map.Put("Name", item.Get("Name").ToString());
                                 map.Put("Age", int.Parse(item.Get("Age").ToString()));
-                                map.Put("Sport",item.Get("Sport").ToString());
+                                map.Put("Sport", item.Get("Sport").ToString());
                                 map.Put("EMail", item.Get("EMail").ToString());
                                 map.Put("PhoneNum", item.Get("PhoneNum").ToString());
                                 map.Put("Login", false);
@@ -197,18 +201,24 @@ namespace MyLittleClub
         {
             abc = 0;
             string txt = MakeDateString(year, month + 1, dayOfMonth);
-            for (int i = 0; i<dates.Count; i++)
+            for (int i = 0; i < dates.Count; i++)
             {
                 if (dates[i] == txt)
+                {
                     abc++;
+                }
             }
             int year1 = int.Parse(DateTime.Today.Year.ToString());
             int month1 = int.Parse(DateTime.Today.Month.ToString());
             int day1 = int.Parse(DateTime.Today.Day.ToString());
             if (txt == MakeDateString(year1, month1, day1))
+            {
                 MainPageTitleTV2.Text = $"You have {abc} trainings Today";
+            }
             else
-                MainPageTitleTV2.Text = $"You have {abc} trainings on the {MakeDateString(year, month+1, dayOfMonth)}";
+            {
+                MainPageTitleTV2.Text = $"You have {abc} trainings on the {MakeDateString(year, month + 1, dayOfMonth)}";
+            }
         }
         //changes the title TextView to show how many trainings are in the inputted date
         public void GetGroups()

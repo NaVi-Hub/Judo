@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
-using Android.Runtime;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
 using Firebase.Firestore;
 using Java.Util;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace MyLittleClub
 {
@@ -43,8 +39,8 @@ namespace MyLittleClub
             CheckBoxList = new List<CheckBox>();
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddGroupLayout);
-                database = OpenActivity.database;
-                admin = MainPageActivity.admin1;
+            database = OpenActivity.database;
+            admin = MainPageActivity.admin1;
             if (firstLogin)
             {
                 firstLogin = !firstLogin;
@@ -198,15 +194,15 @@ namespace MyLittleClub
             BuildScrollView();
         }
         //Building the AddGroup Screen
-        
+
         public void BuildScrollView()
-        { 
+        {
             for (int i = 0; i < students.Count; i++)
             {
                 CheckBoxList.Add(new CheckBox(this));
             }
             OverSVLayout = new LinearLayout(this);
-            OverSVLayout.LayoutParameters = new ViewGroup.LayoutParams(1100,700);
+            OverSVLayout.LayoutParameters = new ViewGroup.LayoutParams(1100, 700);
             OverSVLayout.Orientation = Orientation.Vertical;
             AddGroupStudentsSv = new ScrollView(this);
             AddGroupStudentsSv.LayoutParameters = new ViewGroup.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
@@ -214,8 +210,8 @@ namespace MyLittleClub
             AddGroupSvLayout = new LinearLayout(this);
             AddGroupSvLayout.LayoutParameters = MatchParentParams;
             AddGroupSvLayout.Orientation = Orientation.Vertical;
-           
-            for (int i = 0; i<students.Count; i++)
+
+            for (int i = 0; i < students.Count; i++)
             {
                 //Define Inside Layout
                 InsideSVLayout = new LinearLayout(this);
@@ -292,7 +288,7 @@ namespace MyLittleClub
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Groups").Document(group.Location + " " + group.time + " " + group.age);
                 docref.Set(map);
                 HashMap map2 = new HashMap();
-             
+
                 Toast.MakeText(this, "Group Added Sucesfully", ToastLength.Short).Show();
                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
                 intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
@@ -313,23 +309,37 @@ namespace MyLittleClub
         {
             int x = -1;
             if (location != "" && ageRange != "" && grouplvl != "" && AddGroupTimeButton.Text != "Select Time" && AddGroupDateButton.Text != "Select Date")
+            {
                 return true;
+            }
             else
             {
                 if (location == "" && ageRange != "" && grouplvl != "" && cb)
+                {
                     x = 0;
-                else if (location != "" && ageRange == "" && grouplvl != "" &&  cb)
+                }
+                else if (location != "" && ageRange == "" && grouplvl != "" && cb)
+                {
                     x = 1;
-                else if (location != "" && ageRange != "" && grouplvl == "" &&  cb)
+                }
+                else if (location != "" && ageRange != "" && grouplvl == "" && cb)
+                {
                     x = 2;
+                }
                 else if (location != "" && ageRange != "" && grouplvl != "" && !cb)
+                {
                     x = 4;
+                }
                 else if (location != "" && ageRange != "" && grouplvl != "" && cb)
+                {
                     x = 5;
+                }
                 else
+                {
                     x = 3;
+                }
             }
-            switch(x)
+            switch (x)
             {
                 case 0:
                     Toast.MakeText(this, "Location InValid", ToastLength.Short).Show();
@@ -393,7 +403,11 @@ namespace MyLittleClub
             {
                 str = e.HourOfDay + ":0" + e.Minute;
             }
-            else str = e.HourOfDay + ":" + e.Minute;
+            else
+            {
+                str = e.HourOfDay + ":" + e.Minute;
+            }
+
             AddGroupTimeButton.Text = str;
         }
         //formats the string in HH:MM format
@@ -408,37 +422,69 @@ namespace MyLittleClub
         {
             string txt;
             if (e.Date.Day < 10)
+            {
                 txt = string.Format("0{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
             else if (e.Date.Month < 10)
+            {
                 txt = string.Format("{0}.0{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
             else if (e.Date.Month < 10 && e.Date.Day < 10)
+            {
                 txt = string.Format("0{0}.0{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
             else
+            {
                 txt = string.Format("{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
+
             if (IsDateLegit(e.Date))
+            {
                 AddGroupDateButton.Text = txt;
+            }
             else
+            {
                 Toast.MakeText(this, "InValid Date", ToastLength.Long).Show();
+            }
         }
         //: formats the string in DD/MM/YYYY format
         public bool IsDateLegit(DateTime date)
         {
-            if (date.Year < DateTime.Today.Year) return false;
-            else if (date.Year > DateTime.Today.Year) return true;
+            if (date.Year < DateTime.Today.Year)
+            {
+                return false;
+            }
+            else if (date.Year > DateTime.Today.Year)
+            {
+                return true;
+            }
             else
             {
-                if (date.Month > DateTime.Today.Month) return true;
-                else if (date.Month > DateTime.Today.Month) return true;
+                if (date.Month > DateTime.Today.Month)
+                {
+                    return true;
+                }
+                else if (date.Month > DateTime.Today.Month)
+                {
+                    return true;
+                }
                 else
                 {
-                    if (date.Day >= DateTime.Today.Day) return true;
-                    else if (date.Day > DateTime.Today.Day) return true;
+                    if (date.Day >= DateTime.Today.Day)
+                    {
+                        return true;
+                    }
+                    else if (date.Day > DateTime.Today.Day)
+                    {
+                        return true;
+                    }
                     else
+                    {
                         return false;
+                    }
                 }
             }
         }
         //makes sure the date is in the future
     }
 }
- 
