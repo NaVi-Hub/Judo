@@ -68,7 +68,7 @@
     <Compile Include="AddStudentActivity.cs" />
     <Compile Include="AddTrainingActivity.cs" />
     <Compile Include="Admin1.cs" />
-    <Compile Include="BuildExerciseActivity.cs" />
+    <Compile Include="BuildTrainingActivity.cs" />
     <Compile Include="Exercise.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="QueryListener.cs" />
