@@ -421,17 +421,17 @@ namespace MyLittleClub
         private void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
         {
             string txt;
-            if (e.Date.Day < 10)
+            if (e.Date.Month < 10 && e.Date.Day < 10)
+            {
+                txt = string.Format("0{0}.0{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
+            else if (e.Date.Day < 10)
             {
                 txt = string.Format("0{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
             }
             else if (e.Date.Month < 10)
             {
                 txt = string.Format("{0}.0{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
-            }
-            else if (e.Date.Month < 10 && e.Date.Day < 10)
-            {
-                txt = string.Format("0{0}.0{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
             }
             else
             {

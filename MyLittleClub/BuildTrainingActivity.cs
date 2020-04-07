@@ -7,8 +7,9 @@ using Firebase.Firestore;
 using System.Collections.Generic;
 using Android.Views;
 using Android.Graphics;
-using Java.Util;
 using Newtonsoft.Json;
+using System;
+using Java.Util;
 
 namespace MyLittleClub
 {
@@ -18,6 +19,19 @@ namespace MyLittleClub
         //https://pumpingco.de/blog/adding-drag-and-drop-to-your-android-application-with-xamarin/ 
         FirebaseFirestore database;
         Admin1 admin;
+        Button[] buttons;
+        bool InView = false;
+        Button CurrButton;
+        Button Send;
+        LinearLayout.LayoutParams BLP = new LinearLayout.LayoutParams(350, 200);
+        LinearLayout.LayoutParams LLLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent, 1);
+        LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(530, 160);
+        LinearLayout Overalllayout, InsideButtonsSVL, InsideTrainingSVL, ScrollViewsLayout;
+        ScrollView BtnSV, TrainingSV;
+        Spinner spin;
+        List<string> groups;
+        string groupname;
+        string currGroup;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -27,20 +41,29 @@ namespace MyLittleClub
             GetExercises();
             // Create your application here
         }
-        Button[] buttons;
-        LinearLayout.LayoutParams BLP = new LinearLayout.LayoutParams(350, 200);
-        LinearLayout.LayoutParams LLLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent, 1);
-        LinearLayout Overalllayout, InsideButtonsSVL, InsideTrainingSVL;
-        ScrollView BtnSV, TrainingSV;
         public void BuildAddExScreen()
         {
             Overalllayout = (LinearLayout)FindViewById(Resource.Id.AddGroupL);
-            Overalllayout.Orientation = Orientation.Horizontal;
+            Overalllayout.Orientation = Orientation.Vertical;
+            Overalllayout.SetGravity(GravityFlags.CenterHorizontal);
+            //
+            spin = new Spinner(this);
+            var adapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleSpinnerItem, groups);
+            adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            spin.Adapter = adapter;
+            spin.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spin_ItemSelected);
+            Overalllayout.AddView(spin);
+            //
+            ScrollViewsLayout = new LinearLayout(this);
+            ScrollViewsLayout.LayoutParameters = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent, 1);
+            ScrollViewsLayout.Orientation = Orientation.Horizontal;
             //
             BtnSV = new ScrollView(this);
             BtnSV.LayoutParameters = LLLP;
             InsideButtonsSVL = new LinearLayout(this);
             InsideButtonsSVL.LayoutParameters = LLLP;
+            InsideButtonsSVL.SetBackgroundColor(Color.GreenYellow);
+            BtnSV.SetBackgroundColor(Color.DarkSeaGreen);
             InsideButtonsSVL.Orientation = Orientation.Vertical;
             //
             buttons = new Button[exes.Count];
@@ -52,7 +75,6 @@ namespace MyLittleClub
             InsideTrainingSVL.Orientation = Orientation.Vertical;
             InsideTrainingSVL.SetBackgroundColor(Color.DodgerBlue);
             TrainingSV.SetBackgroundColor(Color.DodgerBlue);
-            TrainingSV.AddView(InsideTrainingSVL);
 
             TrainingSV.Drag += Button_Drag;
             //
@@ -66,14 +88,23 @@ namespace MyLittleClub
             }
             //
             BtnSV.AddView(InsideButtonsSVL);
-            Overalllayout.AddView(BtnSV);
-            Overalllayout.AddView(TrainingSV);
+            ScrollViewsLayout.AddView(BtnSV);
+            TrainingSV.AddView(InsideTrainingSVL);
+            ScrollViewsLayout.AddView(TrainingSV);
             //
             Send = new Button(this);
             Send.LayoutParameters = BLP;
             Send.Text = "Finish Exercise";
             Send.Click += this.Send_Click;
+            Overalllayout.AddView(ScrollViewsLayout);
             Overalllayout.AddView(Send);
+
+        }
+        private void spin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            Spinner spin = (Spinner)sender;
+
+            currGroup = spin.GetItemAtPosition(e.Position).ToString();
         }
 
         private void Send_Click(object sender, System.EventArgs e)
@@ -84,17 +115,13 @@ namespace MyLittleClub
             {
                 map.Put("Ex" + i, ex[i].name);
             }
-            DocumentReference doref = database.Collection("Trainings").Document("Training"/*insert Edittext and insert here the title of training*/);
+            DocumentReference doref = database.Collection("Trainings").Document(currGroup);
             doref.Set(map);
             Intent inte = new Intent(this, typeof(MainPageActivity));
             inte.PutExtra("Admin", JsonConvert.SerializeObject(admin));
             StartActivity(inte);
         }
 
-        bool InView = false;
-        Button CurrButton;
-        Exercise[] training;
-        Button Send;
         public void Button_Drag(object sender, View.DragEventArgs e)
         {
             Button a = CurrButton;
@@ -118,10 +145,13 @@ namespace MyLittleClub
                 case DragAction.Drop:
                     if(InView)
                     {
-                        InsideButtonsSVL.RemoveView(a);
+                        Button copy = new Button(CurrButton.Context);
+                        copy.LayoutParameters = CurrButton.LayoutParameters;
+                        copy.Text = CurrButton.Text;
+                        copy.Click += this.Copy_Click;
                         TrainingSV.SetBackgroundColor(Color.DodgerBlue);
                         InsideTrainingSVL.SetBackgroundColor(Color.DodgerBlue);
-                        InsideTrainingSVL.AddView(a);
+                        InsideTrainingSVL.AddView(copy);
                         e.Handled = true;
                         var data = e.Event.ClipData;
                         if (data != null)
@@ -136,6 +166,12 @@ namespace MyLittleClub
                     break;
             }
         }
+
+        private void Copy_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void BuildExerciseActivity_LongClick(object sender, Android.Views.View.LongClickEventArgs e)
         {
             CurrButton = (Button)sender;
@@ -165,12 +201,11 @@ namespace MyLittleClub
                         }
                     }
                 }
-                BuildAddExScreen();
+                GetGroups();
             }
             ));
         }
         List<Exercise> ex = new List<Exercise>();
-        //Number Of Exercises So Far
         public void GetSpecificExercise(string name)
         {
             Query query = database.Collection("Exercises").WhereEqualTo("Name", name);
@@ -194,5 +229,31 @@ namespace MyLittleClub
             }
             ));
         }
+
+        public List<String> GetGroups()
+        {
+            groups = new List<string>();
+            groups.Add("Choose Group");
+            Query query = database.Collection("Users").Document(admin.email).Collection("Groups");
+            query.Get().AddOnCompleteListener(new QueryListener((task) =>
+            {
+                if (task.IsSuccessful)
+                {
+                    var snapshot = (QuerySnapshot)task.Result;
+                    if (!snapshot.IsEmpty)
+                    {
+                        var document = snapshot.Documents;
+                        foreach (DocumentSnapshot item in document)
+                        {
+                            groupname = (item.GetString("Location")).ToString() + " " + (item.GetString("Time")).ToString() + " " + (item.GetString("Age")).ToString();
+                            groups.Add(groupname);
+                        }
+                    }
+                }
+                BuildAddExScreen();
+            }));
+            return groups;
+        }
+        //Retreiving Groups From FireBase
     }
 }
