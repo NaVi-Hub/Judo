@@ -3179,67 +3179,88 @@ namespace MyLittleClub
 			public const int design_snackbar_background = 2131230818;
 			
 			// aapt resource value: 0x7F080063
-			public const int ic_mtrl_chip_checked_black = 2131230819;
+			public const int ic_check_white_48dp = 2131230819;
 			
 			// aapt resource value: 0x7F080064
-			public const int ic_mtrl_chip_checked_circle = 2131230820;
+			public const int ic_clear_white_48dp = 2131230820;
 			
 			// aapt resource value: 0x7F080065
-			public const int ic_mtrl_chip_close_circle = 2131230821;
+			public const int ic_error_outline_white_48dp = 2131230821;
 			
 			// aapt resource value: 0x7F080066
-			public const int judogiicon = 2131230822;
+			public const int ic_info_outline_white_48dp = 2131230822;
 			
 			// aapt resource value: 0x7F080067
-			public const int mtrl_snackbar_background = 2131230823;
+			public const int ic_mtrl_chip_checked_black = 2131230823;
 			
 			// aapt resource value: 0x7F080068
-			public const int mtrl_tabs_default_indicator = 2131230824;
+			public const int ic_mtrl_chip_checked_circle = 2131230824;
 			
 			// aapt resource value: 0x7F080069
-			public const int navigation_empty_icon = 2131230825;
+			public const int ic_mtrl_chip_close_circle = 2131230825;
 			
 			// aapt resource value: 0x7F08006A
-			public const int notification_action_background = 2131230826;
+			public const int ic_warning_outline_white = 2131230826;
 			
 			// aapt resource value: 0x7F08006B
-			public const int notification_bg = 2131230827;
+			public const int ic_warning_white_48dp = 2131230827;
 			
 			// aapt resource value: 0x7F08006C
-			public const int notification_bg_low = 2131230828;
+			public const int judogiicon = 2131230828;
 			
 			// aapt resource value: 0x7F08006D
-			public const int notification_bg_low_normal = 2131230829;
+			public const int mtrl_snackbar_background = 2131230829;
 			
 			// aapt resource value: 0x7F08006E
-			public const int notification_bg_low_pressed = 2131230830;
+			public const int mtrl_tabs_default_indicator = 2131230830;
 			
 			// aapt resource value: 0x7F08006F
-			public const int notification_bg_normal = 2131230831;
+			public const int navigation_empty_icon = 2131230831;
 			
 			// aapt resource value: 0x7F080070
-			public const int notification_bg_normal_pressed = 2131230832;
+			public const int notification_action_background = 2131230832;
 			
 			// aapt resource value: 0x7F080071
-			public const int notification_icon_background = 2131230833;
+			public const int notification_bg = 2131230833;
 			
 			// aapt resource value: 0x7F080072
-			public const int notification_template_icon_bg = 2131230834;
+			public const int notification_bg_low = 2131230834;
 			
 			// aapt resource value: 0x7F080073
-			public const int notification_template_icon_low_bg = 2131230835;
+			public const int notification_bg_low_normal = 2131230835;
 			
 			// aapt resource value: 0x7F080074
-			public const int notification_tile_bg = 2131230836;
+			public const int notification_bg_low_pressed = 2131230836;
 			
 			// aapt resource value: 0x7F080075
-			public const int notify_panel_notification_icon_bg = 2131230837;
+			public const int notification_bg_normal = 2131230837;
 			
 			// aapt resource value: 0x7F080076
-			public const int tooltip_frame_dark = 2131230838;
+			public const int notification_bg_normal_pressed = 2131230838;
 			
 			// aapt resource value: 0x7F080077
-			public const int tooltip_frame_light = 2131230839;
+			public const int notification_icon_background = 2131230839;
+			
+			// aapt resource value: 0x7F080078
+			public const int notification_template_icon_bg = 2131230840;
+			
+			// aapt resource value: 0x7F080079
+			public const int notification_template_icon_low_bg = 2131230841;
+			
+			// aapt resource value: 0x7F08007A
+			public const int notification_tile_bg = 2131230842;
+			
+			// aapt resource value: 0x7F08007B
+			public const int notify_panel_notification_icon_bg = 2131230843;
+			
+			// aapt resource value: 0x7F08007C
+			public const int toast_frame = 2131230844;
+			
+			// aapt resource value: 0x7F08007D
+			public const int tooltip_frame_dark = 2131230845;
+			
+			// aapt resource value: 0x7F08007E
+			public const int tooltip_frame_light = 2131230846;
 			
 			static Drawable()
 			{
@@ -3822,52 +3843,61 @@ namespace MyLittleClub
 			public const int title_template = 2131296444;
 			
 			// aapt resource value: 0x7F0900BD
-			public const int top = 2131296445;
+			public const int toast_icon = 2131296445;
 			
 			// aapt resource value: 0x7F0900BE
-			public const int topPanel = 2131296446;
+			public const int toast_root = 2131296446;
 			
 			// aapt resource value: 0x7F0900BF
-			public const int touch_outside = 2131296447;
+			public const int toast_text = 2131296447;
 			
 			// aapt resource value: 0x7F0900C0
-			public const int transition_current_scene = 2131296448;
+			public const int top = 2131296448;
 			
 			// aapt resource value: 0x7F0900C1
-			public const int transition_layout_save = 2131296449;
+			public const int topPanel = 2131296449;
 			
 			// aapt resource value: 0x7F0900C2
-			public const int transition_position = 2131296450;
+			public const int touch_outside = 2131296450;
 			
 			// aapt resource value: 0x7F0900C3
-			public const int transition_scene_layoutid_cache = 2131296451;
+			public const int transition_current_scene = 2131296451;
 			
 			// aapt resource value: 0x7F0900C4
-			public const int transition_transform = 2131296452;
+			public const int transition_layout_save = 2131296452;
 			
 			// aapt resource value: 0x7F0900C5
-			public const int uniform = 2131296453;
+			public const int transition_position = 2131296453;
 			
 			// aapt resource value: 0x7F0900C6
-			public const int unlabeled = 2131296454;
+			public const int transition_scene_layoutid_cache = 2131296454;
 			
 			// aapt resource value: 0x7F0900C7
-			public const int up = 2131296455;
+			public const int transition_transform = 2131296455;
 			
 			// aapt resource value: 0x7F0900C8
-			public const int useLogo = 2131296456;
+			public const int uniform = 2131296456;
 			
 			// aapt resource value: 0x7F0900C9
-			public const int view_offset_helper = 2131296457;
+			public const int unlabeled = 2131296457;
 			
 			// aapt resource value: 0x7F0900CA
-			public const int visible = 2131296458;
+			public const int up = 2131296458;
 			
 			// aapt resource value: 0x7F0900CB
-			public const int withText = 2131296459;
+			public const int useLogo = 2131296459;
 			
 			// aapt resource value: 0x7F0900CC
-			public const int wrap_content = 2131296460;
+			public const int view_offset_helper = 2131296460;
+			
+			// aapt resource value: 0x7F0900CD
+			public const int visible = 2131296461;
+			
+			// aapt resource value: 0x7F0900CE
+			public const int withText = 2131296462;
+			
+			// aapt resource value: 0x7F0900CF
+			public const int wrap_content = 2131296463;
 			
 			static Id()
 			{
@@ -4181,6 +4211,9 @@ namespace MyLittleClub
 			// aapt resource value: 0x7F0C0046
 			public const int support_simple_spinner_dropdown_item = 2131492934;
 			
+			// aapt resource value: 0x7F0C0047
+			public const int toast_layout = 2131492935;
+			
 			static Layout()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -4414,6 +4447,9 @@ namespace MyLittleClub
 			
 			// aapt resource value: 0x7F0F003C
 			public const int status_bar_notification_info_overflow = 2131689532;
+			
+			// aapt resource value: 0x7F0F003D
+			public const int toast_message = 2131689533;
 			
 			static String()
 			{

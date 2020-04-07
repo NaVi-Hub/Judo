@@ -6,6 +6,7 @@ using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using ES.DMoral.ToastyLib;
 using Firebase.Firestore;
 using Java.Util;
 using Newtonsoft.Json;
@@ -165,7 +166,7 @@ namespace MyLittleClub
             map.Put("Explenation", ex.explenatiotn);
             DocumentReference DocRef = database.Collection("Exercises").Document(ex.name);
             DocRef.Set(map);
-            Toast.MakeText(this, "Exercise was added secessfully", ToastLength.Short).Show();
+            Toasty.Success(this, "Exercise was added secessfully", 5, false).Show();
             Intent intent1 = new Intent(this, typeof(MainPageActivity));
             intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
             StartActivity(intent1);

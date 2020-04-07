@@ -6,6 +6,7 @@ using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using ES.DMoral.ToastyLib;
 using Firebase.Firestore;
 using Java.Util;
 using Newtonsoft.Json;
@@ -264,9 +265,7 @@ namespace MyLittleClub
         private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             Spinner spinner = (Spinner)sender;
-            string toast = string.Format("Selected Group is {0}", spinner.GetItemAtPosition(e.Position));
             currGroup = spinner.GetItemAtPosition(e.Position).ToString();
-            Toast.MakeText(this, toast, ToastLength.Long).Show();
         }
         //Toasts the Selected item from the Spinner and saves it to CurrGroup
         string currGroup;
@@ -296,7 +295,7 @@ namespace MyLittleClub
                 map.Put("Group", student.group);
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Students").Document(student.name + " " + student.phoneNumber);
                 docref.Set(map);
-                Toast.MakeText(this, "Student Added Sucesfully", ToastLength.Short).Show();
+                Toasty.Success(this, "Student Added Sucesfully", 5, false).Show();
                 NameAddStudentET.Text = "";
                 PhoneNumAddStudentET.Text = "05";
                 EmailAddStudentET.Text = "";
@@ -307,7 +306,7 @@ namespace MyLittleClub
             }
             else
             {
-                Toast.MakeText(this, "Input InValid", ToastLength.Short).Show();
+                Toasty.Error(this, "Input InValid", 5, false).Show();
             }
         }
         //intents back to main page
@@ -333,7 +332,7 @@ namespace MyLittleClub
             {
                 return true;
             }
-            else { Toast.MakeText(this, "MailInvalid", ToastLength.Long).Show(); return false; }
+            else { Toasty.Error(this, "MailInvalid", 5).Show(); return false; }
             //https://www.c-sharpcorner.com/article/how-to-validate-an-email-address-in-xamarin-android-app-using-visual-studio-2015/ @Delpin Susai Raj 
         }
         //Email Validaton
@@ -357,7 +356,7 @@ namespace MyLittleClub
                     Tr = false;
                 }
             }
-            if (!Tr) { Toast.MakeText(this, "Name InValid", ToastLength.Long).Show(); return Tr; }
+            if (!Tr) { Toasty.Error(this, "Name InValid", 5, false).Show(); return Tr; }
             else
             {
                 return Tr;

@@ -5,6 +5,7 @@ using Android.OS;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
+using ES.DMoral.ToastyLib;
 using Firebase.Firestore;
 using Java.Util;
 using Newtonsoft.Json;
@@ -234,7 +235,7 @@ namespace MyLittleClub
                     InsideSVLayout.AddView(cb);
                     InsideSVLayout.AddView(StudTV);
                 }
-                catch { Toast.MakeText(this, "Not FIrst time open", ToastLength.Short).Show(); }
+                catch { Toasty.Warning(this, "Not FIrst time open", 5, false).Show(); }
                 AddGroupSvLayout.AddView(InsideSVLayout);
             }
             AddGroupStudentsSv.AddView(AddGroupSvLayout);
@@ -289,7 +290,7 @@ namespace MyLittleClub
                 docref.Set(map);
                 HashMap map2 = new HashMap();
 
-                Toast.MakeText(this, "Group Added Sucesfully", ToastLength.Short).Show();
+                Toasty.Success(this, "Group Added Sucesfully", 5, false).Show();
                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
                 intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
                 StartActivity(intent1);
@@ -300,7 +301,7 @@ namespace MyLittleClub
         private void RadioButtonClick(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
-            Toast.MakeText(this, rb.Text, ToastLength.Short).Show();
+            Toasty.Info(this, rb.Text,5, false).Show();
             c = true;
         }
         //Toasts the RadioButton's selection
@@ -342,19 +343,19 @@ namespace MyLittleClub
             switch (x)
             {
                 case 0:
-                    Toast.MakeText(this, "Location InValid", ToastLength.Short).Show();
+                    Toasty.Error(this, "Location InValid", 5, false).Show();
                     return false;
                 case 1:
-                    Toast.MakeText(this, "Age Range InValid", ToastLength.Short).Show();
+                    Toasty.Error(this, "Age Range InValid", 5, false).Show();
                     return false;
                 case 2:
-                    Toast.MakeText(this, "Group Level InValid", ToastLength.Short).Show();
+                    Toasty.Error(this, "Group Level InValid", 5, false).Show();
                     return false;
                 case 3:
-                    Toast.MakeText(this, "Some Imputs Are InValid", ToastLength.Short).Show();
+                    Toasty.Error(this, "Some Imputs Are InValid", 5, false).Show();
                     return false;
                 case 4:
-                    Toast.MakeText(this, "The Competitivness Was'nt Clicked", ToastLength.Short).Show();
+                    Toasty.Error(this, "The Competitivness Was'nt Clicked", 5, false).Show();
                     return false;
                 default:
                     return false;
@@ -444,7 +445,7 @@ namespace MyLittleClub
             }
             else
             {
-                Toast.MakeText(this, "InValid Date", ToastLength.Long).Show();
+                Toasty.Error(this, "InValid Date",5, false).Show();
             }
         }
         //: formats the string in DD/MM/YYYY format

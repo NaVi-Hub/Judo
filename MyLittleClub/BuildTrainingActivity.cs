@@ -10,6 +10,7 @@ using Android.Graphics;
 using Newtonsoft.Json;
 using System;
 using Java.Util;
+using ES.DMoral.ToastyLib;
 
 namespace MyLittleClub
 {
@@ -31,7 +32,7 @@ namespace MyLittleClub
         Spinner spin;
         List<string> groups;
         string groupname;
-        string currGroup;
+        string currGroup = "Choose Group";
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -48,6 +49,8 @@ namespace MyLittleClub
             Overalllayout.SetGravity(GravityFlags.CenterHorizontal);
             //
             spin = new Spinner(this);
+            BLP.SetMargins(5, 5, 5, 5);
+            spin.LayoutParameters = BLP;
             var adapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleSpinnerItem, groups);
             adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             spin.Adapter = adapter;
@@ -103,23 +106,38 @@ namespace MyLittleClub
         private void spin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             Spinner spin = (Spinner)sender;
-
             currGroup = spin.GetItemAtPosition(e.Position).ToString();
         }
 
         private void Send_Click(object sender, System.EventArgs e)
         {
-            HashMap map = new HashMap();
-            Training training = new Training(ex);
-            for(int i = 0; i<ex.Count; i++)
+            if (InputLegit())
             {
-                map.Put("Ex" + i, ex[i].name);
+                HashMap map = new HashMap();
+                Training training = new Training(ex);
+                for (int i = 0; i < ex.Count; i++)
+                {
+                    map.Put("Ex" + i, ex[i].name);
+                }
+                DocumentReference doref = database.Collection("Trainings").Document(currGroup);
+                doref.Set(map);
+                Intent inte = new Intent(this, typeof(MainPageActivity));
+                inte.PutExtra("Admin", JsonConvert.SerializeObject(admin));
+                StartActivity(inte);
+                Toasty.Success(this, "Training Built Successfuly", 10, false).Show();
             }
-            DocumentReference doref = database.Collection("Trainings").Document(currGroup);
-            doref.Set(map);
-            Intent inte = new Intent(this, typeof(MainPageActivity));
-            inte.PutExtra("Admin", JsonConvert.SerializeObject(admin));
-            StartActivity(inte);
+            else
+            {
+                Toasty.Config.Instance
+                .TintIcon(true) // optional (apply textColor also to the icon)
+                .SetTextSize(20) // optional
+                .Apply(); // required
+            }
+        }
+
+        private bool InputLegit()
+        {
+            return currGroup != "Choose Group";
         }
 
         public void Button_Drag(object sender, View.DragEventArgs e)

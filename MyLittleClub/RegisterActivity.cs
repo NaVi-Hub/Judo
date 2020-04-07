@@ -4,6 +4,7 @@ using Android.Graphics;
 using Android.OS;
 using Android.Text;
 using Android.Widget;
+using ES.DMoral.ToastyLib;
 using Firebase.Firestore;
 using Java.Util;
 using Newtonsoft.Json;
@@ -222,7 +223,7 @@ namespace MyLittleClub
             //validation of input
             if (IsValidName(NameLoginET.Text) && IsValidSport(SportLoginET.Text) & isValidEmail(MailLoginET.Text) && PhoneNumberLoginET.Text.Length == 10 && AgeParsed > 0 && AgeParsed <= 99)
             {
-                Toast.MakeText(this, "Logged-in", ToastLength.Long).Show();
+                Toasty.Info(this, "Logged-in", 5, false).Show();
                 //if(MailLoginET.text   Not in   database)
                 admin = new Admin1(int.Parse(AgeLoginET.Text), SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text, keep);
                 HashMap map = new HashMap();
@@ -251,7 +252,7 @@ namespace MyLittleClub
             {
                 return true;
             }
-            else { Toast.MakeText(this, "MailInvalid", ToastLength.Long).Show(); return false; }
+            else { Toasty.Error(this, "MailInvalid", 5, false).Show(); return false; }
             //https://www.c-sharpcorner.com/article/how-to-validate-an-email-address-in-xamarin-android-app-using-visual-studio-2015/ @Delpin Susai Raj 
         }
         //Email Validaton
@@ -276,7 +277,7 @@ namespace MyLittleClub
                     Tr = false;
                 }
             }
-            if (!Tr) { Toast.MakeText(this, "Name InValid", ToastLength.Long).Show(); return Tr; }
+            if (!Tr) { Toasty.Error(this, "Name InValid", 5, false).Show(); return Tr; }
             else
             {
                 return Tr;
@@ -322,7 +323,7 @@ namespace MyLittleClub
             {
                 return true;
             }
-            else { Toast.MakeText(this, "Sport InValid", ToastLength.Long).Show(); return false; }
+            else { Toasty.Error(this, "Sport InValid", 5, false).Show(); return false; }
         }
         //Sport Validation
 
