@@ -295,7 +295,10 @@ namespace MyLittleClub
                 map.Put("Group", student.group);
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Students").Document(student.name + " " + student.phoneNumber);
                 docref.Set(map);
-                Toasty.Success(this, "Student Added Sucesfully", 5, false).Show();
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Success(this, "Student Added Sucesfully", 5, true).Show();
                 NameAddStudentET.Text = "";
                 PhoneNumAddStudentET.Text = "05";
                 EmailAddStudentET.Text = "";
@@ -306,7 +309,10 @@ namespace MyLittleClub
             }
             else
             {
-                Toasty.Error(this, "Input InValid", 5, false).Show();
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Error(this, "Input InValid", 5, true).Show();
             }
         }
         //intents back to main page
@@ -332,7 +338,14 @@ namespace MyLittleClub
             {
                 return true;
             }
-            else { Toasty.Error(this, "MailInvalid", 5).Show(); return false; }
+            else
+            {
+                Toasty.Config.Instance
+                .TintIcon(true)
+                .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf")); 
+                Toasty.Error(this, "MailInvalid", 5, true).Show(); 
+                return false; 
+            }
             //https://www.c-sharpcorner.com/article/how-to-validate-an-email-address-in-xamarin-android-app-using-visual-studio-2015/ @Delpin Susai Raj 
         }
         //Email Validaton
@@ -356,7 +369,13 @@ namespace MyLittleClub
                     Tr = false;
                 }
             }
-            if (!Tr) { Toasty.Error(this, "Name InValid", 5, false).Show(); return Tr; }
+            if (!Tr) 
+            {
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf")); 
+                Toasty.Error(this, "Name InValid", 5, true).Show(); return Tr;
+            }
             else
             {
                 return Tr;

@@ -235,7 +235,7 @@ namespace MyLittleClub
                     InsideSVLayout.AddView(cb);
                     InsideSVLayout.AddView(StudTV);
                 }
-                catch { Toasty.Warning(this, "Not FIrst time open", 5, false).Show(); }
+                catch { Toasty.Warning(this, "Not FIrst time open", 5, true).Show(); }
                 AddGroupSvLayout.AddView(InsideSVLayout);
             }
             AddGroupStudentsSv.AddView(AddGroupSvLayout);
@@ -289,8 +289,10 @@ namespace MyLittleClub
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Groups").Document(group.Location + " " + group.time + " " + group.age);
                 docref.Set(map);
                 HashMap map2 = new HashMap();
-
-                Toasty.Success(this, "Group Added Sucesfully", 5, false).Show();
+                Toasty.Config.Instance
+                    .TintIcon(true)
+                    .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Success(this, "Group Added Sucesfully", 5, true).Show();
                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
                 intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
                 StartActivity(intent1);
@@ -301,7 +303,10 @@ namespace MyLittleClub
         private void RadioButtonClick(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
-            Toasty.Info(this, rb.Text,5, false).Show();
+            Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+            Toasty.Info(this, rb.Text,5, true).Show();
             c = true;
         }
         //Toasts the RadioButton's selection
@@ -343,19 +348,34 @@ namespace MyLittleClub
             switch (x)
             {
                 case 0:
-                    Toasty.Error(this, "Location InValid", 5, false).Show();
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Location InValid", 5, true).Show();
                     return false;
                 case 1:
-                    Toasty.Error(this, "Age Range InValid", 5, false).Show();
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Age Range InValid", 5, true).Show();
                     return false;
                 case 2:
-                    Toasty.Error(this, "Group Level InValid", 5, false).Show();
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Group Level InValid", 5, true).Show();
                     return false;
                 case 3:
-                    Toasty.Error(this, "Some Imputs Are InValid", 5, false).Show();
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Some Imputs Are InValid", 5, true).Show();
                     return false;
                 case 4:
-                    Toasty.Error(this, "The Competitivness Was'nt Clicked", 5, false).Show();
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "The Competitivness Was'nt Clicked", 5, true).Show();
                     return false;
                 default:
                     return false;
@@ -445,7 +465,10 @@ namespace MyLittleClub
             }
             else
             {
-                Toasty.Error(this, "InValid Date",5, false).Show();
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Error(this, "InValid Date",5, true).Show();
             }
         }
         //: formats the string in DD/MM/YYYY format

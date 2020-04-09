@@ -26,7 +26,7 @@ namespace MyLittleClub
         Button Send;
         LinearLayout.LayoutParams BLP = new LinearLayout.LayoutParams(350, 200);
         LinearLayout.LayoutParams LLLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent, 1);
-        LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(530, 160);
+        LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(650, 800);
         LinearLayout Overalllayout, InsideButtonsSVL, InsideTrainingSVL, ScrollViewsLayout;
         ScrollView BtnSV, TrainingSV;
         Spinner spin;
@@ -58,7 +58,7 @@ namespace MyLittleClub
             Overalllayout.AddView(spin);
             //
             ScrollViewsLayout = new LinearLayout(this);
-            ScrollViewsLayout.LayoutParameters = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent, 1);
+            ScrollViewsLayout.LayoutParameters = LLLP;
             ScrollViewsLayout.Orientation = Orientation.Horizontal;
             //
             BtnSV = new ScrollView(this);
@@ -87,6 +87,7 @@ namespace MyLittleClub
                 buttons[i].LayoutParameters = BLP;
                 buttons[i].Text = exes[i].name;
                 buttons[i].LongClick += this.BuildExerciseActivity_LongClick;
+                buttons[i].Click += this.BuildTrainingActivity_Click;
                 InsideButtonsSVL.AddView(buttons[i]);
             }
             //
@@ -103,6 +104,9 @@ namespace MyLittleClub
             Overalllayout.AddView(Send);
 
         }
+
+      
+
         private void spin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             Spinner spin = (Spinner)sender;
@@ -124,14 +128,13 @@ namespace MyLittleClub
                 Intent inte = new Intent(this, typeof(MainPageActivity));
                 inte.PutExtra("Admin", JsonConvert.SerializeObject(admin));
                 StartActivity(inte);
-                Toasty.Success(this, "Training Built Successfuly", 10, false).Show();
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Success(this, "Training Built Successfuly", 10, true).Show();
             }
             else
             {
-                Toasty.Config.Instance
-                .TintIcon(true) // optional (apply textColor also to the icon)
-                .SetTextSize(20) // optional
-                .Apply(); // required
             }
         }
 
@@ -174,7 +177,6 @@ namespace MyLittleClub
                         var data = e.Event.ClipData;
                         if (data != null)
                             a.Text = data.GetItemAt(0).Text;
-                        GetSpecificExercise(a.Text);
                     }
                     else
                     {
@@ -184,12 +186,39 @@ namespace MyLittleClub
                     break;
             }
         }
+        Dialog d;
+        LinearLayout DialogOverLayout, DialogNameLayout, DialogDurationLayout, DialogDurationExplenation;
+        TextView DialogNameTextView, DialogDurationTextView, DialogExplenationTextView;
+        Button DialogRemoveButton;
+        Exercise ab1;
+        public void BuildDialog(object sender)
+        {
+            Button b = (Button)sender;
+            d = new Dialog(this);
+            //if (exes.Contains)
+            d.SetCancelable(true);
+            d.SetTitle(ab1.name);
+            d.SetContentView(Resource.Layout.DialogLayout);
 
+            DialogOverLayout = d.FindViewById<LinearLayout>(Resource.Id.DialogLineaLayout);
+            DialogOverLayout.Orientation = Orientation.Vertical;
+            //
+            DialogNameTextView = new TextView(this);
+            DialogNameTextView.Text = ab1.name;
+            DialogDurationTextView = new TextView(this);
+            DialogDurationTextView.Text = ab1.duration.ToString();
+            DialogExplenationTextView = new TextView(this);
+            DialogExplenationTextView.Text = ab1.explenatiotn.ToString();
+            d.Show();
+        }
         private void Copy_Click(object sender, EventArgs e)
         {
-
+            BuildDialog(sender);
         }
-
+        private void BuildTrainingActivity_Click(object sender, EventArgs e)
+        {
+            BuildDialog(sender);
+        }
         private void BuildExerciseActivity_LongClick(object sender, Android.Views.View.LongClickEventArgs e)
         {
             CurrButton = (Button)sender;
@@ -224,7 +253,7 @@ namespace MyLittleClub
             ));
         }
         List<Exercise> ex = new List<Exercise>();
-        public void GetSpecificExercise(string name)
+        public void GetSpecificExercise(Exercise a1, string name)
         {
             Query query = database.Collection("Exercises").WhereEqualTo("Name", name);
             query.Get().AddOnCompleteListener(new QueryListener((task) =>
@@ -240,14 +269,13 @@ namespace MyLittleClub
                             string name1 = (item.GetString("Name")).ToString();
                             double duration = double.Parse(item.GetDouble("Duration").ToString());
                             string exp = (item.GetString("Explenation")).ToString();
-                            ex.Add(new Exercise(name1, duration, exp));
+                            a1 = new Exercise(name1, duration, exp);
                         }
                     }
                 }
             }
             ));
         }
-
         public List<String> GetGroups()
         {
             groups = new List<string>();

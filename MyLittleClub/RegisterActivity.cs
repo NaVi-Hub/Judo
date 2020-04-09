@@ -26,10 +26,12 @@ namespace MyLittleClub
         LinearLayout.LayoutParams MatchParentParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, 200);
         FirebaseFirestore database;
         CheckBox LoginCB;
+        ISharedPreferences sp;
 
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.RegisterLayout);
@@ -223,24 +225,22 @@ namespace MyLittleClub
             //validation of input
             if (IsValidName(NameLoginET.Text) && IsValidSport(SportLoginET.Text) & isValidEmail(MailLoginET.Text) && PhoneNumberLoginET.Text.Length == 10 && AgeParsed > 0 && AgeParsed <= 99)
             {
-                Toasty.Info(this, "Logged-in", 5, false).Show();
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Info(this, "Logged-in", 5, true).Show();
                 //if(MailLoginET.text   Not in   database)
                 admin = new Admin1(int.Parse(AgeLoginET.Text), SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text, keep);
-                HashMap map = new HashMap();
-                map.Put("Name", admin.name);
-                map.Put("EMail", admin.email);
-                map.Put("Age", AgeParsed);
-                map.Put("PhoneNum", admin.phoneNumber);
-                map.Put("Sport", admin.sport);
-                map.Put("Login", keep);
-                DocumentReference DocRef = database.Collection("Users").Document(admin.email);
-                if (keep) //CancelLoginAbilityOnAllUsers();
-                {
-                    DocRef.Set(map);
-                }
-
+                var editor = sp.Edit();
+                editor.PutString("Name", admin.name);
+                editor.PutInt("Age", admin.age);
+                editor.PutString("Sport", admin.sport);
+                editor.PutString("PhoneNum", admin.phoneNumber);
+                editor.PutBoolean("LogIn", admin.LogIn);
+                editor.Commit();
                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
                 intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
+                intent1.PutExtra("Email", admin.email);
                 StartActivity(intent1);
             }
         }
@@ -252,7 +252,13 @@ namespace MyLittleClub
             {
                 return true;
             }
-            else { Toasty.Error(this, "MailInvalid", 5, false).Show(); return false; }
+            else 
+            {
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf")); 
+                Toasty.Error(this, "MailInvalid", 5, true).Show(); return false;
+            }
             //https://www.c-sharpcorner.com/article/how-to-validate-an-email-address-in-xamarin-android-app-using-visual-studio-2015/ @Delpin Susai Raj 
         }
         //Email Validaton
@@ -277,7 +283,13 @@ namespace MyLittleClub
                     Tr = false;
                 }
             }
-            if (!Tr) { Toasty.Error(this, "Name InValid", 5, false).Show(); return Tr; }
+            if (!Tr) 
+            {
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf")); 
+                Toasty.Error(this, "Name InValid", 5, true).Show(); return Tr; 
+            }
             else
             {
                 return Tr;
@@ -323,7 +335,13 @@ namespace MyLittleClub
             {
                 return true;
             }
-            else { Toasty.Error(this, "Sport InValid", 5, false).Show(); return false; }
+            else 
+            {
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf")); 
+                Toasty.Error(this, "Sport InValid", 5, true).Show(); return false;
+            }
         }
         //Sport Validation
 

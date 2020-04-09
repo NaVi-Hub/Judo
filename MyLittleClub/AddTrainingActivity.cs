@@ -166,7 +166,10 @@ namespace MyLittleClub
             map.Put("Explenation", ex.explenatiotn);
             DocumentReference DocRef = database.Collection("Exercises").Document(ex.name);
             DocRef.Set(map);
-            Toasty.Success(this, "Exercise was added secessfully", 5, false).Show();
+            Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+            Toasty.Success(this, "Exercise was added secessfully", 5, true).Show();
             Intent intent1 = new Intent(this, typeof(MainPageActivity));
             intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
             StartActivity(intent1);

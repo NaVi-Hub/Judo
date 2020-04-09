@@ -18,6 +18,7 @@ namespace MyLittleClub
     [Activity(Theme = "@style/AppTheme")]
     public class MainPageActivity : AppCompatActivity, IOnDateChangeListener
     {
+        ISharedPreferences sp;
         LinearLayout MainPageOverallLayout, MainPageTitleLayout;
         TextView MainPageTitleTV, MainPageTitleTV2;
         LinearLayout.LayoutParams CalendarParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, 1000);
@@ -29,14 +30,25 @@ namespace MyLittleClub
         List<String> dates;
         List<Group> groups;
         Button MainPageShowGroupsbtn;
+        Dialog d;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.MainPageLayout);
-            admin1 = JsonConvert.DeserializeObject<Admin1>(Intent.GetStringExtra("Admin"));//@Itay
+            admin1 = GetAdmin();
             database = OpenActivity.database;
             GetDates();
-            // Create your application here
+        }
+        public Admin1 GetAdmin()
+        {
+            string email = Intent.GetStringExtra("Email");
+            int aAge = sp.GetInt("Age", -1);
+            string sport = sp.GetString("Sport", null);
+            string name = sp.GetString("Name", null);
+            string phoneNum = sp.GetString("PhoneNum", null);
+            bool i = sp.GetBoolean("LogIn", false);
+            return new Admin1(aAge, sport, name, phoneNum, email, i);
         }
         public void BuildMainPage()
         {
@@ -83,7 +95,6 @@ namespace MyLittleClub
             MainPageShowGroupsbtn.Click += this.MainPageShowGroupsbtn_Click;
         }
         //Build Main Page's Views
-        Dialog d;
         private void MainPageShowGroupsbtn_Click(object sender, EventArgs e)
         {
             GetGroups();
@@ -254,6 +265,7 @@ namespace MyLittleClub
             }
             ));
         }
+        //Retrives the Groups from database
         public void GetDates()
         {
             dates = new List<string>();
@@ -282,9 +294,6 @@ namespace MyLittleClub
             }
             ));
         }
-
-        private RecyclerView recyclerView;
-        private RecyclerView.LayoutManager LayoutManager;
-        private RecyclerView.Adapter adapter;
+        //Retrives the Dates on which there are Groups from database
     }
 }

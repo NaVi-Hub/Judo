@@ -4,6 +4,7 @@ using Android.OS;
 using Firebase;
 using Firebase.Firestore;
 using Newtonsoft.Json;
+using Android.Content;
 
 namespace MyLittleClub
 {
@@ -13,8 +14,11 @@ namespace MyLittleClub
 
         public static FirebaseFirestore database;
         Admin1 admin;
+        ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
+            var editor = sp.Edit();
             base.OnCreate(savedInstanceState);
             database = GetDataBase();
             Query query = database.Collection("Users").WhereEqualTo("Login", true);
@@ -37,6 +41,13 @@ namespace MyLittleClub
                                 admin.email = item.Get("EMail").ToString();
                                 admin.phoneNumber = item.Get("PhoneNum").ToString();
                                 admin.LogIn = (bool)item.Get("LogIn");
+                                editor.PutString("Name", admin.name);
+                                editor.PutInt("Age", admin.age);
+                                editor.PutString("Sport", admin.sport);
+                                editor.PutString("EMail", admin.email);
+                                editor.PutString("PhoneNum", admin.phoneNumber);
+                                editor.PutBoolean("LogIn", admin.LogIn);
+                                editor.Apply();
                                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
                                 intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
                                 StartActivity(intent1);
