@@ -33,12 +33,14 @@ namespace MyLittleClub
         List<string> groups;
         string groupname;
         string currGroup = "Choose Group";
+        ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             this.SetContentView(Resource.Layout.BuildGroupLayout);
             database = OpenActivity.database;
-            admin = MainPageActivity.admin1;
+            admin = GetAdmin();
             GetExercises();
             // Create your application here
         }
@@ -105,7 +107,16 @@ namespace MyLittleClub
 
         }
 
-      
+        public Admin1 GetAdmin()
+        {
+            string email = Intent.GetStringExtra("Email");
+            int aAge = sp.GetInt("Age", -1);
+            string sport = sp.GetString("Sport", null);
+            string name = sp.GetString("Name", null);
+            string phoneNum = sp.GetString("PhoneNum", null);
+            bool i = sp.GetBoolean("LogIn", false);
+            return new Admin1(aAge, sport, name, phoneNum, email, i);
+        }
 
         private void spin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
@@ -126,7 +137,7 @@ namespace MyLittleClub
                 DocumentReference doref = database.Collection("Trainings").Document(currGroup);
                 doref.Set(map);
                 Intent inte = new Intent(this, typeof(MainPageActivity));
-                inte.PutExtra("Admin", JsonConvert.SerializeObject(admin));
+                inte.PutExtra("Email", admin.email);
                 StartActivity(inte);
                 Toasty.Config.Instance
                    .TintIcon(true)

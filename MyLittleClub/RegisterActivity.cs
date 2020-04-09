@@ -231,6 +231,23 @@ namespace MyLittleClub
                 Toasty.Info(this, "Logged-in", 5, true).Show();
                 //if(MailLoginET.text   Not in   database)
                 admin = new Admin1(int.Parse(AgeLoginET.Text), SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text, keep);
+                HashMap map = new HashMap();
+                map.Put("Name", admin.name);
+                map.Put("EMail", admin.email);
+                map.Put("Age", AgeParsed);
+                map.Put("PhoneNum", admin.phoneNumber);
+                map.Put("Sport", admin.sport);
+                map.Put("Login", keep);
+                DocumentReference DocRef = database.Collection("Users").Document(admin.email);
+                if (keep) //CancelLoginAbilityOnAllUsers();
+                {
+                    CancelLoginAbilityOnAllUsers();
+                    DocRef.Set(map);
+                }
+                else
+                {
+                    DocRef.Set(map);
+                }
                 var editor = sp.Edit();
                 editor.PutString("Name", admin.name);
                 editor.PutInt("Age", admin.age);
@@ -239,7 +256,6 @@ namespace MyLittleClub
                 editor.PutBoolean("LogIn", admin.LogIn);
                 editor.Commit();
                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
-                intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
                 intent1.PutExtra("Email", admin.email);
                 StartActivity(intent1);
             }

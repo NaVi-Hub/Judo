@@ -34,14 +34,15 @@ namespace MyLittleClub
         CheckBox cb;
         bool c;
         public static bool firstLogin = true;
-
+        ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             CheckBoxList = new List<CheckBox>();
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddGroupLayout);
             database = OpenActivity.database;
-            admin = MainPageActivity.admin1;
+            admin = GetAdmin();
             if (firstLogin)
             {
                 firstLogin = !firstLogin;
@@ -54,6 +55,16 @@ namespace MyLittleClub
             }
 
             // Create your application here
+        }
+        public Admin1 GetAdmin()
+        {
+            string email = Intent.GetStringExtra("Email");
+            int aAge = sp.GetInt("Age", -1);
+            string sport = sp.GetString("Sport", null);
+            string name = sp.GetString("Name", null);
+            string phoneNum = sp.GetString("PhoneNum", null);
+            bool i = sp.GetBoolean("LogIn", false);
+            return new Admin1(aAge, sport, name, phoneNum, email, i);
         }
 
         void BuildAddGroupScreen()
@@ -306,7 +317,7 @@ namespace MyLittleClub
             Toasty.Config.Instance
                    .TintIcon(true)
                    .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-            Toasty.Info(this, rb.Text,5, true).Show();
+            Toasty.Info(this, rb.Text,5, false).Show();
             c = true;
         }
         //Toasts the RadioButton's selection

@@ -40,7 +40,7 @@ namespace MyLittleClub
             database = OpenActivity.database;
             GetDates();
         }
-        public Admin1 GetAdmin()
+        public  Admin1 GetAdmin()
         {
             string email = Intent.GetStringExtra("Email");
             int aAge = sp.GetInt("Age", -1);
@@ -136,24 +136,28 @@ namespace MyLittleClub
                 case Resource.Id.menuItem1:
                     {
                         Intent tryIntent = new Intent(this, typeof(AddGroupActivity));
+                        tryIntent.PutExtra("Email", admin1.email);
                         StartActivity(tryIntent);
                         return true;
                     }
                 case Resource.Id.menuItem2:
                     {
                         Intent tryIntent = new Intent(this, typeof(AddTrainingActivity));
+                        tryIntent.PutExtra("Email", admin1.email);
                         StartActivity(tryIntent);
                         return true;
                     }
                 case Resource.Id.menuItem3:
                     {
                         Intent tryIntent = new Intent(this, typeof(AddStudentActivity));
+                        tryIntent.PutExtra("Email", admin1.email);
                         StartActivity(tryIntent);
                         return true;
                     }
                 case Resource.Id.menuItem4:
                     {
                         Intent tryIntent = new Intent(this, typeof(BuildTrainingActivity));
+                        tryIntent.PutExtra("Email", admin1.email);
                         StartActivity(tryIntent);
                         return true;
                     }
@@ -161,6 +165,7 @@ namespace MyLittleClub
                     {
                         CancelLoginAbilityOnAllUsers();
                         Intent intent3 = new Intent(this, typeof(RegisterActivity));
+                        intent3.PutExtra("Email", admin1.email);
                         StartActivity(intent3);
                         return true;
                     }

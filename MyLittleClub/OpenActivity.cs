@@ -44,12 +44,11 @@ namespace MyLittleClub
                                 editor.PutString("Name", admin.name);
                                 editor.PutInt("Age", admin.age);
                                 editor.PutString("Sport", admin.sport);
-                                editor.PutString("EMail", admin.email);
                                 editor.PutString("PhoneNum", admin.phoneNumber);
                                 editor.PutBoolean("LogIn", admin.LogIn);
                                 editor.Apply();
                                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
-                                intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
+                                intent1.PutExtra("Email", admin.email);
                                 StartActivity(intent1);
                             }
                         }

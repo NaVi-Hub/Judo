@@ -25,13 +25,24 @@ namespace MyLittleClub
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(420, 180);
         Admin1 admin;
         FirebaseFirestore database = OpenActivity.database;
-
+        ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddTrainingLayout);
-            admin = MainPageActivity.admin1;
+            admin = GetAdmin();
             BuildAddTrainingScreen();
+        }
+        public Admin1 GetAdmin()
+        {
+            string email = Intent.GetStringExtra("Email");
+            int aAge = sp.GetInt("Age", -1);
+            string sport = sp.GetString("Sport", null);
+            string name = sp.GetString("Name", null);
+            string phoneNum = sp.GetString("PhoneNum", null);
+            bool i = sp.GetBoolean("LogIn", false);
+            return new Admin1(aAge, sport, name, phoneNum, email, i);
         }
         public void BuildAddTrainingScreen()
         {
@@ -171,7 +182,7 @@ namespace MyLittleClub
                    .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
             Toasty.Success(this, "Exercise was added secessfully", 5, true).Show();
             Intent intent1 = new Intent(this, typeof(MainPageActivity));
-            intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
+            intent1.PutExtra("Email", admin.email);
             StartActivity(intent1);
         }
         //Adds the exercise to the database.
