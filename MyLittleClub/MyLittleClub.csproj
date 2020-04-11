@@ -71,6 +71,7 @@
     <Compile Include="BuildTrainingActivity.cs" />
     <Compile Include="Exercise.cs" />
     <Compile Include="Group.cs" />
+    <Compile Include="MyStuff.cs" />
     <Compile Include="QueryListener.cs" />
     <Compile Include="RegisterActivity.cs" />
     <Compile Include="MainPageActivity.cs" />

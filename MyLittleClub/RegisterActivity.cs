@@ -36,7 +36,7 @@ namespace MyLittleClub
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.RegisterLayout);
             BuildRegisterScreen();
-            database = OpenActivity.database;
+            database = Context.database;
         }
 
         void BuildRegisterScreen()
@@ -223,12 +223,12 @@ namespace MyLittleClub
             int AgeParsed = 0;
             int.TryParse(AgeLoginET.Text, out AgeParsed);
             //validation of input
-            if (IsValidName(NameLoginET.Text) && IsValidSport(SportLoginET.Text) & isValidEmail(MailLoginET.Text) && PhoneNumberLoginET.Text.Length == 10 && AgeParsed > 0 && AgeParsed <= 99)
+            if (IsValidName(NameLoginET.Text) && IsValidSport(SportLoginET.Text) & MyStuff.isValidEmail(MailLoginET.Text, this) && PhoneNumberLoginET.Text.Length == 10 && AgeParsed > 0 && AgeParsed <= 99)
             {
                 Toasty.Config.Instance
                    .TintIcon(true)
                    .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-                Toasty.Info(this, "Logged-in", 5, true).Show();
+                Toasty.Info(this, "Logged-in", 5, false).Show();
                 //if(MailLoginET.text   Not in   database)
                 admin = new Admin1(int.Parse(AgeLoginET.Text), SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text, keep);
                 HashMap map = new HashMap();
@@ -241,43 +241,19 @@ namespace MyLittleClub
                 DocumentReference DocRef = database.Collection("Users").Document(admin.email);
                 if (keep) //CancelLoginAbilityOnAllUsers();
                 {
-                    CancelLoginAbilityOnAllUsers();
+                    MyStuff.CancelLoginAbilityOnAllUsers();
                     DocRef.Set(map);
                 }
                 else
                 {
                     DocRef.Set(map);
                 }
-                var editor = sp.Edit();
-                editor.PutString("Name", admin.name);
-                editor.PutInt("Age", admin.age);
-                editor.PutString("Sport", admin.sport);
-                editor.PutString("PhoneNum", admin.phoneNumber);
-                editor.PutBoolean("LogIn", admin.LogIn);
-                editor.Commit();
+                
                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
-                intent1.PutExtra("Email", admin.email);
                 StartActivity(intent1);
             }
         }
         //When LogIn Button Is Clicked
-
-        public bool isValidEmail(string email)
-        {
-            if (Android.Util.Patterns.EmailAddress.Matcher(email).Matches())
-            {
-                return true;
-            }
-            else 
-            {
-                Toasty.Config.Instance
-                   .TintIcon(true)
-                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf")); 
-                Toasty.Error(this, "MailInvalid", 5, true).Show(); return false;
-            }
-            //https://www.c-sharpcorner.com/article/how-to-validate-an-email-address-in-xamarin-android-app-using-visual-studio-2015/ @Delpin Susai Raj 
-        }
-        //Email Validaton
 
         public bool IsValidName(string name)
         {
@@ -312,39 +288,6 @@ namespace MyLittleClub
             }
         }
         //Name Validation
-
-        public void CancelLoginAbilityOnAllUsers()
-        {
-            Query query = database.Collection("Users").WhereEqualTo("Login", true);
-            query.Get().AddOnCompleteListener(new QueryListener((task) =>
-            {
-                if (task.IsSuccessful)
-                {
-                    var snapshot = (QuerySnapshot)task.Result;
-                    if (!snapshot.IsEmpty)
-                    {
-                        var document = snapshot.Documents;
-                        foreach (DocumentSnapshot item in document)
-                        {
-                            if ((item.Get("Login")).ToString() == "true")
-                            {
-                                HashMap map = new HashMap();
-                                map.Put("Name", item.Get("Name").ToString());
-                                map.Put("Age", int.Parse(item.Get("Age").ToString()));
-                                map.Put("Sport", item.Get("Sport").ToString());
-                                map.Put("EMail", item.Get("EMail").ToString());
-                                map.Put("PhoneNum", item.Get("PhoneNum").ToString());
-                                map.Put("LogIn", false);
-                                DocumentReference docref = database.Collection("Users").Document(item.Get("EMail").ToString());
-                                docref.Set(map);
-                            }
-                        }
-                    }
-                }
-            }
-            ));
-        }
-        //Makes sure only one user has Login true
         public bool IsValidSport(string sport)
         {
             if (sport.Length > 3)

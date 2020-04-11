@@ -24,26 +24,17 @@ namespace MyLittleClub
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(420, 180);
         Admin1 admin;
-        FirebaseFirestore database = OpenActivity.database;
+        FirebaseFirestore database = Context.database;
         ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddTrainingLayout);
-            admin = GetAdmin();
+            admin = MyStuff.GetAdmin();
             BuildAddTrainingScreen();
         }
-        public Admin1 GetAdmin()
-        {
-            string email = Intent.GetStringExtra("Email");
-            int aAge = sp.GetInt("Age", -1);
-            string sport = sp.GetString("Sport", null);
-            string name = sp.GetString("Name", null);
-            string phoneNum = sp.GetString("PhoneNum", null);
-            bool i = sp.GetBoolean("LogIn", false);
-            return new Admin1(aAge, sport, name, phoneNum, email, i);
-        }
+        
         public void BuildAddTrainingScreen()
         {
             //OverAll Layout
@@ -197,7 +188,7 @@ namespace MyLittleClub
         //Makes a big EditText
         public void showSoftKeyboard(Activity activity, View view)
         {
-            InputMethodManager inputMethodManager = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
+            InputMethodManager inputMethodManager = (InputMethodManager)activity.GetSystemService(Android.Content.Context.InputMethodService);
             view.RequestFocus();
             inputMethodManager.ShowSoftInput(view, 0);
             inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);//personal line added

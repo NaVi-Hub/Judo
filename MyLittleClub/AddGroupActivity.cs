@@ -41,8 +41,8 @@ namespace MyLittleClub
             CheckBoxList = new List<CheckBox>();
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddGroupLayout);
-            database = OpenActivity.database;
-            admin = GetAdmin();
+            database = Context.database;
+            admin = MyStuff.GetAdmin();
             if (firstLogin)
             {
                 firstLogin = !firstLogin;
@@ -55,16 +55,6 @@ namespace MyLittleClub
             }
 
             // Create your application here
-        }
-        public Admin1 GetAdmin()
-        {
-            string email = Intent.GetStringExtra("Email");
-            int aAge = sp.GetInt("Age", -1);
-            string sport = sp.GetString("Sport", null);
-            string name = sp.GetString("Name", null);
-            string phoneNum = sp.GetString("PhoneNum", null);
-            bool i = sp.GetBoolean("LogIn", false);
-            return new Admin1(aAge, sport, name, phoneNum, email, i);
         }
 
         void BuildAddGroupScreen()
@@ -305,7 +295,6 @@ namespace MyLittleClub
                     .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
                 Toasty.Success(this, "Group Added Sucesfully", 5, true).Show();
                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
-                intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
                 StartActivity(intent1);
             }
         }

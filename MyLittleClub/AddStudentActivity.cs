@@ -38,21 +38,12 @@ namespace MyLittleClub
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddStudentsLayout);
-            database = OpenActivity.database;
-            admin = GetAdmin();
+            database = Context.database;
+            admin = MyStuff.GetAdmin();
             groups = GetGroups();
             // Create your application here
         }
-        public Admin1 GetAdmin()
-        {
-            string email = Intent.GetStringExtra("Email");
-            int aAge = sp.GetInt("Age", -1);
-            string sport = sp.GetString("Sport", null);
-            string name = sp.GetString("Name", null);
-            string phoneNum = sp.GetString("PhoneNum", null);
-            bool i = sp.GetBoolean("LogIn", false);
-            return new Admin1(aAge, sport, name, phoneNum, email, i);
-        }
+       
         void BuildAddStudentScreen()
         {
             //Defining the parent layout
@@ -284,13 +275,12 @@ namespace MyLittleClub
         private void SendBackToMainButton_Click(object sender, EventArgs e)
         {
             Intent intent1 = new Intent(this, typeof(MainPageActivity));
-            intent1.PutExtra("Email", admin.email);
             StartActivity(intent1);
         }
         //Building the AddStudent Screen
         private void AddStudentButton_Click(object sender, EventArgs e)
         {
-            if (IsValidName(NameAddStudentET.Text) && isValidEmail(EmailAddStudentET.Text) && spin.SelectedView.ToString() != "Choose Group")
+            if (IsValidName(NameAddStudentET.Text) && MyStuff.isValidEmail(EmailAddStudentET.Text, this) && spin.SelectedView.ToString() != "Choose Group")
             {
                 if (Parent1NameAddStudentET.Text != "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent1NameAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text, currGroup); }
                 if (Parent1NameAddStudentET.Text == "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text, currGroup); }
@@ -331,35 +321,13 @@ namespace MyLittleClub
         private void AddStudentExplenationETLayout_Click(object sender, EventArgs e)
         {
             AddStudentExplenationET.RequestFocus();
-            showSoftKeyboard(this, AddStudentExplenationET);
+            MyStuff.showSoftKeyboard(this, AddStudentExplenationET);
             //@Tomer
             //https://gist.github.com/icalderond/742f98f2f8cda1fae1b0bc877df76bbc @Javier Pardo
         }
         //Makes a big EditText
-        public void showSoftKeyboard(Activity activity, View view)
-        {
-            InputMethodManager inputMethodManager = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
-            view.RequestFocus();
-            inputMethodManager.ShowSoftInput(view, 0);
-            inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);//personal line added
-        }
-        //Pops up soft keyboard
-        public bool isValidEmail(string email)
-        {
-            if (Android.Util.Patterns.EmailAddress.Matcher(email).Matches())
-            {
-                return true;
-            }
-            else
-            {
-                Toasty.Config.Instance
-                .TintIcon(true)
-                .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf")); 
-                Toasty.Error(this, "MailInvalid", 5, true).Show(); 
-                return false; 
-            }
-            //https://www.c-sharpcorner.com/article/how-to-validate-an-email-address-in-xamarin-android-app-using-visual-studio-2015/ @Delpin Susai Raj 
-        }
+
+
         //Email Validaton
         public bool IsValidName(string name)
         {

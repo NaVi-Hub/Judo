@@ -39,8 +39,8 @@ namespace MyLittleClub
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             this.SetContentView(Resource.Layout.BuildGroupLayout);
-            database = OpenActivity.database;
-            admin = GetAdmin();
+            database = Context.database;
+            admin = MyStuff.GetAdmin();
             GetExercises();
             // Create your application here
         }
@@ -105,17 +105,6 @@ namespace MyLittleClub
             Overalllayout.AddView(ScrollViewsLayout);
             Overalllayout.AddView(Send);
 
-        }
-
-        public Admin1 GetAdmin()
-        {
-            string email = Intent.GetStringExtra("Email");
-            int aAge = sp.GetInt("Age", -1);
-            string sport = sp.GetString("Sport", null);
-            string name = sp.GetString("Name", null);
-            string phoneNum = sp.GetString("PhoneNum", null);
-            bool i = sp.GetBoolean("LogIn", false);
-            return new Admin1(aAge, sport, name, phoneNum, email, i);
         }
 
         private void spin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
