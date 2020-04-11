@@ -27,8 +27,7 @@ namespace MyLittleClub
             string sport = sp.GetString("Sport", null);
             string name = sp.GetString("Name", null);
             string phoneNum = sp.GetString("PhoneNum", null);
-            bool i = sp.GetBoolean("LogIn", false);
-            return new Admin1(aAge, sport, name, phoneNum, email, i);
+            return new Admin1(aAge, sport, name, phoneNum, email);
         }
         public static string MakeDateString(int Year, int Month, int Day)
         {
@@ -94,14 +93,13 @@ namespace MyLittleClub
         {
             MyStuff.sp = sp;
         }
-        public static void PutToShared(Admin1 admin, ISharedPreferences sp)
+        public static void PutToShared(Admin1 admin)
         {
             var editor = sp.Edit();
             editor.PutString("Name", admin.name);
             editor.PutInt("Age", admin.age);
             editor.PutString("Sport", admin.sport);
             editor.PutString("PhoneNum", admin.phoneNumber);
-            editor.PutBoolean("LogIn", admin.LogIn);
             editor.PutString("Email", MakeEmail(admin.email));
             editor.Commit();
         }

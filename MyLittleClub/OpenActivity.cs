@@ -4,7 +4,6 @@ using Android.OS;
 using Firebase;
 using Firebase.Firestore;
 using Newtonsoft.Json;
-using Android.Content;
 
 namespace MyLittleClub
 {
@@ -26,7 +25,14 @@ namespace MyLittleClub
             if (sp.GetString("Name", "noname") != "noname")
             {
                 Intent intent = new Intent(this, typeof(MainPageActivity));
+                StartActivity(intent);
             }
+            else
+            {
+                Intent intent = new Intent(this, typeof(RegisterActivity));
+                StartActivity(intent);
+            }
+            
         }
         public FirebaseFirestore GetDataBase()
         {

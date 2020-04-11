@@ -16,7 +16,7 @@ namespace MyLittleClub
     public class RegisterActivity : Activity
     {
         Admin1 admin;
-        LinearLayout OverAllLoginLayout, NameLoginLayout, MailLoginLayout, SportLoginLayout, ButtonLoginLayout, LabelLoginLayout, PhoneNumberLoginLayout, AgeLoginLayout, CBLoginLayout;
+        LinearLayout OverAllLoginLayout, NameLoginLayout, MailLoginLayout, SportLoginLayout, ButtonLoginLayout, LabelLoginLayout, PhoneNumberLoginLayout, AgeLoginLayout;
         TextView LabelLoginTV, LabelLoginTV1, NameLoginTV, MailLoginTV, SportLoginTV, PhoneNumberLoginTV, AgeLoginTV;
         EditText NameLoginET, MailLoginET, SportLoginET, PhoneNumberLoginET, AgeLoginET;
         Button LoginButton;
@@ -25,7 +25,6 @@ namespace MyLittleClub
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
         LinearLayout.LayoutParams MatchParentParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, 200);
         FirebaseFirestore database;
-        CheckBox LoginCB;
         ISharedPreferences sp;
 
 
@@ -36,7 +35,7 @@ namespace MyLittleClub
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.RegisterLayout);
             BuildRegisterScreen();
-            database = Context.database;
+            database = MyStuff.database;
         }
 
         void BuildRegisterScreen()
@@ -190,16 +189,6 @@ namespace MyLittleClub
             OverAllLoginLayout.AddView(AgeLoginLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
-            CBLoginLayout = new LinearLayout(this);
-            CBLoginLayout.LayoutParameters = MatchParentParams2;
-            LoginCB = new CheckBox(this);
-            LoginCB.SetWidth(900);
-            LoginCB.SetHeight(50);
-            LoginCB.Text = "Keep LoggedIn?";
-            CBLoginLayout.AddView(LoginCB);
-            OverAllLoginLayout.AddView(CBLoginLayout);
-            //=======================================================================================================================================
-            //=======================================================================================================================================
             //Defining Login Button Layout
             ButtonLoginLayout = new LinearLayout(this);
             ButtonLoginLayout.LayoutParameters = WrapContParams;
@@ -219,7 +208,6 @@ namespace MyLittleClub
 
         private void LoginButton_Click(object sender, System.EventArgs e)
         {
-            bool keep = LoginCB.Checked;
             int AgeParsed = 0;
             int.TryParse(AgeLoginET.Text, out AgeParsed);
             //validation of input
@@ -230,25 +218,16 @@ namespace MyLittleClub
                    .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
                 Toasty.Info(this, "Logged-in", 5, false).Show();
                 //if(MailLoginET.text   Not in   database)
-                admin = new Admin1(int.Parse(AgeLoginET.Text), SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text, keep);
+                admin = new Admin1(int.Parse(AgeLoginET.Text), SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text);
                 HashMap map = new HashMap();
                 map.Put("Name", admin.name);
                 map.Put("EMail", admin.email);
                 map.Put("Age", AgeParsed);
                 map.Put("PhoneNum", admin.phoneNumber);
                 map.Put("Sport", admin.sport);
-                map.Put("Login", keep);
                 DocumentReference DocRef = database.Collection("Users").Document(admin.email);
-                if (keep) //CancelLoginAbilityOnAllUsers();
-                {
-                    MyStuff.CancelLoginAbilityOnAllUsers();
-                    DocRef.Set(map);
-                }
-                else
-                {
-                    DocRef.Set(map);
-                }
-                
+                DocRef.Set(map);
+                MyStuff.PutToShared(admin);
                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
                 StartActivity(intent1);
             }

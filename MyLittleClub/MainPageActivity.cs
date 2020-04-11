@@ -38,7 +38,7 @@ namespace MyLittleClub
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.MainPageLayout);
             admin1 = MyStuff.GetAdmin();
-            database = Context.database;
+            database = MyStuff.database;
             GetDates();
         }
         public void BuildMainPage()

@@ -216,22 +216,6 @@ namespace MyLittleClub
             OverAllAddStudentLayout.AddView(AddStudentExplenationETLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
-            //Defining AddStudent Button Layout
-            ButtonAddStudentLayout = new LinearLayout(this);
-            ButtonAddStudentLayout.LayoutParameters = WrapContParams;
-            ButtonAddStudentLayout.Orientation = Orientation.Horizontal;
-            //Defining AddStudent Button
-            AddStudentButton = new Button(this);
-            AddStudentButton.LayoutParameters = WrapContParams;
-            AddStudentButton.Text = "Add Student";
-            AddStudentButton.TextSize = 40;
-            AddStudentButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            AddStudentButton.Click += this.AddStudentButton_Click;
-            //Adding views
-            ButtonAddStudentLayout.AddView(AddStudentButton);
-            OverAllAddStudentLayout.AddView(ButtonAddStudentLayout);
-            //=======================================================================================================================================
-            //=======================================================================================================================================
             //Declare Spinner
             spin = new Spinner(this);
             spin.LayoutParameters = OneTwentyParams;
@@ -246,6 +230,22 @@ namespace MyLittleClub
             //Adding Views
             SpinnerLayout.AddView(spin);
             OverAllAddStudentLayout.AddView(SpinnerLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            //Defining AddStudent Button Layout
+            ButtonAddStudentLayout = new LinearLayout(this);
+            ButtonAddStudentLayout.LayoutParameters = WrapContParams;
+            ButtonAddStudentLayout.Orientation = Orientation.Horizontal;
+            //Defining AddStudent Button
+            AddStudentButton = new Button(this);
+            AddStudentButton.LayoutParameters = WrapContParams;
+            AddStudentButton.Text = "Add Student";
+            AddStudentButton.TextSize = 40;
+            AddStudentButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            AddStudentButton.Click += this.AddStudentButton_Click;
+            //Adding views
+            ButtonAddStudentLayout.AddView(AddStudentButton);
+            OverAllAddStudentLayout.AddView(ButtonAddStudentLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
             //Defining AddStudent Button Layout
@@ -280,7 +280,7 @@ namespace MyLittleClub
         //Building the AddStudent Screen
         private void AddStudentButton_Click(object sender, EventArgs e)
         {
-            if (IsValidName(NameAddStudentET.Text) && MyStuff.isValidEmail(EmailAddStudentET.Text, this) && spin.SelectedView.ToString() != "Choose Group")
+            if (IsValidName(NameAddStudentET.Text) && MyStuff.isValidEmail(EmailAddStudentET.Text, this) && currGroup != "Choose Group")
             {
                 if (Parent1NameAddStudentET.Text != "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent1NameAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text, currGroup); }
                 if (Parent1NameAddStudentET.Text == "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text, currGroup); }

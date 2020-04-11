@@ -32,7 +32,7 @@ namespace MyLittleClub
         public static List<CheckBox> CheckBoxList;
         ScrollView AddGroupStudentsSv;
         CheckBox cb;
-        bool c;
+        bool c = false;
         public static bool firstLogin = true;
         ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
@@ -41,18 +41,9 @@ namespace MyLittleClub
             CheckBoxList = new List<CheckBox>();
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddGroupLayout);
-            database = Context.database;
+            database = MyStuff.database;
             admin = MyStuff.GetAdmin();
-            if (firstLogin)
-            {
-                firstLogin = !firstLogin;
-                GetStudents();
-                c = false;
-            }
-            else
-            {
-                BuildAddGroupScreen();
-            }
+            BuildAddGroupScreen();
 
             // Create your application here
         }
@@ -243,36 +234,6 @@ namespace MyLittleClub
             OverAllAddGroupLayout.AddView(OverSVLayout);
         }
         //Building the ScrollView
-
-        public void GetStudents()
-        {
-            Query query = database.Collection("Users").Document(admin.email).Collection("Students");
-            query.Get().AddOnCompleteListener(new QueryListener((task) =>
-            {
-                if (task.IsSuccessful)
-                {
-                    var snapshot = (QuerySnapshot)task.Result;
-                    if (!snapshot.IsEmpty)
-                    {
-                        var document = snapshot.Documents;
-                        foreach (DocumentSnapshot item in document)
-                        {
-                            Student s = new Student();
-                            s.name = item.Get("Name").ToString();
-                            s.parentName1 = item.Get("Parent1").ToString();
-                            s.parentName2 = item.Get("Parent2").ToString();
-                            s.phoneNumber = item.Get("PhoneNum").ToString();
-                            s.email = item.Get("Email").ToString();
-                            students.Add(s);
-                        }
-                    }
-                }
-                BuildAddGroupScreen();
-            }
-            ));
-        }
-        //Gets all the students from the FireBase
-
         private void AddGroupButton_Click(object sender, EventArgs e)
         {
 
