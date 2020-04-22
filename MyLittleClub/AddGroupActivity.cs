@@ -420,7 +420,7 @@ namespace MyLittleClub
                 txt = string.Format("{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
             }
 
-            if (IsDateLegit(e.Date))
+            if (MyStuff.IsDateLegit(e.Date))
             {
                 AddGroupDateButton.Text = txt;
             }
@@ -432,44 +432,6 @@ namespace MyLittleClub
                 Toasty.Error(this, "InValid Date",5, true).Show();
             }
         }
-        //: formats the string in DD/MM/YYYY format
-        public bool IsDateLegit(DateTime date)
-        {
-            if (date.Year < DateTime.Today.Year)
-            {
-                return false;
-            }
-            else if (date.Year > DateTime.Today.Year)
-            {
-                return true;
-            }
-            else
-            {
-                if (date.Month > DateTime.Today.Month)
-                {
-                    return true;
-                }
-                else if (date.Month > DateTime.Today.Month)
-                {
-                    return true;
-                }
-                else
-                {
-                    if (date.Day >= DateTime.Today.Day)
-                    {
-                        return true;
-                    }
-                    else if (date.Day > DateTime.Today.Day)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
-        //makes sure the date is in the future
+        //formats the string in DD/MM/YYYY format
     }
 }

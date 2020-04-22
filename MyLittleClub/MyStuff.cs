@@ -23,11 +23,10 @@ namespace MyLittleClub
         public static Admin1 GetAdmin()
         {
             string email = MyStuff.ReverseEmail(sp.GetString("Email", null));
-            int aAge = sp.GetInt("Age", -1);
             string sport = sp.GetString("Sport", null);
             string name = sp.GetString("Name", null);
             string phoneNum = sp.GetString("PhoneNum", null);
-            return new Admin1(aAge, sport, name, phoneNum, email);
+            return new Admin1(sport, name, phoneNum, email);
         }
         public static string MakeDateString(int Year, int Month, int Day)
         {
@@ -97,7 +96,6 @@ namespace MyLittleClub
         {
             var editor = sp.Edit();
             editor.PutString("Name", admin.name);
-            editor.PutInt("Age", admin.age);
             editor.PutString("Sport", admin.sport);
             editor.PutString("PhoneNum", admin.phoneNumber);
             editor.PutString("Email", MakeEmail(admin.email));
@@ -120,7 +118,6 @@ namespace MyLittleClub
                             {
                                 HashMap map = new HashMap();
                                 map.Put("Name", item.Get("Name").ToString());
-                                map.Put("Age", int.Parse(item.Get("Age").ToString()));
                                 map.Put("Sport", item.Get("Sport").ToString());
                                 map.Put("EMail", item.Get("EMail").ToString());
                                 map.Put("PhoneNum", item.Get("PhoneNum").ToString());
@@ -135,5 +132,44 @@ namespace MyLittleClub
             ));
         }
         //Firebase defining
+        public static bool IsDateLegit(DateTime date)
+        {
+            if (date.Year < DateTime.Today.Year)
+            {
+                return false;
+            }
+            else if (date.Year > DateTime.Today.Year)
+            {
+                return true;
+            }
+            else
+            {
+                if (date.Month > DateTime.Today.Month)
+                {
+                    return true;
+                }
+                else if (date.Month > DateTime.Today.Month)
+                {
+                    return true;
+                }
+                else
+                {
+                    if (date.Day >= DateTime.Today.Day)
+                    {
+                        return true;
+                    }
+                    else if (date.Day > DateTime.Today.Day)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                // גבול לתאריך
+            }
+        }
+        //makes sure the date is in legit
     }
 }

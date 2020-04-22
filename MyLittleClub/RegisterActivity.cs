@@ -16,9 +16,9 @@ namespace MyLittleClub
     public class RegisterActivity : Activity
     {
         Admin1 admin;
-        LinearLayout OverAllLoginLayout, NameLoginLayout, MailLoginLayout, SportLoginLayout, ButtonLoginLayout, LabelLoginLayout, PhoneNumberLoginLayout, AgeLoginLayout;
-        TextView LabelLoginTV, LabelLoginTV1, NameLoginTV, MailLoginTV, SportLoginTV, PhoneNumberLoginTV, AgeLoginTV;
-        EditText NameLoginET, MailLoginET, SportLoginET, PhoneNumberLoginET, AgeLoginET;
+        LinearLayout OverAllLoginLayout, NameLoginLayout, MailLoginLayout, SportLoginLayout, ButtonLoginLayout, LabelLoginLayout, PhoneNumberLoginLayout;
+        TextView LabelLoginTV, LabelLoginTV1, NameLoginTV, MailLoginTV, SportLoginTV, PhoneNumberLoginTV;
+        EditText NameLoginET, MailLoginET, SportLoginET, PhoneNumberLoginET;
         Button LoginButton;
         LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(420, 180);
@@ -165,30 +165,6 @@ namespace MyLittleClub
             OverAllLoginLayout.AddView(PhoneNumberLoginLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
-            //Defining AgeLoginLayout
-            AgeLoginLayout = new LinearLayout(this);
-            AgeLoginLayout.LayoutParameters = WrapContParams;
-            AgeLoginLayout.Orientation = Orientation.Horizontal;
-            //Defining the Age Login TextView
-            AgeLoginTV = new TextView(this);
-            AgeLoginTV.LayoutParameters = WrapContParams;
-            AgeLoginTV.Text = "Age: ";
-            AgeLoginTV.TextSize = 30;
-            AgeLoginTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
-            AgeLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Age Login EditText
-            AgeLoginET = new EditText(this);
-            AgeLoginET.LayoutParameters = OneTwentyParams;
-            AgeLoginET.Hint = "Age";
-            AgeLoginET.TextSize = 30;
-            AgeLoginET.InputType = InputTypes.ClassPhone;
-            AgeLoginET.SetSingleLine();
-            //Adding views to layout
-            AgeLoginLayout.AddView(AgeLoginTV);
-            AgeLoginLayout.AddView(AgeLoginET);
-            OverAllLoginLayout.AddView(AgeLoginLayout);
-            //=======================================================================================================================================
-            //=======================================================================================================================================
             //Defining Login Button Layout
             ButtonLoginLayout = new LinearLayout(this);
             ButtonLoginLayout.LayoutParameters = WrapContParams;
@@ -208,21 +184,18 @@ namespace MyLittleClub
 
         private void LoginButton_Click(object sender, System.EventArgs e)
         {
-            int AgeParsed = 0;
-            int.TryParse(AgeLoginET.Text, out AgeParsed);
             //validation of input
-            if (IsValidName(NameLoginET.Text) && IsValidSport(SportLoginET.Text) & MyStuff.isValidEmail(MailLoginET.Text, this) && PhoneNumberLoginET.Text.Length == 10 && AgeParsed > 0 && AgeParsed <= 99)
+            if (IsValidName(NameLoginET.Text) && IsValidSport(SportLoginET.Text) & MyStuff.isValidEmail(MailLoginET.Text, this) && PhoneNumberLoginET.Text.Length == 10)
             {
                 Toasty.Config.Instance
                    .TintIcon(true)
                    .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
                 Toasty.Info(this, "Logged-in", 5, false).Show();
                 //if(MailLoginET.text   Not in   database)
-                admin = new Admin1(int.Parse(AgeLoginET.Text), SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text);
+                admin = new Admin1(SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text);
                 HashMap map = new HashMap();
                 map.Put("Name", admin.name);
                 map.Put("EMail", admin.email);
-                map.Put("Age", AgeParsed);
                 map.Put("PhoneNum", admin.phoneNumber);
                 map.Put("Sport", admin.sport);
                 DocumentReference DocRef = database.Collection("Users").Document(admin.email);
