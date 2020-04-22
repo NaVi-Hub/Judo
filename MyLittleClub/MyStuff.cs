@@ -134,41 +134,85 @@ namespace MyLittleClub
         //Firebase defining
         public static bool IsDateLegit(DateTime date)
         {
+            bool tr = false;
+            DateTime EndDate = new DateTime();
+            if (DateTime.Today.Month <= 8)
+            {
+                EndDate = new DateTime(DateTime.Today.Year, 9, 1);
+            }
+            else if(DateTime.Today.Month >= 9)
+            {
+                EndDate = new DateTime(DateTime.Today.Year + 1, 9, 1);
+            }
             if (date.Year < DateTime.Today.Year)
             {
-                return false;
+                tr = tr && false;
             }
             else if (date.Year > DateTime.Today.Year)
             {
-                return true;
+                tr = tr && true;
             }
             else
             {
                 if (date.Month > DateTime.Today.Month)
                 {
-                    return true;
+                    tr = tr && true;
                 }
                 else if (date.Month > DateTime.Today.Month)
                 {
-                    return true;
+                    tr = tr && true;
                 }
                 else
                 {
                     if (date.Day >= DateTime.Today.Day)
                     {
-                        return true;
+                        tr = tr && true;
                     }
                     else if (date.Day > DateTime.Today.Day)
                     {
-                        return true;
+                        tr = tr && true;
                     }
                     else
                     {
-                        return false;
+                        tr = tr && false;
                     }
                 }
-                // גבול לתאריך
             }
+            if (date.Year < EndDate.Year)
+            {
+                tr = tr && false;
+            }
+            else if (date.Year > EndDate.Year)
+            {
+                tr = tr && true;
+            }
+            else
+            {
+                if (date.Month > EndDate.Month)
+                {
+                    tr = tr && true;
+                }
+                else if (date.Month > EndDate.Month)
+                {
+                    tr = tr && true;
+                }
+                else
+                {
+                    if (date.Day >= EndDate.Day)
+                    {
+                        tr = tr && true;
+                    }
+                    else if (date.Day > EndDate.Day)
+                    {
+                        tr = tr && true;
+                    }
+                    else
+                    {
+                        tr = tr && false;
+                    }
+                }
+            }
+            return tr;
         }
         //makes sure the date is in legit
     }
