@@ -24,15 +24,17 @@ namespace MyLittleClub
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(420, 180);
         Admin1 admin;
-        FirebaseFirestore database = OpenActivity.database;
-
+        FirebaseFirestore database = Context.database;
+        ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddTrainingLayout);
-            admin = MainPageActivity.admin1;
+            admin = MyStuff.GetAdmin();
             BuildAddTrainingScreen();
         }
+        
         public void BuildAddTrainingScreen()
         {
             //OverAll Layout
@@ -166,9 +168,12 @@ namespace MyLittleClub
             map.Put("Explenation", ex.explenatiotn);
             DocumentReference DocRef = database.Collection("Exercises").Document(ex.name);
             DocRef.Set(map);
-            Toasty.Success(this, "Exercise was added secessfully", 5, false).Show();
+            Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+            Toasty.Success(this, "Exercise was added secessfully", 5, true).Show();
             Intent intent1 = new Intent(this, typeof(MainPageActivity));
-            intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
+            intent1.PutExtra("Email", admin.email);
             StartActivity(intent1);
         }
         //Adds the exercise to the database.
@@ -183,7 +188,7 @@ namespace MyLittleClub
         //Makes a big EditText
         public void showSoftKeyboard(Activity activity, View view)
         {
-            InputMethodManager inputMethodManager = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
+            InputMethodManager inputMethodManager = (InputMethodManager)activity.GetSystemService(Android.Content.Context.InputMethodService);
             view.RequestFocus();
             inputMethodManager.ShowSoftInput(view, 0);
             inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);//personal line added

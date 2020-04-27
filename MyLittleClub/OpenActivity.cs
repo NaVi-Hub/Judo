@@ -8,48 +8,31 @@ using Newtonsoft.Json;
 namespace MyLittleClub
 {
     [Activity(Label = "OpenActivity", MainLauncher = true)]
-    public class OpenActivity : Activity
+    public class Context : Activity
     {
 
         public static FirebaseFirestore database;
         Admin1 admin;
+        ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
+            var editor = sp.Edit();
             base.OnCreate(savedInstanceState);
             database = GetDataBase();
-            Query query = database.Collection("Users").WhereEqualTo("Login", true);
-            query.Get().AddOnCompleteListener(new QueryListener((task) =>
+            MyStuff.DefineShared(sp);
+            MyStuff.DefineDatabase(database);
+            if (sp.GetString("Name", "noname") != "noname")
             {
-                if (task.IsSuccessful)
-                {
-                    var snapshot = (QuerySnapshot)task.Result;
-                    if (!snapshot.IsEmpty)
-                    {
-                        var document = snapshot.Documents;
-                        foreach (DocumentSnapshot item in document)
-                        {
-                            if ((item.Get("Login")).ToString() == "true")
-                            {
-                                admin = new Admin1();
-                                admin.name = item.Get("Name").ToString();
-                                admin.age = int.Parse(item.Get("Age").ToString());
-                                admin.sport = item.Get("Sport").ToString();
-                                admin.email = item.Get("EMail").ToString();
-                                admin.phoneNumber = item.Get("PhoneNum").ToString();
-                                admin.LogIn = (bool)item.Get("LogIn");
-                                Intent intent1 = new Intent(this, typeof(MainPageActivity));
-                                intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
-                                StartActivity(intent1);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Intent intent2 = new Intent(this, typeof(RegisterActivity));
-                        StartActivity(intent2);
-                    }
-                }
-            }));
+                Intent intent = new Intent(this, typeof(MainPageActivity));
+                StartActivity(intent);
+            }
+            else
+            {
+                Intent intent = new Intent(this, typeof(RegisterActivity));
+                StartActivity(intent);
+            }
+            
         }
         public FirebaseFirestore GetDataBase()
         {
@@ -63,8 +46,8 @@ namespace MyLittleClub
                 .Build();
             var app = FirebaseApp.InitializeApp(this, options);
             database = FirebaseFirestore.GetInstance(app);
-
             return database;
+
         }
         //Firebase defining
     }

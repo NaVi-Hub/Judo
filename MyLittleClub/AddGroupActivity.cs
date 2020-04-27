@@ -32,26 +32,18 @@ namespace MyLittleClub
         public static List<CheckBox> CheckBoxList;
         ScrollView AddGroupStudentsSv;
         CheckBox cb;
-        bool c;
+        bool c = false;
         public static bool firstLogin = true;
-
+        ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             CheckBoxList = new List<CheckBox>();
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddGroupLayout);
-            database = OpenActivity.database;
-            admin = MainPageActivity.admin1;
-            if (firstLogin)
-            {
-                firstLogin = !firstLogin;
-                GetStudents();
-                c = false;
-            }
-            else
-            {
-                BuildAddGroupScreen();
-            }
+            database = MyStuff.database;
+            admin = MyStuff.GetAdmin();
+            BuildAddGroupScreen();
 
             // Create your application here
         }
@@ -235,43 +227,13 @@ namespace MyLittleClub
                     InsideSVLayout.AddView(cb);
                     InsideSVLayout.AddView(StudTV);
                 }
-                catch { Toasty.Warning(this, "Not FIrst time open", 5, false).Show(); }
+                catch { Toasty.Warning(this, "Not FIrst time open", 5, true).Show(); }
                 AddGroupSvLayout.AddView(InsideSVLayout);
             }
             AddGroupStudentsSv.AddView(AddGroupSvLayout);
             OverAllAddGroupLayout.AddView(OverSVLayout);
         }
         //Building the ScrollView
-
-        public void GetStudents()
-        {
-            Query query = database.Collection("Users").Document(admin.email).Collection("Students");
-            query.Get().AddOnCompleteListener(new QueryListener((task) =>
-            {
-                if (task.IsSuccessful)
-                {
-                    var snapshot = (QuerySnapshot)task.Result;
-                    if (!snapshot.IsEmpty)
-                    {
-                        var document = snapshot.Documents;
-                        foreach (DocumentSnapshot item in document)
-                        {
-                            Student s = new Student();
-                            s.name = item.Get("Name").ToString();
-                            s.parentName1 = item.Get("Parent1").ToString();
-                            s.parentName2 = item.Get("Parent2").ToString();
-                            s.phoneNumber = item.Get("PhoneNum").ToString();
-                            s.email = item.Get("Email").ToString();
-                            students.Add(s);
-                        }
-                    }
-                }
-                BuildAddGroupScreen();
-            }
-            ));
-        }
-        //Gets all the students from the FireBase
-
         private void AddGroupButton_Click(object sender, EventArgs e)
         {
 
@@ -289,10 +251,11 @@ namespace MyLittleClub
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Groups").Document(group.Location + " " + group.time + " " + group.age);
                 docref.Set(map);
                 HashMap map2 = new HashMap();
-
-                Toasty.Success(this, "Group Added Sucesfully", 5, false).Show();
+                Toasty.Config.Instance
+                    .TintIcon(true)
+                    .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Success(this, "Group Added Sucesfully", 5, true).Show();
                 Intent intent1 = new Intent(this, typeof(MainPageActivity));
-                intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
                 StartActivity(intent1);
             }
         }
@@ -301,6 +264,9 @@ namespace MyLittleClub
         private void RadioButtonClick(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
+            Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
             Toasty.Info(this, rb.Text,5, false).Show();
             c = true;
         }
@@ -343,19 +309,34 @@ namespace MyLittleClub
             switch (x)
             {
                 case 0:
-                    Toasty.Error(this, "Location InValid", 5, false).Show();
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Location InValid", 5, true).Show();
                     return false;
                 case 1:
-                    Toasty.Error(this, "Age Range InValid", 5, false).Show();
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Age Range InValid", 5, true).Show();
                     return false;
                 case 2:
-                    Toasty.Error(this, "Group Level InValid", 5, false).Show();
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Group Level InValid", 5, true).Show();
                     return false;
                 case 3:
-                    Toasty.Error(this, "Some Imputs Are InValid", 5, false).Show();
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Some Imputs Are InValid", 5, true).Show();
                     return false;
                 case 4:
-                    Toasty.Error(this, "The Competitivness Was'nt Clicked", 5, false).Show();
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "The Competitivness Was'nt Clicked", 5, true).Show();
                     return false;
                 default:
                     return false;
@@ -439,53 +420,18 @@ namespace MyLittleClub
                 txt = string.Format("{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
             }
 
-            if (IsDateLegit(e.Date))
+            if (MyStuff.IsDateLegit(e.Date))
             {
                 AddGroupDateButton.Text = txt;
             }
             else
             {
-                Toasty.Error(this, "InValid Date",5, false).Show();
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Error(this, "InValid Date",5, true).Show();
             }
         }
-        //: formats the string in DD/MM/YYYY format
-        public bool IsDateLegit(DateTime date)
-        {
-            if (date.Year < DateTime.Today.Year)
-            {
-                return false;
-            }
-            else if (date.Year > DateTime.Today.Year)
-            {
-                return true;
-            }
-            else
-            {
-                if (date.Month > DateTime.Today.Month)
-                {
-                    return true;
-                }
-                else if (date.Month > DateTime.Today.Month)
-                {
-                    return true;
-                }
-                else
-                {
-                    if (date.Day >= DateTime.Today.Day)
-                    {
-                        return true;
-                    }
-                    else if (date.Day > DateTime.Today.Day)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
-        //makes sure the date is in the future
+        //formats the string in DD/MM/YYYY format
     }
 }

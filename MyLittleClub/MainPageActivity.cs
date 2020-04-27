@@ -18,6 +18,7 @@ namespace MyLittleClub
     [Activity(Theme = "@style/AppTheme")]
     public class MainPageActivity : AppCompatActivity, IOnDateChangeListener
     {
+        ISharedPreferences sp;
         LinearLayout MainPageOverallLayout, MainPageTitleLayout;
         TextView MainPageTitleTV, MainPageTitleTV2;
         LinearLayout.LayoutParams CalendarParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, 1000);
@@ -29,14 +30,16 @@ namespace MyLittleClub
         List<String> dates;
         List<Group> groups;
         Button MainPageShowGroupsbtn;
+        Dialog d;
+        CalendarView calendar;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.MainPageLayout);
-            admin1 = JsonConvert.DeserializeObject<Admin1>(Intent.GetStringExtra("Admin"));//@Itay
-            database = OpenActivity.database;
+            admin1 = MyStuff.GetAdmin();
+            database = MyStuff.database;
             GetDates();
-            // Create your application here
         }
         public void BuildMainPage()
         {
@@ -64,7 +67,7 @@ namespace MyLittleClub
             int year = int.Parse(DateTime.Today.Year.ToString());
             int month = int.Parse(DateTime.Today.Month.ToString()) + 1;
             int day = int.Parse(DateTime.Today.Day.ToString());
-            MainPageTitleTV2.Text = $"You have {abc} trainings on the {MakeDateString(year, month, day)}";
+            MainPageTitleTV2.Text = $"You have {abc} trainings on the {MyStuff.MakeDateString(year, month, day)}";
             MainPageTitleTV2.TextSize = 25;
             MainPageTitleTV2.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             MainPageTitleTV2.SetTextColor(Android.Graphics.Color.SaddleBrown);
@@ -83,35 +86,11 @@ namespace MyLittleClub
             MainPageShowGroupsbtn.Click += this.MainPageShowGroupsbtn_Click;
         }
         //Build Main Page's Views
-        Dialog d;
         private void MainPageShowGroupsbtn_Click(object sender, EventArgs e)
         {
             GetGroups();
         }
         //Defining and adding views to layout
-        public string MakeDateString(int Year, int Month, int Day)
-        {
-            string txt;
-            if (Month < 10 && Day < 10)
-            {
-                txt = string.Format("0{0}.0{1}.{2}", Day, Month, Year);
-            }
-            else if (Month < 10)
-            {
-                txt = string.Format("{0}.0{1}.{2}", Day, Month, Year);
-            }
-            else if (Day < 10)
-            {
-                txt = string.Format("0{0}.{1}.{2}", Day, Month, Year);
-            }
-            else
-            {
-                txt = string.Format("{0}.{1}.{2}", Day, Month, Year);
-            }
-
-            return txt;
-        }
-        //Makes the Date string comfortable
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             MenuInflater.Inflate(Resource.Menu.MyLittleMenu, menu);
@@ -148,7 +127,7 @@ namespace MyLittleClub
                     }
                 case Resource.Id.menuItem5:
                     {
-                        CancelLoginAbilityOnAllUsers();
+                        MyStuff.CancelLoginAbilityOnAllUsers();
                         Intent intent3 = new Intent(this, typeof(RegisterActivity));
                         StartActivity(intent3);
                         return true;
@@ -157,39 +136,6 @@ namespace MyLittleClub
             return base.OnOptionsItemSelected(item);
         }
         //Menu selected
-        public void CancelLoginAbilityOnAllUsers()
-        {
-            Query query = database.Collection("Users").WhereEqualTo("Login", true);
-            query.Get().AddOnCompleteListener(new QueryListener((task) =>
-            {
-                if (task.IsSuccessful)
-                {
-                    var snapshot = (QuerySnapshot)task.Result;
-                    if (!snapshot.IsEmpty)
-                    {
-                        var document = snapshot.Documents;
-                        foreach (DocumentSnapshot item in document)
-                        {
-                            if ((item.Get("Login")).ToString() == "true")
-                            {
-                                HashMap map = new HashMap();
-                                map.Put("Name", item.Get("Name").ToString());
-                                map.Put("Age", int.Parse(item.Get("Age").ToString()));
-                                map.Put("Sport", item.Get("Sport").ToString());
-                                map.Put("EMail", item.Get("EMail").ToString());
-                                map.Put("PhoneNum", item.Get("PhoneNum").ToString());
-                                map.Put("Login", false);
-                                DocumentReference docref = database.Collection("Users").Document(item.Get("EMail").ToString());
-                                docref.Set(map);
-                            }
-                        }
-                    }
-                }
-            }
-            ));
-        }
-        //Makes sure there only one User Who's Logedin
-        CalendarView calendar;
         public void BuildCalendar()
         {
             calendar = new CalendarView(this);
@@ -200,7 +146,7 @@ namespace MyLittleClub
         public void OnSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth)
         {
             abc = 0;
-            string txt = MakeDateString(year, month + 1, dayOfMonth);
+            string txt = MyStuff.MakeDateString(year, month + 1, dayOfMonth);
             for (int i = 0; i < dates.Count; i++)
             {
                 if (dates[i] == txt)
@@ -211,13 +157,13 @@ namespace MyLittleClub
             int year1 = int.Parse(DateTime.Today.Year.ToString());
             int month1 = int.Parse(DateTime.Today.Month.ToString());
             int day1 = int.Parse(DateTime.Today.Day.ToString());
-            if (txt == MakeDateString(year1, month1, day1))
+            if (txt == MyStuff.MakeDateString(year1, month1, day1))
             {
                 MainPageTitleTV2.Text = $"You have {abc} trainings Today";
             }
             else
             {
-                MainPageTitleTV2.Text = $"You have {abc} trainings on the {MakeDateString(year, month + 1, dayOfMonth)}";
+                MainPageTitleTV2.Text = $"You have {abc} trainings on the {MyStuff.MakeDateString(year, month + 1, dayOfMonth)}";
             }
         }
         //changes the title TextView to show how many trainings are in the inputted date
@@ -246,14 +192,10 @@ namespace MyLittleClub
                         }
                     }
                 }
-                d = new Dialog(this);
-                //d.SetContentView(Resource.Layout.ShowGroupsLayout);
-                d.SetTitle("Groups");
-                d.SetCancelable(true);
-                d.Show();
             }
             ));
         }
+        //Retrives the Groups from database
         public void GetDates()
         {
             dates = new List<string>();
@@ -274,7 +216,7 @@ namespace MyLittleClub
                             int inday = int.Parse(day);
                             int inmonth = int.Parse(month);
                             int inyear = int.Parse(year);
-                            dates.Add(MakeDateString(inyear, inmonth, inday));
+                            dates.Add(MyStuff.MakeDateString(inyear, inmonth, inday));
                         }
                     }
                 }
@@ -282,9 +224,6 @@ namespace MyLittleClub
             }
             ));
         }
-
-        private RecyclerView recyclerView;
-        private RecyclerView.LayoutManager LayoutManager;
-        private RecyclerView.Adapter adapter;
+        //Retrives the Dates on which there are Groups from database
     }
 }

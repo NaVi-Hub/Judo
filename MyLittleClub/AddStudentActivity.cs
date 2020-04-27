@@ -32,15 +32,18 @@ namespace MyLittleClub
         LinearLayout SpinnerLayout;
         List<string> groups;
         string groupname;
+        ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddStudentsLayout);
-            database = OpenActivity.database;
-            admin = MainPageActivity.admin1;
+            database = Context.database;
+            admin = MyStuff.GetAdmin();
             groups = GetGroups();
             // Create your application here
         }
+       
         void BuildAddStudentScreen()
         {
             //Defining the parent layout
@@ -213,22 +216,6 @@ namespace MyLittleClub
             OverAllAddStudentLayout.AddView(AddStudentExplenationETLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
-            //Defining AddStudent Button Layout
-            ButtonAddStudentLayout = new LinearLayout(this);
-            ButtonAddStudentLayout.LayoutParameters = WrapContParams;
-            ButtonAddStudentLayout.Orientation = Orientation.Horizontal;
-            //Defining AddStudent Button
-            AddStudentButton = new Button(this);
-            AddStudentButton.LayoutParameters = WrapContParams;
-            AddStudentButton.Text = "Add Student";
-            AddStudentButton.TextSize = 40;
-            AddStudentButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            AddStudentButton.Click += this.AddStudentButton_Click;
-            //Adding views
-            ButtonAddStudentLayout.AddView(AddStudentButton);
-            OverAllAddStudentLayout.AddView(ButtonAddStudentLayout);
-            //=======================================================================================================================================
-            //=======================================================================================================================================
             //Declare Spinner
             spin = new Spinner(this);
             spin.LayoutParameters = OneTwentyParams;
@@ -243,6 +230,22 @@ namespace MyLittleClub
             //Adding Views
             SpinnerLayout.AddView(spin);
             OverAllAddStudentLayout.AddView(SpinnerLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
+            //Defining AddStudent Button Layout
+            ButtonAddStudentLayout = new LinearLayout(this);
+            ButtonAddStudentLayout.LayoutParameters = WrapContParams;
+            ButtonAddStudentLayout.Orientation = Orientation.Horizontal;
+            //Defining AddStudent Button
+            AddStudentButton = new Button(this);
+            AddStudentButton.LayoutParameters = WrapContParams;
+            AddStudentButton.Text = "Add Student";
+            AddStudentButton.TextSize = 40;
+            AddStudentButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            AddStudentButton.Click += this.AddStudentButton_Click;
+            //Adding views
+            ButtonAddStudentLayout.AddView(AddStudentButton);
+            OverAllAddStudentLayout.AddView(ButtonAddStudentLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
             //Defining AddStudent Button Layout
@@ -272,13 +275,12 @@ namespace MyLittleClub
         private void SendBackToMainButton_Click(object sender, EventArgs e)
         {
             Intent intent1 = new Intent(this, typeof(MainPageActivity));
-            intent1.PutExtra("Admin", JsonConvert.SerializeObject(admin));
             StartActivity(intent1);
         }
         //Building the AddStudent Screen
         private void AddStudentButton_Click(object sender, EventArgs e)
         {
-            if (IsValidName(NameAddStudentET.Text) && isValidEmail(EmailAddStudentET.Text) && spin.SelectedView.ToString() != "Choose Group")
+            if (IsValidName(NameAddStudentET.Text) && MyStuff.isValidEmail(EmailAddStudentET.Text, this) && currGroup != "Choose Group")
             {
                 if (Parent1NameAddStudentET.Text != "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent1NameAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text, currGroup); }
                 if (Parent1NameAddStudentET.Text == "" && Parent2NameAddStudentET.Text != "") { student = new Student(NameAddStudentET.Text, PhoneNumAddStudentET.Text, EmailAddStudentET.Text, Parent2NameAddStudentET.Text, AddStudentExplenationET.Text, currGroup); }
@@ -295,7 +297,10 @@ namespace MyLittleClub
                 map.Put("Group", student.group);
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Students").Document(student.name + " " + student.phoneNumber);
                 docref.Set(map);
-                Toasty.Success(this, "Student Added Sucesfully", 5, false).Show();
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Success(this, "Student Added Sucesfully", 5, true).Show();
                 NameAddStudentET.Text = "";
                 PhoneNumAddStudentET.Text = "05";
                 EmailAddStudentET.Text = "";
@@ -306,35 +311,23 @@ namespace MyLittleClub
             }
             else
             {
-                Toasty.Error(this, "Input InValid", 5, false).Show();
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Error(this, "Input InValid", 5, true).Show();
             }
         }
         //intents back to main page
         private void AddStudentExplenationETLayout_Click(object sender, EventArgs e)
         {
             AddStudentExplenationET.RequestFocus();
-            showSoftKeyboard(this, AddStudentExplenationET);
+            MyStuff.showSoftKeyboard(this, AddStudentExplenationET);
             //@Tomer
             //https://gist.github.com/icalderond/742f98f2f8cda1fae1b0bc877df76bbc @Javier Pardo
         }
         //Makes a big EditText
-        public void showSoftKeyboard(Activity activity, View view)
-        {
-            InputMethodManager inputMethodManager = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
-            view.RequestFocus();
-            inputMethodManager.ShowSoftInput(view, 0);
-            inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);//personal line added
-        }
-        //Pops up soft keyboard
-        public bool isValidEmail(string email)
-        {
-            if (Android.Util.Patterns.EmailAddress.Matcher(email).Matches())
-            {
-                return true;
-            }
-            else { Toasty.Error(this, "MailInvalid", 5).Show(); return false; }
-            //https://www.c-sharpcorner.com/article/how-to-validate-an-email-address-in-xamarin-android-app-using-visual-studio-2015/ @Delpin Susai Raj 
-        }
+
+
         //Email Validaton
         public bool IsValidName(string name)
         {
@@ -356,7 +349,13 @@ namespace MyLittleClub
                     Tr = false;
                 }
             }
-            if (!Tr) { Toasty.Error(this, "Name InValid", 5, false).Show(); return Tr; }
+            if (!Tr) 
+            {
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf")); 
+                Toasty.Error(this, "Name InValid", 5, true).Show(); return Tr;
+            }
             else
             {
                 return Tr;

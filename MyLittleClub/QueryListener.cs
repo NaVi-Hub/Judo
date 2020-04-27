@@ -12,7 +12,7 @@ namespace MyLittleClub
             OnQueryComplete = action;
         }
 
-        public void OnComplete(Android.Gms.Tasks.Task task)
+        public void OnComplete(Task task)
         {
             OnQueryComplete(task);
         }
