@@ -1,5 +1,4 @@
-﻿
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Widget;
@@ -106,13 +105,11 @@ namespace MyLittleClub
             Overalllayout.AddView(Send);
 
         }
-
         private void spin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             Spinner spin = (Spinner)sender;
             currGroup = spin.GetItemAtPosition(e.Position).ToString();
         }
-
         private void Send_Click(object sender, System.EventArgs e)
         {
             if (InputLegit())
@@ -137,12 +134,10 @@ namespace MyLittleClub
             {
             }
         }
-
         private bool InputLegit()
         {
             return currGroup != "Choose Group";
         }
-
         public void Button_Drag(object sender, View.DragEventArgs e)
         {
             Button a = CurrButton;
@@ -186,7 +181,7 @@ namespace MyLittleClub
                     break;
             }
         }
-        Dialog d;
+        Dialog d1;
         LinearLayout DialogOverLayout, DialogNameLayout, DialogDurationLayout, DialogDurationExplenation;
         TextView DialogNameTextView, DialogDurationTextView, DialogExplenationTextView;
         Button DialogRemoveButton;
@@ -194,13 +189,12 @@ namespace MyLittleClub
         public void BuildDialog(object sender)
         {
             Button b = (Button)sender;
-            d = new Dialog(this);
+            d1 = new Dialog(this);
             //if (exes.Contains)
-            d.SetCancelable(true);
-            d.SetTitle(ab1.name);
-            d.SetContentView(Resource.Layout.DialogLayout);
-
-            DialogOverLayout = d.FindViewById<LinearLayout>(Resource.Id.DialogLineaLayout);
+            d1.SetCancelable(true);
+            d1.SetTitle(ab1.name);
+            d1.SetContentView(Resource.Layout.MyDialog);
+            LinearLayout ll = d1.FindViewById<LinearLayout>(Resource.Id.AbcDEF);
             DialogOverLayout.Orientation = Orientation.Vertical;
             //
             DialogNameTextView = new TextView(this);
@@ -209,7 +203,7 @@ namespace MyLittleClub
             DialogDurationTextView.Text = ab1.duration.ToString();
             DialogExplenationTextView = new TextView(this);
             DialogExplenationTextView.Text = ab1.explenatiotn.ToString();
-            d.Show();
+            d1.Show();
         }
         private void Copy_Click(object sender, EventArgs e)
         {
@@ -225,7 +219,6 @@ namespace MyLittleClub
             var data = ClipData.NewPlainText("name", CurrButton.Text);
             CurrButton.StartDrag(data, new View.DragShadowBuilder(CurrButton), null, 0);
         }
-
         List<Exercise> exes;
         public void GetExercises()
         {
@@ -253,29 +246,6 @@ namespace MyLittleClub
             ));
         }
         List<Exercise> ex = new List<Exercise>();
-        public void GetSpecificExercise(Exercise a1, string name)
-        {
-            Query query = database.Collection("Exercises").WhereEqualTo("Name", name);
-            query.Get().AddOnCompleteListener(new QueryListener((task) =>
-            {
-                if (task.IsSuccessful)
-                {
-                    var snapshot = (QuerySnapshot)task.Result;
-                    if (!snapshot.IsEmpty)
-                    {
-                        var document = snapshot.Documents;
-                        foreach (DocumentSnapshot item in document)
-                        {
-                            string name1 = (item.GetString("Name")).ToString();
-                            double duration = double.Parse(item.GetDouble("Duration").ToString());
-                            string exp = (item.GetString("Explenation")).ToString();
-                            a1 = new Exercise(name1, duration, exp);
-                        }
-                    }
-                }
-            }
-            ));
-        }
         public List<String> GetGroups()
         {
             groups = new List<string>();

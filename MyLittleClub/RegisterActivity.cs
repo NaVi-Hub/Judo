@@ -9,6 +9,10 @@ using Firebase.Firestore;
 using Java.Util;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Firebase;
+using Firebase.Firestore;
+using Java.Util;
+using Xamarin.Essentials;
 
 namespace MyLittleClub
 {
@@ -26,18 +30,14 @@ namespace MyLittleClub
         LinearLayout.LayoutParams MatchParentParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, 200);
         FirebaseFirestore database;
         ISharedPreferences sp;
-
-
         protected override void OnCreate(Bundle savedInstanceState)
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.RegisterLayout);
-            BuildRegisterScreen();
             database = MyStuff.database;
         }
-
         void BuildRegisterScreen()
         {
             //Defining the parent layout
@@ -181,32 +181,38 @@ namespace MyLittleClub
             OverAllLoginLayout.AddView(ButtonLoginLayout);
         }
         //Building Register Screen
-
         private void LoginButton_Click(object sender, System.EventArgs e)
         {
-            //validation of input
-            if (IsValidName(NameLoginET.Text) && IsValidSport(SportLoginET.Text) & MyStuff.isValidEmail(MailLoginET.Text, this) && PhoneNumberLoginET.Text.Length == 10)
+            if (!Emails.Contains(MailLoginET.Text))
             {
-                Toasty.Config.Instance
-                   .TintIcon(true)
-                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-                Toasty.Info(this, "Logged-in", 5, false).Show();
-                //if(MailLoginET.text   Not in   database)
-                admin = new Admin1(SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text);
-                HashMap map = new HashMap();
-                map.Put("Name", admin.name);
-                map.Put("EMail", admin.email);
-                map.Put("PhoneNum", admin.phoneNumber);
-                map.Put("Sport", admin.sport);
-                DocumentReference DocRef = database.Collection("Users").Document(admin.email);
-                DocRef.Set(map);
-                MyStuff.PutToShared(admin);
-                Intent intent1 = new Intent(this, typeof(MainPageActivity));
-                StartActivity(intent1);
+                //validation of input
+                if (IsValidName(NameLoginET.Text) && IsValidSport(SportLoginET.Text) & MyStuff.isValidEmail(MailLoginET.Text, this) && PhoneNumberLoginET.Text.Length == 10)
+                {
+                    Toasty.Config.Instance
+                       .TintIcon(true)
+                       .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Info(this, "Logged-in", 5, false).Show();
+                    //if(MailLoginET.text   Not in   database)
+                    admin = new Admin1(SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text);
+                    HashMap map = new HashMap();
+                    map.Put("Name", admin.name);
+                    map.Put("EMail", admin.email);
+                    map.Put("PhoneNum", admin.phoneNumber);
+                    map.Put("Sport", admin.sport);
+                    DocumentReference DocRef = database.Collection("Users").Document(admin.email);
+                    DocRef.Set(map);
+                    MyStuff.PutToShared(admin);
+                    Intent intent1 = new Intent(this, typeof(MainPageActivity));
+                    StartActivity(intent1);
+                }
+            }
+            else
+            {
+                Toasty.Error(this, "Email Already In Database", 5, true);
+                MailLoginET.Text = "";
             }
         }
         //When LogIn Button Is Clicked
-
         public bool IsValidName(string name)
         {
             bool Tr = true;
@@ -227,12 +233,12 @@ namespace MyLittleClub
                     Tr = false;
                 }
             }
-            if (!Tr) 
+            if (!Tr)
             {
                 Toasty.Config.Instance
                    .TintIcon(true)
-                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf")); 
-                Toasty.Error(this, "Name InValid", 5, true).Show(); return Tr; 
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Error(this, "Name InValid", 5, true).Show(); return Tr;
             }
             else
             {
@@ -246,16 +252,39 @@ namespace MyLittleClub
             {
                 return true;
             }
-            else 
+            else
             {
                 Toasty.Config.Instance
                    .TintIcon(true)
-                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf")); 
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
                 Toasty.Error(this, "Sport InValid", 5, true).Show(); return false;
             }
         }
         //Sport Validation
-
+        List<string> Emails;
+        public List<string> GetEmails()
+        {
+            Emails = new List<string>();
+            Query query = database.Collection("Users").WhereEqualTo("Login", true);
+            query.Get().AddOnCompleteListener(new QueryListener((task) =>
+            {
+                if (task.IsSuccessful)
+                {
+                    var snapshot = (QuerySnapshot)task.Result;
+                    if (!snapshot.IsEmpty)
+                    {
+                        var document = snapshot.Documents;
+                        foreach (DocumentSnapshot item in document)
+                        {
+                            Emails.Add(item.GetString("Email"));
+                        }
+                    }
+                }
+                BuildRegisterScreen();
+            }
+            ));
+            return Emails;
+        }
     }
 }
 /* https://www.youtube.com/watch?v=A9rcKZUm0zM

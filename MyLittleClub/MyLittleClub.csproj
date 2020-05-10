@@ -178,7 +178,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\DialogLayout.xml">
+    <AndroidResource Include="Resources\layout\MyDialog.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

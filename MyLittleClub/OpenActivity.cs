@@ -3,16 +3,13 @@ using Android.Content;
 using Android.OS;
 using Firebase;
 using Firebase.Firestore;
-using Newtonsoft.Json;
 
 namespace MyLittleClub
 {
     [Activity(Label = "OpenActivity", MainLauncher = true)]
     public class Context : Activity
     {
-
         public static FirebaseFirestore database;
-        Admin1 admin;
         ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -32,7 +29,6 @@ namespace MyLittleClub
                 Intent intent = new Intent(this, typeof(RegisterActivity));
                 StartActivity(intent);
             }
-            
         }
         public FirebaseFirestore GetDataBase()
         {
@@ -47,7 +43,6 @@ namespace MyLittleClub
             var app = FirebaseApp.InitializeApp(this, options);
             database = FirebaseFirestore.GetInstance(app);
             return database;
-
         }
         //Firebase defining
     }
