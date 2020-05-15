@@ -117,35 +117,14 @@ namespace MyLittleClub
             editor.PutString("Email", MakeEmail(admin.email));
             editor.Commit();
         }
-        public static void CancelLoginAbilityOnAllUsers()
+        public static void RemoveFromShared()
         {
-            Query query = database.Collection("Users").WhereEqualTo("Login", true);
-            query.Get().AddOnCompleteListener(new QueryListener((task) =>
-            {
-                if (task.IsSuccessful)
-                {
-                    var snapshot = (QuerySnapshot)task.Result;
-                    if (!snapshot.IsEmpty)
-                    {
-                        var document = snapshot.Documents;
-                        foreach (DocumentSnapshot item in document)
-                        {
-                            if ((item.Get("Login")).ToString() == "true")
-                            {
-                                HashMap map = new HashMap();
-                                map.Put("Name", item.Get("Name").ToString());
-                                map.Put("Sport", item.Get("Sport").ToString());
-                                map.Put("EMail", item.Get("EMail").ToString());
-                                map.Put("PhoneNum", item.Get("PhoneNum").ToString());
-                                map.Put("Login", false);
-                                DocumentReference docref = database.Collection("Users").Document(item.Get("EMail").ToString());
-                                docref.Set(map);
-                            }
-                        }
-                    }
-                }
-            }
-            ));
+            var editor = sp.Edit();
+            editor.PutString("Name", default);
+            editor.PutString("Sport", default);
+            editor.PutString("PhoneNum", default);
+            editor.PutString("Email", default);
+            editor.Commit();
         }
         //Firebase defining
         public static bool IsDateLegit(DateTime date)

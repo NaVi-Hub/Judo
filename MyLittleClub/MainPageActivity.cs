@@ -127,7 +127,7 @@ namespace MyLittleClub
                     }
                 case Resource.Id.menuItem5:
                     {
-                        MyStuff.CancelLoginAbilityOnAllUsers();
+                        MyStuff.RemoveFromShared();
                         Intent intent3 = new Intent(this, typeof(RegisterActivity));
                         StartActivity(intent3);
                         return true;
