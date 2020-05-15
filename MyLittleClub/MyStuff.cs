@@ -17,6 +17,7 @@ using Firebase.Firestore;
 using Java.Util;
 
 using Android.Util;
+using System.Globalization;
 
 namespace MyLittleClub
 {
@@ -130,84 +131,45 @@ namespace MyLittleClub
         public static bool IsDateLegit(DateTime date)
         {
             bool tr = false;
-            DateTime EndDate = new DateTime();
-            if (DateTime.Today.Month <= 8)
+            DateTime today = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
+            DateTime EndDate = new DateTime(DateTime.Today.Year + 1, DateTime.Today.Month, DateTime.Today.Day);
+        }
+        private bool IsDateNoitBefore(DateTime Today, DateTime Date)
+        {
+            if (Date.Year > Today.Year)
             {
-                EndDate = new DateTime(DateTime.Today.Year, 9, 1);
+                return true;
             }
-            else if(DateTime.Today.Month >= 9)
+            else if (Date.Year < Today.Year)
             {
-                EndDate = new DateTime(DateTime.Today.Year + 1, 9, 1);
+                return false;
             }
-            if (date.Year < DateTime.Today.Year)
+            else (Date.Year == Today.Year)
             {
-                tr = tr && false;
-            }
-            else if (date.Year > DateTime.Today.Year)
-            {
-                tr = tr && true;
-            }
-            else
-            {
-                if (date.Month > DateTime.Today.Month)
+                if(Date.Month > Today.Month)
                 {
-                    tr = tr && true;
+                    return true;
                 }
-                else if (date.Month > DateTime.Today.Month)
+                else if(Date.Month == Today.Month)
                 {
-                    tr = tr && true;
-                }
-                else
-                {
-                    if (date.Day >= DateTime.Today.Day)
+                    if (Date.Day >= Today.Day)
                     {
-                        tr = tr && true;
-                    }
-                    else if (date.Day > DateTime.Today.Day)
-                    {
-                        tr = tr && true;
+                        return true;
                     }
                     else
                     {
-                        tr = tr && false;
+                        return false;
                     }
                 }
-            }
-            if (date.Year < EndDate.Year)
-            {
-                tr = tr && false;
-            }
-            else if (date.Year > EndDate.Year)
-            {
-                tr = tr && true;
-            }
-            else
-            {
-                if (date.Month > EndDate.Month)
+                else if (Date.Month < Today.Month)
                 {
-                    tr = tr && true;
-                }
-                else if (date.Month > EndDate.Month)
-                {
-                    tr = tr && true;
-                }
-                else
-                {
-                    if (date.Day >= EndDate.Day)
-                    {
-                        tr = tr && true;
-                    }
-                    else if (date.Day > EndDate.Day)
-                    {
-                        tr = tr && true;
-                    }
-                    else
-                    {
-                        tr = tr && false;
-                    }
+                    return false;
                 }
             }
-            return tr;
+        }
+        private bool IsDateAfter()
+        {
+
         }
         //makes sure the date is in legit
     }
