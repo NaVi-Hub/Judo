@@ -120,10 +120,10 @@ namespace MyLittleClub
         public static void RemoveFromShared()
         {
             var editor = sp.Edit();
-            editor.PutString("Name", default);
-            editor.PutString("Sport", default);
-            editor.PutString("PhoneNum", default);
-            editor.PutString("Email", default);
+            editor.Remove("Name");
+            editor.Remove("Sport");
+            editor.Remove("PhoneNum");
+            editor.Remove("Email");
             editor.Commit();
         }
         //Firebase defining
