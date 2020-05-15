@@ -223,7 +223,7 @@ namespace MyLittleClub
         public void GetExercises()
         {
             exes = new List<Exercise>();
-            Query query = database.Collection("Exercises");
+            Query query = database.Collection("Users").Document(admin.email).Collection("Exercises");
             query.Get().AddOnCompleteListener(new QueryListener((task) =>
             {
                 if (task.IsSuccessful)

@@ -109,7 +109,7 @@ namespace MyLittleClub
                     }
                 case Resource.Id.menuItem2:
                     {
-                        Intent tryIntent = new Intent(this, typeof(AddTrainingActivity));
+                        Intent tryIntent = new Intent(this, typeof(AddExerciseActivity));
                         StartActivity(tryIntent);
                         return true;
                     }

@@ -15,10 +15,10 @@ using System;
 namespace MyLittleClub
 {
     [Activity(Theme = "@style/AppTheme")]
-    public class AddTrainingActivity : Activity
+    public class AddExerciseActivity : Activity
     {
         LinearLayout AddTrainingOverAllLayout, AddTrainingLabelLayout, AddTrainingNameLayout, AddTrainingDurationLayout, AddTrainingOrderLayout, ButtonAddTrainingLayout, AddTrainingExplenationLayout, AddTrainingExplenationETLayout;
-        TextView AddTrainingLabelTV, AddTrainingNameTV, AddTrainingDurationTV, AddTrainingOrderTV, AddTrainingExplenationTV;
+        TextView AddTrainingLabelTV, AddTrainingNameTV, AddTrainingDurationTV, AddTrainingExplenationTV;
         Button AddTrainingButton;
         EditText AddTrainingNameET, AddTrainingDurationET, AddTrainingOrderET, AddTrainingExplenationET;
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
@@ -166,7 +166,7 @@ namespace MyLittleClub
             map.Put("Name", ex.name);
             map.Put("Duration", ex.duration);
             map.Put("Explenation", ex.explenatiotn);
-            DocumentReference DocRef = database.Collection("Exercises").Document(ex.name);
+            DocumentReference DocRef = database.Collection("Users").Document(admin.email).Collection("Exercises").Document(ex.name);
             DocRef.Set(map);
             Toasty.Config.Instance
                    .TintIcon(true)
