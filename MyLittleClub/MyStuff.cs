@@ -16,13 +16,15 @@ using Firebase;
 using Firebase.Firestore;
 using Java.Util;
 
+using Android.Util;
+
 namespace MyLittleClub
 {
     static class MyStuff
     {
         public static Admin1 GetAdmin()
         {
-            string email = MyStuff.ReverseEmail(sp.GetString("Email", null));
+            string email = ReverseEmail(sp.GetString("Email", null));
             string sport = sp.GetString("Sport", null);
             string name = sp.GetString("Name", null);
             string phoneNum = sp.GetString("PhoneNum", null);
@@ -52,7 +54,7 @@ namespace MyLittleClub
         }
         public static bool isValidEmail(string email, Activity c)
         {
-            if (Android.Util.Patterns.EmailAddress.Matcher(email).Matches())
+            if (Patterns.EmailAddress.Matcher(email).Matches())
             {
                 return true;
             }
@@ -78,11 +80,25 @@ namespace MyLittleClub
         public static FirebaseFirestore database { get; set; }
         public static string MakeEmail(string email)
         {
-            return email.Replace("@", "]");
+            try
+            {
+                return email.Replace("@", "]");
+            }
+            catch
+            {
+                return "Failed";
+            }
         }
         public static string ReverseEmail(string email)
         {
-            return email.Replace("]", "@");
+            try
+            {
+                return email.Replace("]", "@");
+            }
+            catch
+            {
+                return "Failed";
+            }
         }
         public static void DefineDatabase(FirebaseFirestore database)
         {

@@ -13,6 +13,8 @@ using Firebase;
 using Firebase.Firestore;
 using Java.Util;
 using Xamarin.Essentials;
+using Android.Gms.Tasks;
+using Android.InputMethodServices;
 
 namespace MyLittleClub
 {
@@ -37,6 +39,7 @@ namespace MyLittleClub
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.RegisterLayout);
             database = MyStuff.database;
+            GetEmails();
         }
         void BuildRegisterScreen()
         {
@@ -165,6 +168,20 @@ namespace MyLittleClub
             OverAllLoginLayout.AddView(PhoneNumberLoginLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
+            //Defining LoginLoginLayout
+            LoginLoginLayout = new LinearLayout(this);
+            LoginLoginLayout.LayoutParameters = WrapContParams;
+            LoginLoginLayout.Orientation = Orientation.Horizontal;
+            //
+            TextView Login = new TextView(this);
+            Login.Text = "Try Logging-In";
+            Login.SetTextColor(Color.Blue);
+            Login.Click += this.Login_Click;
+            Login.TextSize = 30;
+            LoginLoginLayout.AddView(Login);
+            OverAllLoginLayout.AddView(LoginLoginLayout);
+            //=======================================================================================================================================
+            //=======================================================================================================================================
             //Defining Login Button Layout
             ButtonLoginLayout = new LinearLayout(this);
             ButtonLoginLayout.LayoutParameters = WrapContParams;
@@ -179,6 +196,109 @@ namespace MyLittleClub
             //Adding views
             ButtonLoginLayout.AddView(LoginButton);
             OverAllLoginLayout.AddView(ButtonLoginLayout);
+        }
+        Dialog d;
+        private void Login_Click(object sender, System.EventArgs e)
+        {
+            BuildLoginScreen();
+        }
+        LinearLayout LoginLoginLayout,dLayout, MailLoginLayout1, ButtonLoginLayout1;
+        TextView MailLoginTV1;
+        EditText MailLoginET1;
+        Button LoginButton1;
+        private void BuildLoginScreen()
+        {
+            d = new Dialog(this);
+            d.SetContentView(Resource.Layout.MyDialog);
+            d.SetCancelable(true);
+            d.SetTitle("LogIn");
+            //OverallLayout
+            dLayout = d.FindViewById<LinearLayout>(Resource.Id.AbcDEF);
+            //Defining MailLoginLayout
+            MailLoginLayout1 = new LinearLayout(this);
+            MailLoginLayout1.LayoutParameters = WrapContParams;
+            MailLoginLayout1.Orientation = Orientation.Horizontal;
+            //Defining the Mail Login TextView
+            MailLoginTV1 = new TextView(this);
+            MailLoginTV1.LayoutParameters = WrapContParams;
+            MailLoginTV1.Text = "EMail: ";
+            MailLoginTV1.TextSize = 30;
+            MailLoginTV1.SetForegroundGravity(Android.Views.GravityFlags.Center);
+            MailLoginTV1.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            //Defining the Mail Login EditText
+            MailLoginET1 = new EditText(this);
+            MailLoginET1.LayoutParameters = OneTwentyParams;
+            MailLoginET1.Hint = "Enter y6EMail";
+            MailLoginET1.InputType = InputTypes.TextVariationEmailAddress;
+            MailLoginET1.TextSize = 30;
+            MailLoginET1.SetSingleLine();
+            //Adding views to layout
+            MailLoginLayout1.AddView(MailLoginTV1);
+            MailLoginLayout1.AddView(MailLoginET1);
+            dLayout.AddView(MailLoginLayout1);
+            //
+            //
+            //Defining Login Button Layout
+            ButtonLoginLayout1 = new LinearLayout(this);
+            ButtonLoginLayout1.LayoutParameters = WrapContParams;
+            ButtonLoginLayout1.Orientation = Orientation.Horizontal;
+            //Defining Login Button
+            LoginButton1 = new Button(this);
+            LoginButton1.LayoutParameters = WrapContParams;
+            LoginButton1.Text = "Register";
+            LoginButton1.TextSize = 40;
+            LoginButton1.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            LoginButton1.Click += this.LoginButton1_Click;
+            //Adding views
+            ButtonLoginLayout1.AddView(LoginButton1);
+            dLayout.AddView(ButtonLoginLayout1);
+
+            //
+            d.Show();
+        }
+        private void LoginButton1_Click(object sender, System.EventArgs e)
+        {
+            ButtonLoginLayout1.RequestFocus();
+            string mail = MailLoginET1.Text;
+            if (MyStuff.isValidEmail(mail ,this))
+            {
+                if(Emails.Contains(mail))
+                {
+                    GetAdmin(mail);
+                }
+                else
+                {
+                    Toasty.Error(this, "Email Not Found", 5, true);
+                    MailLoginET1.Text = "";
+                }
+            }
+        }
+        public void GetAdmin(string email)
+        {
+            Query query = database.Collection("Users").WhereEqualTo("EMail", email);
+            query.Get().AddOnCompleteListener(new QueryListener((task) =>
+            {
+                if (task.IsSuccessful)
+                {
+                    var snapshot = (QuerySnapshot)task.Result;
+                    if (!snapshot.IsEmpty)
+                    {
+                        var document = snapshot.Documents;
+                        foreach (DocumentSnapshot item in document)
+                        {
+                            string adminemail = item.GetString("EMail");
+                            string adminName = item.GetString("Name");
+                            string adminphonenum = item.GetString("PhoneNum");
+                            string adminsport = item.GetString("Sport");
+                            Admin1 a = new Admin1(adminsport, adminName, adminphonenum, adminemail);
+                            MyStuff.PutToShared(a);
+                        }
+                    }
+                }
+                Intent i = new Intent(this, typeof(MainPageActivity));
+                StartActivity(i);
+            }
+            ));
         }
         //Building Register Screen
         private void LoginButton_Click(object sender, System.EventArgs e)
@@ -265,7 +385,7 @@ namespace MyLittleClub
         public List<string> GetEmails()
         {
             Emails = new List<string>();
-            Query query = database.Collection("Users").WhereEqualTo("Login", true);
+            Query query = database.Collection("Users");
             query.Get().AddOnCompleteListener(new QueryListener((task) =>
             {
                 if (task.IsSuccessful)
@@ -276,13 +396,13 @@ namespace MyLittleClub
                         var document = snapshot.Documents;
                         foreach (DocumentSnapshot item in document)
                         {
-                            Emails.Add(item.GetString("Email"));
+                            Emails.Add(item.GetString("EMail"));
                         }
                     }
                 }
                 BuildRegisterScreen();
             }
-            ));
+            )) ;
             return Emails;
         }
     }

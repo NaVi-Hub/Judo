@@ -6,7 +6,7 @@ using Firebase.Firestore;
 
 namespace MyLittleClub
 {
-    [Activity(Label = "OpenActivity", MainLauncher = true)]
+    [Activity(Label = "TPOV", MainLauncher = true)]
     public class Context : Activity
     {
         public static FirebaseFirestore database;
