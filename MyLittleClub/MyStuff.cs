@@ -128,48 +128,17 @@ namespace MyLittleClub
             editor.Commit();
         }
         //Firebase defining
-        public static bool IsDateLegit(DateTime date)
+        public static bool IsDateLegit(DateTime date, Context a)
         {
-            bool tr = false;
             DateTime today = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
             DateTime EndDate = new DateTime(DateTime.Today.Year + 1, DateTime.Today.Month, DateTime.Today.Day);
-        }
-        private bool IsDateNoitBefore(DateTime Today, DateTime Date)
-        {
-            if (Date.Year > Today.Year)
-            {
+            if (date.CompareTo(today) < 0 && date.CompareTo(EndDate) > 0)
                 return true;
-            }
-            else if (Date.Year < Today.Year)
+            else
             {
+                Toasty.Error(a, "InValid Date", 5, true);
                 return false;
             }
-            else (Date.Year == Today.Year)
-            {
-                if(Date.Month > Today.Month)
-                {
-                    return true;
-                }
-                else if(Date.Month == Today.Month)
-                {
-                    if (Date.Day >= Today.Day)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else if (Date.Month < Today.Month)
-                {
-                    return false;
-                }
-            }
-        }
-        private bool IsDateAfter()
-        {
-
         }
         //makes sure the date is in legit
     }
