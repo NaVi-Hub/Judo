@@ -420,7 +420,7 @@ namespace MyLittleClub
                 txt = string.Format("{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
             }
 
-            if (MyStuff.IsDateLegit(e.Date))
+            if (MyStuff.IsDateLegit(e.Date, this))
             {
                 AddGroupDateButton.Text = txt;
             }

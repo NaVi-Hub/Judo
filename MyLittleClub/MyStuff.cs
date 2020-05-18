@@ -128,11 +128,11 @@ namespace MyLittleClub
             editor.Commit();
         }
         //Firebase defining
-        public static bool IsDateLegit(DateTime date, Context a)
+        public static bool IsDateLegit(DateTime date, Activity a)
         {
             DateTime today = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
             DateTime EndDate = new DateTime(DateTime.Today.Year + 1, DateTime.Today.Month, DateTime.Today.Day);
-            if (date.CompareTo(today) < 0 && date.CompareTo(EndDate) > 0)
+            if (date.CompareTo(today) >= 0 && date.CompareTo(EndDate) <= 0)
                 return true;
             else
             {
