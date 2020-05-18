@@ -66,8 +66,6 @@ namespace MyLittleClub
             BtnSV.LayoutParameters = LLLP;
             InsideButtonsSVL = new LinearLayout(this);
             InsideButtonsSVL.LayoutParameters = LLLP;
-            InsideButtonsSVL.SetBackgroundColor(Color.GreenYellow);
-            BtnSV.SetBackgroundColor(Color.DarkSeaGreen);
             InsideButtonsSVL.Orientation = Orientation.Vertical;
             //
             buttons = new Button[exes.Count];
@@ -77,8 +75,6 @@ namespace MyLittleClub
             InsideTrainingSVL = new LinearLayout(this);
             InsideTrainingSVL.LayoutParameters = LLLP;
             InsideTrainingSVL.Orientation = Orientation.Vertical;
-            InsideTrainingSVL.SetBackgroundColor(Color.DodgerBlue);
-            TrainingSV.SetBackgroundColor(Color.DodgerBlue);
 
             TrainingSV.Drag += Button_Drag;
             //
@@ -149,13 +145,9 @@ namespace MyLittleClub
                     e.Handled = true;
                     break;
                 case DragAction.Entered:
-                    TrainingSV.SetBackgroundColor(Color.LawnGreen);
-                    InsideTrainingSVL.SetBackgroundColor(Color.LawnGreen);
                     InView = true;
                     break;
                 case DragAction.Exited:
-                    TrainingSV.SetBackgroundColor(Color.Red);
-                    InsideTrainingSVL.SetBackgroundColor(Color.Red);
                     InView = false;
                     break;
                 case DragAction.Drop:
@@ -165,8 +157,6 @@ namespace MyLittleClub
                         copy.LayoutParameters = CurrButton.LayoutParameters;
                         copy.Text = CurrButton.Text;
                         copy.Click += this.Copy_Click;
-                        TrainingSV.SetBackgroundColor(Color.DodgerBlue);
-                        InsideTrainingSVL.SetBackgroundColor(Color.DodgerBlue);
                         InsideTrainingSVL.AddView(copy);
                         e.Handled = true;
                         var data = e.Event.ClipData;
