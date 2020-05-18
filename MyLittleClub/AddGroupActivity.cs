@@ -63,7 +63,6 @@ namespace MyLittleClub
             BuildAddGroupScreen();
             // Create your application here
         }
-
         void BuildAddGroupScreen()
         {
             //Defining the parent layout
@@ -231,28 +230,29 @@ namespace MyLittleClub
         }
         Spinner[] spinners;
         LinearLayout SpinnersLayout;
+        ScrollView DaysSV;
+        LinearLayout.LayoutParams LLLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent, 1);
         private void BuildallSpinners(int t)
         {
             try
             {
-                SpinnersLayout.RemoveAllViewsInLayout();
+                DaysSV.RemoveAllViews();
+                SpinnersLayout.RemoveAllViews();
+                OverAllAddGroupLayout.RemoveView(DaysSV);
             }
             catch 
             {
                 Toasty.Normal(this, "First Inital", 5).Show();
+                SpinnersLayout = new LinearLayout(this);
+                SpinnersLayout.LayoutParameters = WrapContParams;
+                SpinnersLayout.Orientation = Orientation.Vertical;
+                SpinnersLayout.SetGravity(GravityFlags.Center);
+                DaysSV = new ScrollView(this);
+                DaysSV.LayoutParameters = LLLP;
             }
             spinners = new Spinner[7];
-            SpinnersLayout = new LinearLayout(this);
-            SpinnersLayout.LayoutParameters = WrapContParams;
-            SpinnersLayout.Orientation = Orientation.Vertical;
-            SpinnersLayout.SetGravity(GravityFlags.Center);
-            SpinnersLayout.RemoveAllViews();
             try { OverAllAddGroupLayout.RemoveView(SpinnersLayout); }
             catch { Toasty.Normal(this, "Not Cleared", 5).Show(); }
-            for (int i = 0; i < 7; i++)
-            {
-                SpinnersLayout.RemoveView(spinners[i]);
-            }
             for (int k = 0; k < 7; k++)
             {
                 spinners[k] = null;
@@ -270,7 +270,8 @@ namespace MyLittleClub
                 spinners[i].Selected = false;
                 SpinnersLayout.AddView(spinners[i]);
             }
-            OverAllAddGroupLayout.AddView(SpinnersLayout);
+            DaysSV.AddView(SpinnersLayout);
+            OverAllAddGroupLayout.AddView(DaysSV);
         }
         int asd;
         private void Spinners_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
