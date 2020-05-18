@@ -3,15 +3,15 @@
   
   <!-- Add menu Item 1 -->  
   <item android:id="@+id/menuItem1"  
-        android:title="Add Group"/>  
+        android:title="New Group"/>  
     
   <!-- Add menu Item 2 -->  
   <item android:id="@+id/menuItem2"  
-         android:title="New Training"/>
+         android:title="New Exercise"/>
 
   <!-- Add menu Item 3 -->
   <item android:id="@+id/menuItem3"
-      android:title="Add Student"/>
+      android:title="New Student"/>
   
     <!-- Add menu Item 4 -->  
   <item android:id="@+id/menuItem4"  

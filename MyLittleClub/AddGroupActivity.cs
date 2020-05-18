@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Hardware;
 using Android.OS;
 using Android.Text;
 using Android.Views;
@@ -32,6 +33,8 @@ namespace MyLittleClub
         public static List<CheckBox> CheckBoxList;
         ScrollView AddGroupStudentsSv;
         CheckBox cb;
+        List<string> times;
+        List<string> days;
         bool c = false;
         public static bool firstLogin = true;
         ISharedPreferences sp;
@@ -43,8 +46,21 @@ namespace MyLittleClub
             SetContentView(Resource.Layout.AddGroupLayout);
             database = MyStuff.database;
             admin = MyStuff.GetAdmin();
+            arr = new bool[7];
+            times = new List<string>();
+            for (int i = 1; i<=7; i++)
+            {
+                times.Add(i + "");
+            }
+            days = new List<string>();
+            days.Add("Sunday");
+            days.Add("Monday");
+            days.Add("Tuesday");
+            days.Add("Wednsday");
+            days.Add("Thursday");
+            days.Add("Friday");
+            days.Add("Saturday");
             BuildAddGroupScreen();
-
             // Create your application here
         }
 
@@ -184,56 +200,87 @@ namespace MyLittleClub
             //=======================================================================================================================================
             //=======================================================================================================================================
             BuildTimeAndDate();
-            BuildScrollView();
+            BuildFirstSpiner();
+            OverAllAddGroupLayout.AddView(FSpin);
         }
         //Building the AddGroup Screen
-
-        public void BuildScrollView()
+        LinearLayout.LayoutParams BLP = new LinearLayout.LayoutParams(350, 200);
+        bool[] arr;
+        public void HardFunc(int x)
         {
-            for (int i = 0; i < students.Count; i++)
-            {
-                CheckBoxList.Add(new CheckBox(this));
-            }
-            OverSVLayout = new LinearLayout(this);
-            OverSVLayout.LayoutParameters = new ViewGroup.LayoutParams(1100, 700);
-            OverSVLayout.Orientation = Orientation.Vertical;
-            AddGroupStudentsSv = new ScrollView(this);
-            AddGroupStudentsSv.LayoutParameters = new ViewGroup.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
-            OverSVLayout.AddView(AddGroupStudentsSv);
-            AddGroupSvLayout = new LinearLayout(this);
-            AddGroupSvLayout.LayoutParameters = MatchParentParams;
-            AddGroupSvLayout.Orientation = Orientation.Vertical;
-
-            for (int i = 0; i < students.Count; i++)
-            {
-                //Define Inside Layout
-                InsideSVLayout = new LinearLayout(this);
-                InsideSVLayout.Orientation = Orientation.Horizontal;
-                InsideSVLayout.SetForegroundGravity(Android.Views.GravityFlags.Center);
-                InsideSVLayout.LayoutParameters = new ViewGroup.LayoutParams(1100, 150);
-                InsideSVLayout.SetBackgroundResource(Resource.Drawable.BlackOutLine);
-                //Define CheckBox
-                cb = CheckBoxList[i];
-                cb.SetWidth(60);
-                cb.SetHeight(40);
-                cb.Text = "" + i;
-                //Define Textview
-                StudTV = new TextView(this);
-                StudTV.SetHeight(40);
-                StudTV.SetWidth(1100);
-                StudTV.Text = students[i].name + " " + students[i].parentName1;
-                try
-                {
-                    InsideSVLayout.AddView(cb);
-                    InsideSVLayout.AddView(StudTV);
-                }
-                catch { Toasty.Warning(this, "Not FIrst time open", 5, true).Show(); }
-                AddGroupSvLayout.AddView(InsideSVLayout);
-            }
-            AddGroupStudentsSv.AddView(AddGroupSvLayout);
-            OverAllAddGroupLayout.AddView(OverSVLayout);
+            arr[x] = true;
         }
-        //Building the ScrollView
+        Spinner FSpin;
+        private void BuildFirstSpiner()
+        {
+            FSpin = new Spinner(this);
+            BLP.SetMargins(5, 5, 5, 5);
+            FSpin.LayoutParameters = BLP;
+            var adapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleSpinnerItem, times);
+            adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            FSpin.Adapter = adapter;
+            FSpin.ItemSelected += this.FSpin_ItemSelected;
+            FSpin.Selected = false;
+        }
+        int t;
+        private void FSpin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            Spinner spin = (Spinner)sender;
+            t = int.Parse(spin.GetItemAtPosition(e.Position).ToString());
+            BuildallSpinners(t);
+        }
+        Spinner[] spinners;
+        LinearLayout SpinnersLayout;
+        private void BuildallSpinners(int t)
+        {
+            try
+            {
+                SpinnersLayout.RemoveAllViewsInLayout();
+            }
+            catch 
+            {
+                Toasty.Normal(this, "First Inital", 5).Show();
+            }
+            spinners = new Spinner[7];
+            SpinnersLayout = new LinearLayout(this);
+            SpinnersLayout.LayoutParameters = WrapContParams;
+            SpinnersLayout.Orientation = Orientation.Vertical;
+            SpinnersLayout.SetGravity(GravityFlags.Center);
+            SpinnersLayout.RemoveAllViews();
+            try { OverAllAddGroupLayout.RemoveView(SpinnersLayout); }
+            catch { Toasty.Normal(this, "Not Cleared", 5).Show(); }
+            for (int i = 0; i < 7; i++)
+            {
+                SpinnersLayout.RemoveView(spinners[i]);
+            }
+            for (int k = 0; k < 7; k++)
+            {
+                spinners[k] = null;
+            }
+            ////////////////////////////////
+            for (int i = 0; i < t; i++)
+            {
+                spinners[i] = new Spinner(this);
+                BLP.SetMargins(5, 5, 5, 5);
+                spinners[i].LayoutParameters = BLP;
+                var adapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleSpinnerItem, days);
+                adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+                spinners[i].Adapter = adapter;
+                spinners[i].ItemSelected += this.Spinners_ItemSelected;
+                spinners[i].Selected = false;
+                SpinnersLayout.AddView(spinners[i]);
+            }
+            OverAllAddGroupLayout.AddView(SpinnersLayout);
+        }
+        int asd;
+        private void Spinners_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            Spinner spin = (Spinner)sender;
+            int a = 0;
+            int.TryParse(spin.GetItemAtPosition(e.Position).ToString(), out a);
+            asd = a;
+            HardFunc(asd);
+        }
         private void AddGroupButton_Click(object sender, EventArgs e)
         {
 
@@ -260,7 +307,6 @@ namespace MyLittleClub
             }
         }
         //Adds data to firebase and intents back to main page
-
         private void RadioButtonClick(object sender, EventArgs e)
         {
             RadioButton rb = (RadioButton)sender;
@@ -271,7 +317,6 @@ namespace MyLittleClub
             c = true;
         }
         //Toasts the RadioButton's selection
-
         private bool InputValid(string location, string ageRange, string grouplvl, bool cb)
         {
             int x = -1;
@@ -343,7 +388,6 @@ namespace MyLittleClub
             }
         }
         //Checks all inputs and Toasts Whom Crashed the test
-
         public void BuildTimeAndDate()
         {
             AddGroupTimeAndDateLayout = new LinearLayout(this);
@@ -370,7 +414,7 @@ namespace MyLittleClub
             AddGroupTimeAndDateLayout.AddView(AddGroupDateButton);
             OverAllAddGroupLayout.AddView(AddGroupTimeAndDateLayout);
         }
-        //builds time and date selection buttons
+        //Builds time and date selection buttons
         private void AddGroupDateButton_Click(object sender, EventArgs e)
         {
             DateTime today = DateTime.Today;
