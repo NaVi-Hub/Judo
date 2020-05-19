@@ -15,6 +15,8 @@ using Java.Util;
 using Xamarin.Essentials;
 using Android.Gms.Tasks;
 using Android.InputMethodServices;
+using Android.Views;
+using Android.Support.V7.Widget;
 
 namespace MyLittleClub
 {
@@ -23,7 +25,7 @@ namespace MyLittleClub
     {
         Admin1 admin;
         LinearLayout OverAllLoginLayout, NameLoginLayout, MailLoginLayout, SportLoginLayout, ButtonLoginLayout, LabelLoginLayout, PhoneNumberLoginLayout;
-        TextView LabelLoginTV, LabelLoginTV1, NameLoginTV, MailLoginTV, SportLoginTV, PhoneNumberLoginTV;
+        TextView LabelLoginTV, LabelLoginTV1, NameLoginTV, MailLoginTV, SportLoginTV, PhoneNumberLoginTV, Login1;
         EditText NameLoginET, MailLoginET, SportLoginET, PhoneNumberLoginET;
         Button LoginButton;
         LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
@@ -46,7 +48,7 @@ namespace MyLittleClub
             //Defining the parent layout
             OverAllLoginLayout = (LinearLayout)FindViewById(Resource.Id.LoginLinearLayout);
             OverAllLoginLayout.Orientation = Orientation.Vertical;
-            OverAllLoginLayout.SetGravity(Android.Views.GravityFlags.CenterHorizontal);
+            OverAllLoginLayout.SetGravity(GravityFlags.CenterHorizontal);
             //=======================================================================================================================================
             //=======================================================================================================================================
             //Defining the Label login Layout
@@ -172,13 +174,14 @@ namespace MyLittleClub
             LoginLoginLayout = new LinearLayout(this);
             LoginLoginLayout.LayoutParameters = WrapContParams;
             LoginLoginLayout.Orientation = Orientation.Horizontal;
+            LoginLoginLayout.SetGravity(GravityFlags.Left);
             //
-            TextView Login = new TextView(this);
-            Login.Text = "Try Logging-In";
-            Login.SetTextColor(Color.Blue);
-            Login.Click += this.Login_Click;
-            Login.TextSize = 30;
-            LoginLoginLayout.AddView(Login);
+            Login1 = new TextView(this);
+            Login1.Text = "Log-In";
+            Login1.SetTextColor(Color.Blue);
+            Login1.Click += this.Login1_Click;
+            Login1.TextSize = 30;
+            LoginLoginLayout.AddView(Login1);
             OverAllLoginLayout.AddView(LoginLoginLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -198,8 +201,9 @@ namespace MyLittleClub
             OverAllLoginLayout.AddView(ButtonLoginLayout);
         }
         Dialog d;
-        private void Login_Click(object sender, System.EventArgs e)
+        private void Login1_Click(object sender, System.EventArgs e)
         {
+            Login1.SetTextColor(Color.Purple);
             BuildLoginScreen();
         }
         LinearLayout LoginLoginLayout,dLayout, MailLoginLayout1, ButtonLoginLayout1;
@@ -214,12 +218,28 @@ namespace MyLittleClub
             d.SetTitle("LogIn");
             //OverallLayout
             dLayout = d.FindViewById<LinearLayout>(Resource.Id.AbcDEF);
+            //Dialog Title Layout
+            LinearLayout DialogTitleLayout = new LinearLayout(this);
+            DialogTitleLayout.LayoutParameters = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, 100);
+            DialogTitleLayout.SetFadingEdgeLength(100);
+            DialogTitleLayout.SetBackgroundColor(Color.RoyalBlue);
+            //Dialog TitleTV
+            TextView LoginDialogTitle = new TextView(this);
+            LoginDialogTitle.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            LoginDialogTitle.SetTextColor(Color.WhiteSmoke);
+            LoginDialogTitle.TextSize = 35;
+            LoginDialogTitle.VerticalFadingEdgeEnabled = true;
+            LoginDialogTitle.SetFadingEdgeLength(30);
+            LoginDialogTitle.Text = "Welcome Back";
+            DialogTitleLayout.AddView(LoginDialogTitle);
+            dLayout.AddView(DialogTitleLayout);
             //Defining MailLoginLayout
             MailLoginLayout1 = new LinearLayout(this);
             MailLoginLayout1.LayoutParameters = WrapContParams;
             MailLoginLayout1.Orientation = Orientation.Horizontal;
             //Defining the Mail Login TextView
             MailLoginTV1 = new TextView(this);
+            WrapContParams.SetMargins(20, 20, 5, 10);
             MailLoginTV1.LayoutParameters = WrapContParams;
             MailLoginTV1.Text = "EMail: ";
             MailLoginTV1.TextSize = 30;
@@ -227,8 +247,9 @@ namespace MyLittleClub
             MailLoginTV1.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Mail Login EditText
             MailLoginET1 = new EditText(this);
+            OneTwentyParams.SetMargins(5, 20, 20, 10);
             MailLoginET1.LayoutParameters = OneTwentyParams;
-            MailLoginET1.Hint = "Enter y6EMail";
+            MailLoginET1.Hint = "Enter EMail";
             MailLoginET1.InputType = InputTypes.TextVariationEmailAddress;
             MailLoginET1.TextSize = 30;
             MailLoginET1.SetSingleLine();
@@ -240,12 +261,13 @@ namespace MyLittleClub
             //
             //Defining Login Button Layout
             ButtonLoginLayout1 = new LinearLayout(this);
+            WrapContParams.SetMargins(20, 10, 20, 20);
             ButtonLoginLayout1.LayoutParameters = WrapContParams;
             ButtonLoginLayout1.Orientation = Orientation.Horizontal;
             //Defining Login Button
             LoginButton1 = new Button(this);
             LoginButton1.LayoutParameters = WrapContParams;
-            LoginButton1.Text = "Register";
+            LoginButton1.Text = "Log-In";
             LoginButton1.TextSize = 40;
             LoginButton1.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             LoginButton1.Click += this.LoginButton1_Click;
@@ -296,6 +318,7 @@ namespace MyLittleClub
                     }
                 }
                 Intent i = new Intent(this, typeof(MainPageActivity));
+                Toasty.Success(this, "Logged-In Successfully", 5, true).Show();
                 StartActivity(i);
             }
             ));
@@ -311,7 +334,6 @@ namespace MyLittleClub
                     Toasty.Config.Instance
                        .TintIcon(true)
                        .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-                    Toasty.Info(this, "Logged-in", 5, false).Show();
                     //if(MailLoginET.text   Not in   database)
                     admin = new Admin1(SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text);
                     HashMap map = new HashMap();
@@ -323,12 +345,13 @@ namespace MyLittleClub
                     DocRef.Set(map);
                     MyStuff.PutToShared(admin);
                     Intent intent1 = new Intent(this, typeof(MainPageActivity));
+                    Toasty.Success(this, "Registered Succesfully", 5, true);
                     StartActivity(intent1);
                 }
             }
             else
             {
-                Toasty.Error(this, "Email Already In Database", 5, true);
+                Toasty.Error(this, "Email Already In Database", 5, true).Show();
                 MailLoginET.Text = "";
             }
         }

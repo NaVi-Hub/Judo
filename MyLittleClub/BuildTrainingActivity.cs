@@ -146,13 +146,19 @@ namespace MyLittleClub
                     break;
                 case DragAction.Entered:
                     InView = true;
+                    TrainingSV.SetBackgroundColor(Color.LawnGreen);
+                    InsideTrainingSVL.SetBackgroundColor(Color.LawnGreen);
                     break;
                 case DragAction.Exited:
                     InView = false;
+                    TrainingSV.SetBackgroundColor(Color.Transparent);
+                    InsideTrainingSVL.SetBackgroundColor(Color.Transparent);
                     break;
                 case DragAction.Drop:
                     if(InView)
                     {
+                        TrainingSV.SetBackgroundColor(Color.Transparent);
+                        InsideTrainingSVL.SetBackgroundColor(Color.Transparent);
                         Button copy = new Button(CurrButton.Context);
                         copy.LayoutParameters = CurrButton.LayoutParameters;
                         copy.Text = CurrButton.Text;
