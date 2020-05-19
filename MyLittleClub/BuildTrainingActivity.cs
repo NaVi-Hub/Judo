@@ -67,9 +67,6 @@ namespace MyLittleClub
             InsideButtonsSVL = new LinearLayout(this);
             InsideButtonsSVL.LayoutParameters = LLLP;
             InsideButtonsSVL.Orientation = Orientation.Vertical;
-
-            BtnSV.Drag += Button_Drag2;
-            TrainingButtons = new List<Button>();
             //
             buttons = new Button[exes.Count];
             //
@@ -137,104 +134,41 @@ namespace MyLittleClub
         {
             return currGroup != "Choose Group";
         }
-        List<Button> TrainingButtons;
         public void Button_Drag(object sender, View.DragEventArgs e)
         {
-
             Button a = CurrButton;
-            if (a.Parent == InsideButtonsSVL)
+            var evt = e.Event;
+            switch(evt.Action)
             {
-                var evt = e.Event;
-                switch (evt.Action)
-                {
-                    case DragAction.Ended:
-                    case DragAction.Started:
+                case DragAction.Ended:
+                case DragAction.Started:
+                    e.Handled = true;
+                    break;
+                case DragAction.Entered:
+                    InView = true;
+                    break;
+                case DragAction.Exited:
+                    InView = false;
+                    break;
+                case DragAction.Drop:
+                    if(InView)
+                    {
+                        Button copy = new Button(CurrButton.Context);
+                        copy.LayoutParameters = CurrButton.LayoutParameters;
+                        copy.Text = CurrButton.Text;
+                        copy.Click += this.Copy_Click;
+                        InsideTrainingSVL.AddView(copy);
                         e.Handled = true;
-                        break;
-                    case DragAction.Entered:
-                        InView = true;
-                        TrainingSV.SetBackgroundColor(Color.LawnGreen);
-                        InsideTrainingSVL.SetBackgroundColor(Color.LawnGreen);
-                        break;
-                    case DragAction.Exited:
-                        InView = false;
-                        TrainingSV.SetBackgroundColor(Color.Transparent);
-                        InsideTrainingSVL.SetBackgroundColor(Color.Transparent);
-                        break;
-                    case DragAction.Drop:
-                        if (InView)
-                        {
-                            TrainingSV.SetBackgroundColor(Color.Transparent);
-                            InsideTrainingSVL.SetBackgroundColor(Color.Transparent);
-                            Button copy = new Button(CurrButton.Context);
-                            copy.LayoutParameters = CurrButton.LayoutParameters;
-                            copy.Text = CurrButton.Text;
-                            copy.Click += this.Copy_Click;
-                            InsideTrainingSVL.AddView(copy);
-                            e.Handled = true;
-                            var data = e.Event.ClipData;
-                            if (data != null)
-                                a.Text = data.GetItemAt(0).Text;
-                            TrainingButtons.Add(a);
-                            for (int j = 0; j < TrainingButtons.Count; j++)
-                            {
-                                TrainingButtons[j].LongClick += this.BuildExerciseActivity_LongClick;
-                            }
-                        }
-                        else
-                        {
-                            InsideButtonsSVL.RemoveView(a);
-                            InsideTrainingSVL.AddView(a);
-                        }
-                        break;
-                }
-            }
-        }
-        public void Button_Drag2(object sender, View.DragEventArgs e)
-        {
-
-            Button a = CurrButton;
-            if (a.Parent == InsideButtonsSVL)
-            {
-                var evt = e.Event;
-                switch (evt.Action)
-                {
-                    case DragAction.Ended:
-                    case DragAction.Started:
-                        e.Handled = true;
-                        break;
-                    case DragAction.Entered:
-                        InView = true;
-                        TrainingSV.SetBackgroundColor(Color.LawnGreen);
-                        InsideTrainingSVL.SetBackgroundColor(Color.LawnGreen);
-                        break;
-                    case DragAction.Exited:
-                        InView = false;
-                        TrainingSV.SetBackgroundColor(Color.Transparent);
-                        InsideTrainingSVL.SetBackgroundColor(Color.Transparent);
-                        break;
-                    case DragAction.Drop:
-                        if (InView)
-                        {
-                            TrainingSV.SetBackgroundColor(Color.Transparent);
-                            InsideTrainingSVL.SetBackgroundColor(Color.Transparent);
-                            Button copy = new Button(CurrButton.Context);
-                            copy.LayoutParameters = CurrButton.LayoutParameters;
-                            copy.Text = CurrButton.Text;
-                            copy.Click += this.Copy_Click;
-                            InsideTrainingSVL.AddView(copy);
-                            e.Handled = true;
-                            var data = e.Event.ClipData;
-                            if (data != null)
-                                a.Text = data.GetItemAt(0).Text;
-                        }
-                        else
-                        {
-                            InsideButtonsSVL.RemoveView(a);
-                            InsideTrainingSVL.AddView(a);
-                        }
-                        break;
-                }
+                        var data = e.Event.ClipData;
+                        if (data != null)
+                            a.Text = data.GetItemAt(0).Text;
+                    }
+                    else
+                    {
+                        InsideButtonsSVL.RemoveView(a);
+                        InsideTrainingSVL.AddView(a);
+                    }
+                    break;
             }
         }
         Dialog d1;
@@ -269,7 +203,7 @@ namespace MyLittleClub
         {
             BuildDialog(sender);
         }
-        private void BuildExerciseActivity_LongClick(object sender, View.LongClickEventArgs e)
+        private void BuildExerciseActivity_LongClick(object sender, Android.Views.View.LongClickEventArgs e)
         {
             CurrButton = (Button)sender;
             var data = ClipData.NewPlainText("name", CurrButton.Text);

@@ -12,7 +12,7 @@ namespace MyLittleClub
         public static FirebaseFirestore database;
         ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
-       {
+        {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             var editor = sp.Edit();
             base.OnCreate(savedInstanceState);

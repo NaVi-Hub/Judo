@@ -228,7 +228,7 @@ namespace MyLittleClub
             //Defining the Mail Login EditText
             MailLoginET1 = new EditText(this);
             MailLoginET1.LayoutParameters = OneTwentyParams;
-            MailLoginET1.Hint = "Enter EMail";
+            MailLoginET1.Hint = "Enter y6EMail";
             MailLoginET1.InputType = InputTypes.TextVariationEmailAddress;
             MailLoginET1.TextSize = 30;
             MailLoginET1.SetSingleLine();
