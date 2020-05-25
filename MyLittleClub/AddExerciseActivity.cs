@@ -17,10 +17,10 @@ namespace MyLittleClub
     [Activity(Theme = "@style/AppTheme")]
     public class AddExerciseActivity : Activity
     {
-        LinearLayout AddTrainingOverAllLayout, AddTrainingLabelLayout, AddTrainingNameLayout, AddTrainingDurationLayout, AddTrainingOrderLayout, ButtonAddTrainingLayout, AddTrainingExplenationLayout, AddTrainingExplenationETLayout;
-        TextView AddTrainingLabelTV, AddTrainingNameTV, AddTrainingDurationTV, AddTrainingExplenationTV;
+        LinearLayout AddTrainingOverAllLayout, AddTrainingLabelLayout, AddTrainingNameLayout, AddTrainingOrderLayout, ButtonAddTrainingLayout, AddTrainingExplenationLayout, AddTrainingExplenationETLayout;
+        TextView AddTrainingLabelTV, AddTrainingNameTV, AddTrainingExplenationTV;
         Button AddTrainingButton;
-        EditText AddTrainingNameET, AddTrainingDurationET, AddTrainingOrderET, AddTrainingExplenationET;
+        EditText AddTrainingNameET, AddTrainingOrderET, AddTrainingExplenationET;
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(420, 180);
         Admin1 admin;
@@ -75,27 +75,6 @@ namespace MyLittleClub
             AddTrainingNameLayout.AddView(AddTrainingNameET);
             AddTrainingOverAllLayout.AddView(AddTrainingNameLayout);
             //----------------------------------------------------------------------------------
-            //Defining the AddTraining Duration layout
-            AddTrainingDurationLayout = new LinearLayout(this);
-            AddTrainingDurationLayout.LayoutParameters = WrapContParams;
-            AddTrainingDurationLayout.Orientation = Orientation.Horizontal;
-            //Defining the Duration AddTraining TextView
-            AddTrainingDurationTV = new TextView(this);
-            AddTrainingDurationTV.LayoutParameters = WrapContParams;
-            AddTrainingDurationTV.Text = "Exercise Duration: ";
-            AddTrainingDurationTV.TextSize = 30;
-            AddTrainingDurationTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Duration AddTraining EditText
-            AddTrainingDurationET = new EditText(this);
-            AddTrainingDurationET.LayoutParameters = OneTwentyParams;
-            AddTrainingDurationET.Hint = "Duration";
-            AddTrainingDurationET.TextSize = 30;
-            AddTrainingDurationET.InputType = InputTypes.NumberFlagDecimal;
-            AddTrainingDurationET.SetSingleLine();
-            //Adding views to layout
-            AddTrainingDurationLayout.AddView(AddTrainingDurationTV);
-            AddTrainingDurationLayout.AddView(AddTrainingDurationET);
-            AddTrainingOverAllLayout.AddView(AddTrainingDurationLayout);
             //----------------------------------------------------------------------------------------
             //Defining the AddTraining Explenation layout
             AddTrainingExplenationLayout = new LinearLayout(this);
@@ -159,12 +138,9 @@ namespace MyLittleClub
         //Builds The Screen
         private void AddTrainingButton_Click(object sender, EventArgs e)
         {
-            double xDuration = 0;
-            double.TryParse(AddTrainingDurationET.Text, out xDuration);
-            Exercise ex = new Exercise(AddTrainingNameET.Text, xDuration, AddTrainingExplenationET.Text);
+            Exercise ex = new Exercise(AddTrainingNameET.Text, AddTrainingExplenationET.Text);
             HashMap map = new HashMap();
             map.Put("Name", ex.name);
-            map.Put("Duration", ex.duration);
             map.Put("Explenation", ex.explenatiotn);
             DocumentReference DocRef = database.Collection("Users").Document(admin.email).Collection("Exercises").Document(ex.name);
             DocRef.Set(map);

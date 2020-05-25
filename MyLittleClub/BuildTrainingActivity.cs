@@ -178,8 +178,8 @@ namespace MyLittleClub
             }
         }
         Dialog d1;
-        LinearLayout DialogOverLayout, DialogNameLayout, DialogDurationLayout, DialogDurationExplenation;
-        TextView DialogNameTextView, DialogDurationTextView, DialogExplenationTextView;
+        LinearLayout DialogOverLayout, DialogNameLayout, DialogDurationExplenation;
+        TextView DialogNameTextView, DialogExplenationTextView;
         Button DialogRemoveButton;
         Exercise ab1;
         public void BuildDialog(object sender)
@@ -195,8 +195,6 @@ namespace MyLittleClub
             //
             DialogNameTextView = new TextView(this);
             DialogNameTextView.Text = ab1.name;
-            DialogDurationTextView = new TextView(this);
-            DialogDurationTextView.Text = ab1.duration.ToString();
             DialogExplenationTextView = new TextView(this);
             DialogExplenationTextView.Text = ab1.explenatiotn.ToString();
             d1.Show();
@@ -231,9 +229,8 @@ namespace MyLittleClub
                         foreach (DocumentSnapshot item in document)
                         {
                             string name = (item.GetString("Name")).ToString();
-                            double duration = double.Parse(item.GetDouble("Duration").ToString());
                             string exp = (item.GetString("Explenation")).ToString();
-                            exes.Add(new Exercise(name, duration, exp));
+                            exes.Add(new Exercise(name, exp));
                         }
                     }
                 }
