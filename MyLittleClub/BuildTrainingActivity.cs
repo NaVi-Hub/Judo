@@ -10,6 +10,8 @@ using Newtonsoft.Json;
 using System;
 using Java.Util;
 using ES.DMoral.ToastyLib;
+using Android.Text;
+using Javax.Xml.Datatype;
 
 namespace MyLittleClub
 {
@@ -28,6 +30,7 @@ namespace MyLittleClub
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(650, 800);
         LinearLayout Overalllayout, InsideButtonsSVL, InsideTrainingSVL, ScrollViewsLayout;
         ScrollView BtnSV, TrainingSV;
+        EditText DurationDialogET;
         Spinner spin;
         List<string> groups;
         string groupname;
@@ -43,6 +46,7 @@ namespace MyLittleClub
             GetExercises();
             // Create your application here
         }
+        TextView OAdurationTV;
         public void BuildAddExScreen()
         {
             Overalllayout = (LinearLayout)FindViewById(Resource.Id.AddGroupL);
@@ -57,6 +61,13 @@ namespace MyLittleClub
             spin.Adapter = adapter;
             spin.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spin_ItemSelected);
             Overalllayout.AddView(spin);
+            //
+            OAdurationTV = new TextView(this);
+            OAdurationTV.LayoutParameters = BLP;
+            OAdurationTV.Text = OAduration.ToString();
+            OAdurationTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            OAdurationTV.TextSize = 30;
+            Overalllayout.AddView(OAdurationTV);
             //
             ScrollViewsLayout = new LinearLayout(this);
             ScrollViewsLayout.LayoutParameters = LLLP;
@@ -134,6 +145,7 @@ namespace MyLittleClub
         {
             return currGroup != "Choose Group";
         }
+        Dialog DurationDialog;
         public void Button_Drag(object sender, View.DragEventArgs e)
         {
             Button a = CurrButton;
@@ -168,6 +180,45 @@ namespace MyLittleClub
                         var data = e.Event.ClipData;
                         if (data != null)
                             a.Text = data.GetItemAt(0).Text;
+                        //Dialog
+                        DurationDialog = new Dialog(this);
+                        DurationDialog.SetCancelable(true);
+                        DurationDialog.SetContentView(Resource.Layout.MyDialog);
+                        //Linear Layout
+                        LinearLayout DurationDialogLayout = DurationDialog.FindViewById<LinearLayout>(Resource.Id.AbcDEF);
+                        DurationDialogLayout.LayoutParameters = OneTwentyParams;
+                        DurationDialogLayout.Orientation = Orientation.Vertical;
+                        //Text view
+                        TextView DurationDialogTV = new TextView(this);
+                        BLP.SetMargins(20, 20, 10, 10);
+                        DurationDialogTV.LayoutParameters = BLP;
+                        DurationDialogTV.Text = "Duration: ";
+                        DurationDialogTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+                        DurationDialogTV.TextSize = 30;
+                        //Edit text
+                        DurationDialogET = new EditText(this);
+                        DurationDialogET.Hint = "Duration";
+                        BLP.SetMargins(10, 20, 20, 10);
+                        DurationDialogET.LayoutParameters = BLP;
+                        DurationDialogET.TextSize = 30;
+                        DurationDialogET.InputType = InputTypes.NumberVariationNormal;
+                        //Input Layout
+                        LinearLayout DialogInputLayout = new LinearLayout(this);
+                        DurationDialogLayout.LayoutParameters = LLLP;
+                        DurationDialogLayout.Orientation = Orientation.Horizontal;
+                        //addind to layout
+                        DialogInputLayout.AddView(DurationDialogTV);
+                        DialogInputLayout.AddView(DurationDialogET);
+                        DurationDialogLayout.AddView(DialogInputLayout);
+                        //button
+                        Button DialogButton = new Button(this);
+                        DialogButton.LayoutParameters = BLP;
+                        DialogButton.Text = "Add";
+                        DialogButton.TextSize = 30;
+                        DialogButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+                        DialogButton.Click += this.DialogButton_Click;
+                        DurationDialogLayout.AddView(DialogButton);
+                        DurationDialog.Show();
                     }
                     else
                     {
@@ -177,6 +228,15 @@ namespace MyLittleClub
                     break;
             }
         }
+
+        private void DialogButton_Click(object sender, EventArgs e)
+        {
+            int a;
+            int.TryParse(DurationDialogET.Text, out a);
+            OAduration += a;
+            DurationDialog.Dismiss();
+        }
+        public int OAduration = 0;
         Dialog d1;
         LinearLayout DialogOverLayout, DialogNameLayout, DialogDurationExplenation;
         TextView DialogNameTextView, DialogExplenationTextView;

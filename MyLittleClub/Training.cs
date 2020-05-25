@@ -5,16 +5,15 @@ namespace MyLittleClub
     public class Training
     {
 
-        public int SuggestedAge { get; set; }
         public List<Exercise> Exercises { get; set; }
-
+        public double duration { get; set; }
         public Training()
         {
 
         }
-        public Training(int sug)
+        public Training(double duration)
         {
-            this.SuggestedAge = sug;
+            this.duration = duration;
         }
         public void AddTraining (Exercise ex)
         {
@@ -31,16 +30,5 @@ namespace MyLittleClub
         {
             this.Exercises = exercises;
         }
-
-        public double DurationSum()
-        {
-            double TR = 0;
-            for (int i = 0; i < this.Exercises.Count; i++)
-            {
-                TR += Exercises[i].duration;
-            }
-            return TR;
-        }
-        //sums the duration of all exercies in the array
     }
 }
