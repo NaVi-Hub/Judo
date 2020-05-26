@@ -12,6 +12,7 @@ using Java.Util;
 using ES.DMoral.ToastyLib;
 using Android.Text;
 using Javax.Xml.Datatype;
+using Android.Graphics.Drawables;
 
 namespace MyLittleClub
 {
@@ -25,21 +26,35 @@ namespace MyLittleClub
         bool InView = false;
         Button CurrButton;
         Button Send;
+        Dialog d1;
+        LinearLayout DialogOverLayout, DialogNameLayout, DialogDurationExplenation;
+        TextView DialogNameTextView, DialogExplenationTextView;
+        Button DialogRemoveButton;
+        Exercise ab1;
         LinearLayout.LayoutParams BLP = new LinearLayout.LayoutParams(350, 200);
         LinearLayout.LayoutParams LLLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent, 1);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(650, 800);
         //
         ViewGroup.LayoutParams vlp = new ViewGroup.LayoutParams(350, 200);
         ViewGroup.LayoutParams vlllp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
-        ViewGroup.LayoutParams vOneTwentyParams = new ViewGroup.LayoutParams(650, 800);
+        ViewGroup.LayoutParams vOneTwentyParams = new ViewGroup.LayoutParams(650, 400);
+        ViewGroup.LayoutParams vWrap = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
+        //
         LinearLayout Overalllayout, InsideButtonsSVL, InsideTrainingSVL, ScrollViewsLayout;
         ScrollView BtnSV, TrainingSV;
         EditText DurationDialogET;
-        Spinner spin;
+        TextView OAdurationTV;
+        Spinner spin; 
+        Dialog DurationDialog;
         List<string> groups;
         string groupname;
         string currGroup = "Choose Group";
+        private int OAduration = 0;
         ISharedPreferences sp;
+        List<Exercise> exes;
+        List<Exercise> ex = new List<Exercise>();
+
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
@@ -50,7 +65,9 @@ namespace MyLittleClub
             GetExercises();
             // Create your application here
         }
-        TextView OAdurationTV;
+
+
+
         public void BuildAddExScreen()
         {
             Overalllayout = (LinearLayout)FindViewById(Resource.Id.AddGroupL);
@@ -68,7 +85,7 @@ namespace MyLittleClub
             //
             OAdurationTV = new TextView(this);
             OAdurationTV.LayoutParameters = BLP;
-            OAdurationTV.Text = OAduration.ToString();
+            OAdurationTV.Text = "";
             OAdurationTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             OAdurationTV.TextSize = 30;
             Overalllayout.AddView(OAdurationTV);
@@ -116,11 +133,17 @@ namespace MyLittleClub
             Overalllayout.AddView(Send);
 
         }
+        //Build the Screen
+
+
         private void spin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             Spinner spin = (Spinner)sender;
             currGroup = spin.GetItemAtPosition(e.Position).ToString();
         }
+        //Sppiner item changed
+
+
         private void Send_Click(object sender, System.EventArgs e)
         {
             if (InputLegit())
@@ -145,11 +168,36 @@ namespace MyLittleClub
             {
             }
         }
+        //Final Send Button
+
         private bool InputLegit()
         {
-            return currGroup != "Choose Group";
+            int a = 0;
+            int.TryParse(OAdurationTV.Text, out a);
+            bool tr = false;
+            if (currGroup != "Choose Group")
+            {
+                tr = true;
+            }
+            else
+            {
+                Toasty.Error(this, "Choose Group", 5, true).Show();
+                tr = false;
+            }
+            if (a < 51 && a > 39)
+            {
+                tr =  tr && true;
+            }
+            else
+            {
+                Toasty.Error(this, "Watch The Time", 5, true).Show();
+                tr = false;
+            }
+            return tr;
         }
-        Dialog DurationDialog;
+        //Input Validation
+
+        
         public void Button_Drag(object sender, View.DragEventArgs e)
         {
             Button a = CurrButton;
@@ -194,17 +242,20 @@ namespace MyLittleClub
                     break;
             }
         }
+        //Drag Events
+
+
         public void BuildDialog()
         {
             //Dialog
             DurationDialog = new Dialog(this);
-            DurationDialog.SetCancelable(true);
+            DurationDialog.SetCancelable(false);
             DurationDialog.SetContentView(Resource.Layout.MyDialog);
-            //Linear Layout
             LinearLayout DurationDialogLayout = DurationDialog.FindViewById<LinearLayout>(Resource.Id.AbcDEF);
+            DurationDialogLayout.Orientation = Orientation.Vertical;
+            DurationDialogLayout.SetGravity(GravityFlags.Center);
             //Text view
             TextView DurationDialogTV = new TextView(this);
-            BLP.SetMargins(20, 20, 10, 10);
             DurationDialogTV.LayoutParameters = vlp;
             DurationDialogTV.Text = "Duration: ";
             DurationDialogTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
@@ -212,17 +263,17 @@ namespace MyLittleClub
             //Edit text
             DurationDialogET = new EditText(this);
             DurationDialogET.Hint = "Duration";
-            BLP.SetMargins(10, 20, 20, 10);
             DurationDialogET.LayoutParameters = vlp;
             DurationDialogET.TextSize = 30;
-            DurationDialogET.InputType = InputTypes.NumberVariationNormal;
+            DurationDialogET.InputType = InputTypes.ClassPhone;
             //Input Layout
             LinearLayout DialogInputLayout = new LinearLayout(this);
-            DurationDialogLayout.LayoutParameters = vlllp;
-            DurationDialogLayout.Orientation = Orientation.Horizontal;
+            DialogInputLayout.LayoutParameters = vOneTwentyParams;
+            DialogInputLayout.Orientation = Orientation.Horizontal;
             //addind to layout
             DialogInputLayout.AddView(DurationDialogTV);
             DialogInputLayout.AddView(DurationDialogET);
+            //Linear Layout
             DurationDialogLayout.AddView(DialogInputLayout);
             //button
             Button DialogButton = new Button(this);
@@ -233,52 +284,97 @@ namespace MyLittleClub
             DialogButton.Click += this.DialogButton_Click;
             DurationDialogLayout.AddView(DialogButton);
             DurationDialog.Show();
+            MyStuff.showSoftKeyboard(this, DurationDialogET);
         }
+        //Build Duration Dialog
+
+
         private void DialogButton_Click(object sender, EventArgs e)
         {
             int a;
             int.TryParse(DurationDialogET.Text, out a);
             OAduration += a;
+            OAdurationTV.Text = OAduration.ToString();
+            if (OAduration <= 50 && OAduration >= 40)
+            {
+                OAdurationTV.SetTextColor(Color.LawnGreen);
+            }
+            else if (OAduration > 50)
+            {
+                OAdurationTV.SetTextColor(Color.Red);
+            }
+            else
+            {
+                OAdurationTV.SetTextColor(Color.Black);
+            }
             DurationDialog.Dismiss();
         }
-        public int OAduration = 0;
-        Dialog d1;
-        LinearLayout DialogOverLayout, DialogNameLayout, DialogDurationExplenation;
-        TextView DialogNameTextView, DialogExplenationTextView;
-        Button DialogRemoveButton;
-        Exercise ab1;
+        //Dialog Button Click
+
         public void BuildDialog(object sender)
         {
             Button b = (Button)sender;
+            for (int i = 0; i<exes.Count; i++)
+            {
+                if (exes[i].name.Equals(b.Text))
+                {
+                    ab1 = exes[i];
+                }
+            }
             d1 = new Dialog(this);
             //if (exes.Contains)
             d1.SetCancelable(true);
             d1.SetTitle(ab1.name);
             d1.SetContentView(Resource.Layout.MyDialog);
             LinearLayout ll = d1.FindViewById<LinearLayout>(Resource.Id.AbcDEF);
-            DialogOverLayout.Orientation = Orientation.Vertical;
+            ll.Orientation = Orientation.Vertical;
             //
-            DialogNameTextView = new TextView(this);
-            DialogNameTextView.Text = ab1.name;
+            LinearLayout DialogLayout = new LinearLayout(this);
+            DialogLayout.LayoutParameters = vWrap;
+            DialogLayout.Orientation = Orientation.Vertical;
+            DialogLayout.SetGravity(GravityFlags.CenterVertical);
+            //Dialog TitleTV
+            TextView ExDialogTitle = new TextView(this);
+            ExDialogTitle.SetBackgroundColor(Color.RoyalBlue);
+            ExDialogTitle.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            ExDialogTitle.SetTextColor(Color.DarkRed);
+            ExDialogTitle.TextSize = 40; 
+            ExDialogTitle.Text = ab1.name;
+            DialogLayout.AddView(ExDialogTitle);
+            //
             DialogExplenationTextView = new TextView(this);
             DialogExplenationTextView.Text = ab1.explenatiotn.ToString();
+            DialogExplenationTextView.TextSize = 30;
+            DialogExplenationTextView.SetTextColor(Color.Black);
+            //
+            ////Add BitMap
+            //
+            DialogLayout.AddView(DialogExplenationTextView);
+            ll.AddView(DialogLayout);
             d1.Show();
         }
+        //Builds Ex Dialog
+
+
         private void Copy_Click(object sender, EventArgs e)
         {
             BuildDialog(sender);
         }
+        //Calls BuildDialog(object sender)
         private void BuildTrainingActivity_Click(object sender, EventArgs e)
         {
             BuildDialog(sender);
         }
+        //Calls BuildDialog(object sender)
+
         private void BuildExerciseActivity_LongClick(object sender, Android.Views.View.LongClickEventArgs e)
         {
             CurrButton = (Button)sender;
             var data = ClipData.NewPlainText("name", CurrButton.Text);
             CurrButton.StartDrag(data, new View.DragShadowBuilder(CurrButton), null, 0);
         }
-        List<Exercise> exes;
+        //Start Drag
+        
         public void GetExercises()
         {
             exes = new List<Exercise>();
@@ -303,7 +399,8 @@ namespace MyLittleClub
             }
             ));
         }
-        List<Exercise> ex = new List<Exercise>();
+        //Retreiving Exercies From FireBase
+
         public List<String> GetGroups()
         {
             groups = new List<string>();
