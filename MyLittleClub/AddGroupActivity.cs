@@ -23,6 +23,9 @@ namespace MyLittleClub
         TextView StudTV, LabelAddGroupTV, LocationAddGroupTV, AgeAddGroupTV, GroupLevelAddGroupTV;
         EditText LocationAddGroupET, AgeAddGroupET, GroupLevelAddGroupET;
         Button AddGroupButton, AddGroupTimeButton, AddGroupDateButton;
+        ViewGroup.LayoutParams Match = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+        ViewGroup.LayoutParams fivethirthy = new ViewGroup.LayoutParams(530, 180);
+        ViewGroup.LayoutParams wrap = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
         LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(530, 180);
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
@@ -244,7 +247,7 @@ namespace MyLittleClub
             {
                 Toasty.Normal(this, "First Inital", 5).Show();
                 SpinnersLayout = new LinearLayout(this);
-                SpinnersLayout.LayoutParameters = WrapContParams;
+                SpinnersLayout.LayoutParameters = wrap;
                 SpinnersLayout.Orientation = Orientation.Vertical;
                 SpinnersLayout.SetGravity(GravityFlags.Center);
                 DaysSV = new ScrollView(this);
