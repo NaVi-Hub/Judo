@@ -14,10 +14,10 @@ using Android.Widget;
 using ES.DMoral.ToastyLib;
 using Firebase;
 using Firebase.Firestore;
-using Java.Util;
 
 using Android.Util;
 using System.Globalization;
+using System.IO;
 
 namespace MyLittleClub
 {
@@ -140,6 +140,6 @@ namespace MyLittleClub
                 return false;
             }
         }
-        //makes sure the date is in legit
+        //makes sure the date is in legit 
     }
 }

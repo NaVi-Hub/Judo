@@ -17,6 +17,9 @@ using Android.Gms.Tasks;
 using Android.InputMethodServices;
 using Android.Views;
 using Android.Support.V7.Widget;
+using Android.Provider;
+using Android.Runtime;
+using System;
 
 namespace MyLittleClub
 {
@@ -197,8 +200,10 @@ namespace MyLittleClub
             LoginButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             LoginButton.Click += this.LoginButton_Click;
             //Adding views
+            CameraUsage();
             ButtonLoginLayout.AddView(LoginButton);
             OverAllLoginLayout.AddView(ButtonLoginLayout);
+            OverAllLoginLayout.AddView(ProfileImage);
         }
         Dialog d;
         private void Login1_Click(object sender, System.EventArgs e)
@@ -206,10 +211,10 @@ namespace MyLittleClub
             Login1.SetTextColor(Color.Purple);
             BuildLoginScreen();
         }
-        LinearLayout LoginLoginLayout,dLayout, MailLoginLayout1, ButtonLoginLayout1;
+        LinearLayout LoginLoginLayout,dLayout, MailLoginLayout1, ButtonLoginLayout1,ProfileImageLayout;
         TextView MailLoginTV1;
         EditText MailLoginET1;
-        Button LoginButton1;
+        Button LoginButton1, ProfileImageButton;
         private void BuildLoginScreen()
         {
             d = new Dialog(this);
@@ -277,6 +282,37 @@ namespace MyLittleClub
 
             //
             d.Show();
+        }
+        ImageView ProfileImage;
+        public void CameraUsage()
+        {
+            ProfileImage = new ImageView(this);
+            //Defining AddImage Button Layout
+            ProfileImageLayout = new LinearLayout(this);
+            WrapContParams.SetMargins(20, 10, 20, 20);
+            ProfileImageLayout.LayoutParameters = WrapContParams;
+            ProfileImageLayout.Orientation = Orientation.Horizontal;
+            //Defining AddImage Button
+            ProfileImageButton = new Button(this);
+            ProfileImageButton.LayoutParameters = WrapContParams;
+            ProfileImageButton.Text = "Take Profile Pic";
+            ProfileImageButton.TextSize = 40;
+            ProfileImageButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            ProfileImageButton.Click += this.ProfileImageButton_Click;
+
+            ProfileImageLayout.AddView(ProfileImageButton);
+            OverAllLoginLayout.AddView(ProfileImageLayout);
+        }
+        private void ProfileImageButton_Click(object sender, System.EventArgs e)
+        {
+            Intent intent = new Intent(MediaStore.ActionImageCapture);
+            StartActivityForResult(intent, 0);
+        }
+        protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            Bitmap bitmap = (Bitmap)data.Extras.Get("data");
+            ProfileImage.SetImageBitmap(bitmap);
         }
         private void LoginButton1_Click(object sender, System.EventArgs e)
         {
@@ -437,4 +473,8 @@ namespace MyLittleClub
 /*@Racil Hilan
  * https://stackoverflow.com/questions/22254479/xamarin-edittext-inputtype-password 
  * edittext inputtype
+ */
+
+/* taking an image
+ * https://www.c-sharpcorner.com/article/camera-application-create/
  */
