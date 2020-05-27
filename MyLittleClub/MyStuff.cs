@@ -29,7 +29,8 @@ namespace MyLittleClub
             string sport = sp.GetString("Sport", null);
             string name = sp.GetString("Name", null);
             string phoneNum = sp.GetString("PhoneNum", null);
-            return new Admin1(sport, name, phoneNum, email);
+            string Profile = sp.GetString("Profile", null);
+            return new Admin1(sport, name, phoneNum, email, Profile);
         }
         public static string MakeDateString(int Year, int Month, int Day)
         {
@@ -116,6 +117,7 @@ namespace MyLittleClub
             editor.PutString("Sport", admin.sport);
             editor.PutString("PhoneNum", admin.phoneNumber);
             editor.PutString("Email", MakeEmail(admin.email));
+            editor.PutString("Profile", admin.ProfilePic);
             editor.Commit();
         }
         public static void RemoveFromShared()
@@ -141,5 +143,28 @@ namespace MyLittleClub
             }
         }
         //makes sure the date is in legit 
+
+        public static string ConvertBitMapToString (Bitmap TheBitMap)
+        {
+            string imageStr = string.Empty;
+            using(var stream = new System.IO.MemoryStream())
+            {
+                TheBitMap.Compress(Bitmap.CompressFormat.Png, 50, stream);
+                var bytes = stream.ToArray();
+                imageStr = Convert.ToBase64String(bytes);
+            }
+            return imageStr;
+        }
+        public static Bitmap ConvertStringToBitMap(string theBitMap)
+        {
+            Bitmap img = null;
+            if(theBitMap != null)
+            {
+                byte[] decodebyte = Base64.Decode(theBitMap, 0);
+                img = BitmapFactory.DecodeByteArray(decodebyte, 0, decodebyte.Length);
+            }
+            return img;
+        }
+        // @Raz Shefer
     }
 }

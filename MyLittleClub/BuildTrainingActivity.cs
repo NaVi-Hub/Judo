@@ -361,6 +361,7 @@ namespace MyLittleClub
             BuildDialog(sender);
         }
         //Calls BuildDialog(object sender)
+
         private void BuildTrainingActivity_Click(object sender, EventArgs e)
         {
             BuildDialog(sender);

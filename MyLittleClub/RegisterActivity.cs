@@ -20,6 +20,7 @@ using Android.Support.V7.Widget;
 using Android.Provider;
 using Android.Runtime;
 using System;
+using Android.Graphics.Drawables;
 
 namespace MyLittleClub
 {
@@ -203,7 +204,7 @@ namespace MyLittleClub
             CameraUsage();
             ButtonLoginLayout.AddView(LoginButton);
             OverAllLoginLayout.AddView(ButtonLoginLayout);
-            OverAllLoginLayout.AddView(ProfileImage);
+            OverAllLoginLayout.AddView(ImageViewProfileImage);
         }
         Dialog d;
         private void Login1_Click(object sender, System.EventArgs e)
@@ -211,10 +212,10 @@ namespace MyLittleClub
             Login1.SetTextColor(Color.Purple);
             BuildLoginScreen();
         }
-        LinearLayout LoginLoginLayout,dLayout, MailLoginLayout1, ButtonLoginLayout1,ProfileImageLayout;
+        LinearLayout LoginLoginLayout,dLayout, MailLoginLayout1, ButtonLoginLayout1,ImageViewProfileImageLayout;
         TextView MailLoginTV1;
         EditText MailLoginET1;
-        Button LoginButton1, ProfileImageButton;
+        Button LoginButton1, ImageViewProfileImageButton;
         private void BuildLoginScreen()
         {
             d = new Dialog(this);
@@ -283,27 +284,28 @@ namespace MyLittleClub
             //
             d.Show();
         }
-        ImageView ProfileImage;
+        ImageView ImageViewProfileImage;
+        Bitmap BitProfilePic;
         public void CameraUsage()
         {
-            ProfileImage = new ImageView(this);
+            ImageViewProfileImage = new ImageView(this);
             //Defining AddImage Button Layout
-            ProfileImageLayout = new LinearLayout(this);
+            ImageViewProfileImageLayout = new LinearLayout(this);
             WrapContParams.SetMargins(20, 10, 20, 20);
-            ProfileImageLayout.LayoutParameters = WrapContParams;
-            ProfileImageLayout.Orientation = Orientation.Horizontal;
+            ImageViewProfileImageLayout.LayoutParameters = WrapContParams;
+            ImageViewProfileImageLayout.Orientation = Orientation.Horizontal;
             //Defining AddImage Button
-            ProfileImageButton = new Button(this);
-            ProfileImageButton.LayoutParameters = WrapContParams;
-            ProfileImageButton.Text = "Take Profile Pic";
-            ProfileImageButton.TextSize = 40;
-            ProfileImageButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            ProfileImageButton.Click += this.ProfileImageButton_Click;
+            ImageViewProfileImageButton = new Button(this);
+            ImageViewProfileImageButton.LayoutParameters = WrapContParams;
+            ImageViewProfileImageButton.Text = "Take Profile Pic";
+            ImageViewProfileImageButton.TextSize = 40;
+            ImageViewProfileImageButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            ImageViewProfileImageButton.Click += this.ImageViewProfileImageButton_Click;
 
-            ProfileImageLayout.AddView(ProfileImageButton);
-            OverAllLoginLayout.AddView(ProfileImageLayout);
+            ImageViewProfileImageLayout.AddView(ImageViewProfileImageButton);
+            OverAllLoginLayout.AddView(ImageViewProfileImageLayout);
         }
-        private void ProfileImageButton_Click(object sender, System.EventArgs e)
+        private void ImageViewProfileImageButton_Click(object sender, System.EventArgs e)
         {
             Intent intent = new Intent(MediaStore.ActionImageCapture);
             StartActivityForResult(intent, 0);
@@ -312,7 +314,9 @@ namespace MyLittleClub
         {
             base.OnActivityResult(requestCode, resultCode, data);
             Bitmap bitmap = (Bitmap)data.Extras.Get("data");
-            ProfileImage.SetImageBitmap(bitmap);
+            ImageViewProfileImage.SetImageBitmap(bitmap);
+            BitmapDrawable drawable = (BitmapDrawable)ImageViewProfileImage.Drawable;
+            BitProfilePic  = drawable.Bitmap;
         }
         private void LoginButton1_Click(object sender, System.EventArgs e)
         {
@@ -348,7 +352,8 @@ namespace MyLittleClub
                             string adminName = item.GetString("Name");
                             string adminphonenum = item.GetString("PhoneNum");
                             string adminsport = item.GetString("Sport");
-                            Admin1 a = new Admin1(adminsport, adminName, adminphonenum, adminemail);
+                            string profilepic = item.GetString("Profile");
+                            Admin1 a = new Admin1(adminsport, adminName, adminphonenum, adminemail, profilepic);
                             MyStuff.PutToShared(a);
                         }
                     }
@@ -367,16 +372,18 @@ namespace MyLittleClub
                 //validation of input
                 if (IsValidName(NameLoginET.Text) && IsValidSport(SportLoginET.Text) & MyStuff.isValidEmail(MailLoginET.Text, this) && PhoneNumberLoginET.Text.Length == 10)
                 {
+                    string image = MyStuff.ConvertBitMapToString(BitProfilePic);
                     Toasty.Config.Instance
                        .TintIcon(true)
                        .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
                     //if(MailLoginET.text   Not in   database)
-                    admin = new Admin1(SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text);
+                    admin = new Admin1(SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text, image);
                     HashMap map = new HashMap();
                     map.Put("Name", admin.name);
                     map.Put("EMail", admin.email);
                     map.Put("PhoneNum", admin.phoneNumber);
                     map.Put("Sport", admin.sport);
+                    map.Put("Profile", admin.ProfilePic);
                     DocumentReference DocRef = database.Collection("Users").Document(admin.email);
                     DocRef.Set(map);
                     MyStuff.PutToShared(admin);

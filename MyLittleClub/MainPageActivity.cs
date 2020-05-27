@@ -19,13 +19,14 @@ namespace MyLittleClub
     public class MainPageActivity : AppCompatActivity, IOnDateChangeListener
     {
         ISharedPreferences sp;
-        LinearLayout MainPageOverallLayout, MainPageTitleLayout;
+        LinearLayout MainPageOverallLayout, MainPageTitleLayout, MainPageProfilePictureLayout;
         TextView MainPageTitleTV, MainPageTitleTV2;
         LinearLayout.LayoutParams CalendarParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, 1000);
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
         LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
         public static Admin1 admin1;
         FirebaseFirestore database;
+        ImageView Profile;
         int abc = 0;
         List<String> dates;
         List<Group> groups;
@@ -61,6 +62,17 @@ namespace MyLittleClub
             MainPageTitleTV.TextSize = 55;
             MainPageTitleTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             MainPageTitleTV.SetTextColor(Android.Graphics.Color.DarkRed);
+            //Profile Picture Layout
+            MainPageProfilePictureLayout = new LinearLayout(this);
+            MainPageProfilePictureLayout.LayoutParameters = WrapContParams;
+            MainPageProfilePictureLayout.Orientation = Orientation.Vertical;
+            MainPageProfilePictureLayout.SetGravity(Android.Views.GravityFlags.Center);
+            //Profile Pic
+            Profile = new ImageView(this);
+            Profile.SetImageBitmap(MyStuff.ConvertStringToBitMap(admin1.ProfilePic));
+            Profile.SetMaxWidth(250);
+            Profile.SetMinimumHeight(400);
+            MainPageProfilePictureLayout.AddView(Profile);
             //Title TV 2
             MainPageTitleTV2 = new TextView(this);
             MainPageTitleTV2.LayoutParameters = WrapContParams;
@@ -70,9 +82,10 @@ namespace MyLittleClub
             MainPageTitleTV2.Text = $"You have {abc} trainings on the {MyStuff.MakeDateString(year, month, day)}";
             MainPageTitleTV2.TextSize = 25;
             MainPageTitleTV2.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            MainPageTitleTV2.SetTextColor(Android.Graphics.Color.SaddleBrown);
+            MainPageTitleTV2.SetTextColor(Color.SaddleBrown);
             //adding to layouts
             MainPageTitleLayout.AddView(MainPageTitleTV);
+            MainPageOverallLayout.AddView(MainPageProfilePictureLayout);
             MainPageTitleLayout.AddView(MainPageTitleTV2);
             MainPageOverallLayout.AddView(MainPageTitleLayout);
             //Calendar
@@ -89,6 +102,10 @@ namespace MyLittleClub
         private void MainPageShowGroupsbtn_Click(object sender, EventArgs e)
         {
             GetGroups();
+        }
+        private void BuildMainPageShowGroupsDialogRecycler()
+        {
+
         }
         //Defining and adding views to layout
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -192,6 +209,7 @@ namespace MyLittleClub
                         }
                     }
                 }
+                BuildMainPageShowGroupsDialogRecycler()
             }
             ));
         }

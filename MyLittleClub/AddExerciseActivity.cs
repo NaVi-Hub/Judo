@@ -11,13 +11,12 @@ using Firebase.Firestore;
 using Java.Util;
 using Newtonsoft.Json;
 using System;
-
 namespace MyLittleClub
 {
     [Activity(Theme = "@style/AppTheme")]
     public class AddExerciseActivity : Activity
     {
-        LinearLayout AddTrainingOverAllLayout, AddTrainingLabelLayout, AddTrainingNameLayout, AddTrainingOrderLayout, ButtonAddTrainingLayout, AddTrainingExplenationLayout, AddTrainingExplenationETLayout;
+        LinearLayout AddTrainingOverAllLayout, AddTrainingLabelLayout, AddTrainingNameLayout, ButtonAddTrainingLayout, AddTrainingExplenationLayout, AddTrainingExplenationETLayout;
         TextView AddTrainingLabelTV, AddTrainingNameTV, AddTrainingExplenationTV;
         Button AddTrainingButton;
         EditText AddTrainingNameET, AddTrainingOrderET, AddTrainingExplenationET;
