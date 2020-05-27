@@ -140,27 +140,6 @@ namespace MyLittleClub
                 return false;
             }
         }
-        //makes sure the date is in legit
-        
-        public static List<DateTime> BuildDates(DateTime day, List<string> Days)
-        {
-            List<DateTime> ListToReturn = new List<DateTime>();
-            while (day.Month < 8)
-            {
-                if (Days.Contains(day.DayOfWeek.ToString()))
-                {
-                    ListToReturn.Add(day);
-                }
-                if (DateTime.DaysInMonth(day.Year, day.Month) > day.Day)
-                {
-                    day = new DateTime(day.Year, day.Month, day.Day + 1);
-                }
-                else
-                {
-                    day = new DateTime(day.Year, day.Month + 1, 1);
-                }
-            }
-            return ListToReturn;
-        }
+        //makes sure the date is in legit 
     }
 }

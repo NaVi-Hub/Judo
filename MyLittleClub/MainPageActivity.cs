@@ -11,7 +11,6 @@ using Java.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using static Android.Widget.CalendarView;
 
 namespace MyLittleClub
@@ -33,7 +32,6 @@ namespace MyLittleClub
         Button MainPageShowGroupsbtn;
         Dialog d;
         CalendarView calendar;
-        List<DateTime> OADates1;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
@@ -42,7 +40,6 @@ namespace MyLittleClub
             admin1 = MyStuff.GetAdmin();
             database = MyStuff.database;
             GetDates();
-            OADates1 = MyStuff.BuildDates(DateTime.Today, Datesdays);
         }
         public void BuildMainPage()
         {
@@ -146,19 +143,21 @@ namespace MyLittleClub
             calendar.SetOnDateChangeListener(this);
         }
         //builds calendarview
-        public void OnSelectedDayChange1(CalendarView view, int year, int month, int dayOfMonth)
+        public void OnSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth)
         {
             abc = 0;
-            DateTime day = new DateTime(year, month + 1, dayOfMonth);
-            string dayOfWeek = day.DayOfWeek.ToString();
-            for (int i = 0; i < Datesdays.Count; i++)
+            string txt = MyStuff.MakeDateString(year, month + 1, dayOfMonth);
+            for (int i = 0; i < dates.Count; i++)
             {
-                if (Datesdays[i] == dayOfWeek)
+                if (dates[i] == txt)
                 {
                     abc++;
                 }
             }
-            if (day == DateTime.Today)
+            int year1 = int.Parse(DateTime.Today.Year.ToString());
+            int month1 = int.Parse(DateTime.Today.Month.ToString());
+            int day1 = int.Parse(DateTime.Today.Day.ToString());
+            if (txt == MyStuff.MakeDateString(year1, month1, day1))
             {
                 MainPageTitleTV2.Text = $"You have {abc} trainings Today";
             }
@@ -167,21 +166,9 @@ namespace MyLittleClub
                 MainPageTitleTV2.Text = $"You have {abc} trainings on the {MyStuff.MakeDateString(year, month + 1, dayOfMonth)}";
             }
         }
-        public void OnSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth)
-        {
-            DateTime day = new DateTime(year, month + 1, dayOfMonth);
-            abc = 0;
-            if (OADates1.Contains(day))
-            {
-                abc++;
-            }
-        }
-
         //changes the title TextView to show how many trainings are in the inputted date
-        List<string> GroupDays;
         public void GetGroups()
         {
-            GroupDays = new List<string>();
             groups = new List<Group>();
             Query query = database.Collection("Users").Document(admin1.email).Collection("Groups");
             query.Get().AddOnCompleteListener(new QueryListener((task) =>
@@ -200,10 +187,6 @@ namespace MyLittleClub
                             bool comp = item.GetBoolean("Comp").BooleanValue();
                             string level = (item.GetString("Level")).ToString();
                             string time = (item.GetString("Time")).ToString();
-                            for(int i = 0; i < 7; i++)
-                            {
-                                GroupDays.Add(item.GetString(("Day" + i).ToString()));
-                            }
                             Group group1 = new Group(Age, level, comp, loc, date, time);
                             groups.Add(group1);
                         }
@@ -213,13 +196,9 @@ namespace MyLittleClub
             ));
         }
         //Retrives the Groups from database
-
-        List<string> Datesdays;
-        int count = 0;
         public void GetDates()
         {
-            Datesdays = new List<string>();
-            //dates = new List<string>();
+            dates = new List<string>();
             Query query = database.Collection("Users").Document(admin1.email).Collection("Groups");
             query.Get().AddOnCompleteListener(new QueryListener((task) =>
             {
@@ -231,9 +210,13 @@ namespace MyLittleClub
                         var document = snapshot.Documents;
                         foreach (DocumentSnapshot item in document)
                         {
-                            string date = (item.GetString("Day" + count)).ToString();
-                            Datesdays.Add(date);
-                            count++;
+                            string day = (item.GetString("Date").ToString())[0] + "" + (item.GetString("Date").ToString())[1];
+                            string month = (item.GetString("Date").ToString())[3] + "" + (item.GetString("Date").ToString())[4];
+                            string year = (item.GetString("Date").ToString())[6] + "" + (item.GetString("Date").ToString())[7] + (item.GetString("Date").ToString())[8] + "" + (item.GetString("Date").ToString())[9];
+                            int inday = int.Parse(day);
+                            int inmonth = int.Parse(month);
+                            int inyear = int.Parse(year);
+                            dates.Add(MyStuff.MakeDateString(inyear, inmonth, inday));
                         }
                     }
                 }
@@ -242,10 +225,5 @@ namespace MyLittleClub
             ));
         }
         //Retrives the Dates on which there are Groups from database
-
-        public void TryCal()
-        { 
-
-        }
     }
 }
