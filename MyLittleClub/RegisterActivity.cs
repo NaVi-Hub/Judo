@@ -324,7 +324,7 @@ namespace MyLittleClub
             string mail = MailLoginET1.Text;
             if (MyStuff.isValidEmail(mail ,this))
             {
-                if(Emails.Contains(mail))
+                if(MyStuff.Emails.Contains(mail))
                 {
                     GetAdmin(mail);
                 }
@@ -367,16 +367,15 @@ namespace MyLittleClub
         //Building Register Screen
         private void LoginButton_Click(object sender, System.EventArgs e)
         {
-            if (!Emails.Contains(MailLoginET.Text))
+            if (!MyStuff.Emails.Contains(MailLoginET.Text))
             {
                 //validation of input
-                if (IsValidName(NameLoginET.Text) && IsValidSport(SportLoginET.Text) & MyStuff.isValidEmail(MailLoginET.Text, this) && PhoneNumberLoginET.Text.Length == 10)
+                if (MyStuff.IsValidName(NameLoginET.Text, this) && MyStuff.IsValidSport(SportLoginET.Text, this) & MyStuff.isValidEmail(MailLoginET.Text, this) && PhoneNumberLoginET.Text.Length == 10)
                 {
                     string image = MyStuff.ConvertBitMapToString(BitProfilePic);
                     Toasty.Config.Instance
                        .TintIcon(true)
                        .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-                    //if(MailLoginET.text   Not in   database)
                     admin = new Admin1(SportLoginET.Text, NameLoginET.Text, PhoneNumberLoginET.Text, MailLoginET.Text, image);
                     HashMap map = new HashMap();
                     map.Put("Name", admin.name);
@@ -388,7 +387,7 @@ namespace MyLittleClub
                     DocRef.Set(map);
                     MyStuff.PutToShared(admin);
                     Intent intent1 = new Intent(this, typeof(MainPageActivity));
-                    Toasty.Success(this, "Registered Succesfully", 5, true);
+                    Toasty.Success(this, "Edited successfully", 5, true);
                     StartActivity(intent1);
                 }
             }
@@ -399,58 +398,11 @@ namespace MyLittleClub
             }
         }
         //When LogIn Button Is Clicked
-        public bool IsValidName(string name)
-        {
-            bool Tr = true;
-            List<string> FN = new List<string>();
-            FN.Add("Dick");
-            FN.Add("69");
-            FN.Add("420");
-            FN.Add("Sex");
-            FN.Add("Pussy");
-            FN.Add("pussy");
-            FN.Add("dick");
-            FN.Add("sex");
-            Tr = name.Length >= 4 && name.Length <= 16;
-            for (int i = 0; i < FN.Count; i++)
-            {
-                if (name.Contains(FN[i]))
-                {
-                    Tr = false;
-                }
-            }
-            if (!Tr)
-            {
-                Toasty.Config.Instance
-                   .TintIcon(true)
-                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-                Toasty.Error(this, "Name InValid", 5, true).Show(); return Tr;
-            }
-            else
-            {
-                return Tr;
-            }
-        }
-        //Name Validation
-        public bool IsValidSport(string sport)
-        {
-            if (sport.Length > 3)
-            {
-                return true;
-            }
-            else
-            {
-                Toasty.Config.Instance
-                   .TintIcon(true)
-                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-                Toasty.Error(this, "Sport InValid", 5, true).Show(); return false;
-            }
-        }
+        
         //Sport Validation
-        List<string> Emails;
         public List<string> GetEmails()
         {
-            Emails = new List<string>();
+            MyStuff.Emails = new List<string>();
             Query query = database.Collection("Users");
             query.Get().AddOnCompleteListener(new QueryListener((task) =>
             {
@@ -462,14 +414,14 @@ namespace MyLittleClub
                         var document = snapshot.Documents;
                         foreach (DocumentSnapshot item in document)
                         {
-                            Emails.Add(item.GetString("EMail"));
+                            MyStuff.Emails.Add(item.GetString("EMail"));
                         }
                     }
                 }
                 BuildRegisterScreen();
             }
             )) ;
-            return Emails;
+            return MyStuff.Emails;
         }
     }
 }

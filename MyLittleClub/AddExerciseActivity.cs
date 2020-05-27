@@ -19,12 +19,13 @@ namespace MyLittleClub
         LinearLayout AddTrainingOverAllLayout, AddTrainingLabelLayout, AddTrainingNameLayout, ButtonAddTrainingLayout, AddTrainingExplenationLayout, AddTrainingExplenationETLayout;
         TextView AddTrainingLabelTV, AddTrainingNameTV, AddTrainingExplenationTV;
         Button AddTrainingButton;
-        EditText AddTrainingNameET, AddTrainingOrderET, AddTrainingExplenationET;
+        EditText AddTrainingNameET, AddTrainingExplenationET;
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(420, 180);
         Admin1 admin;
         FirebaseFirestore database = Context.database;
         ISharedPreferences sp;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);

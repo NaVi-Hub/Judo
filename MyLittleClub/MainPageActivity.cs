@@ -142,7 +142,13 @@ namespace MyLittleClub
                         StartActivity(tryIntent);
                         return true;
                     }
-                case Resource.Id.menuItem5:
+                case Resource.Id.menuItem5: 
+                    {
+                        Intent tryIntent = new Intent(this, typeof(EditAdminActivity));
+                        StartActivity(tryIntent);
+                        return true;
+                    }
+                case Resource.Id.menuItem6:
                     {
                         MyStuff.RemoveFromShared();
                         Intent intent3 = new Intent(this, typeof(RegisterActivity));
@@ -209,7 +215,7 @@ namespace MyLittleClub
                         }
                     }
                 }
-                BuildMainPageShowGroupsDialogRecycler()
+                BuildMainPageShowGroupsDialogRecycler();
             }
             ));
         }

@@ -23,6 +23,37 @@ namespace MyLittleClub
 {
     static class MyStuff
     {
+        public static List<string> Emails = new List<string>();
+        public static bool IsValidName(string name ,Activity a)
+        {
+            bool Tr = true;
+            List<string> FN = new List<string>();
+            FN.Add("Dick");
+            FN.Add("69");
+            FN.Add("420");
+            FN.Add("Sex");
+            FN.Add("Pussy");
+            FN.Add("pussy");
+            FN.Add("dick");
+            FN.Add("sex");
+            Tr = name.Length >= 4 && name.Length <= 16;
+            for (int i = 0; i < FN.Count; i++)
+            {
+                if (name.Contains(FN[i]))
+                {
+                    Tr = false;
+                }
+            }
+            if (!Tr)
+            {
+                Toasty.Error(a, "Name InValid", 5, true).Show(); 
+                return Tr;
+            }
+            else
+            {
+                return Tr;
+            }
+        }
         public static Admin1 GetAdmin()
         {
             string email = ReverseEmail(sp.GetString("Email", null));
@@ -31,6 +62,18 @@ namespace MyLittleClub
             string phoneNum = sp.GetString("PhoneNum", null);
             string Profile = sp.GetString("Profile", null);
             return new Admin1(sport, name, phoneNum, email, Profile);
+        }
+        //Name Validation
+        public static bool IsValidSport(string sport, Activity a)
+        {
+            if (sport.Length > 3)
+            {
+                return true;
+            }
+            else
+            {
+                Toasty.Error(a, "Sport InValid", 5, true).Show(); return false;
+            }
         }
         public static string MakeDateString(int Year, int Month, int Day)
         {

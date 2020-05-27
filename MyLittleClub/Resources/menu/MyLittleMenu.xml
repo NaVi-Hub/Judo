@@ -15,10 +15,14 @@
   
     <!-- Add menu Item 4 -->  
   <item android:id="@+id/menuItem4"  
-        android:title="Build Training"/>  
+        android:title="Build Training"/>
+  
+  <!-- Add menu Item 5 -->
+  <item android:id="@+id/menuItem5"
+        android:title="Edit Your User"/>
 
-  <!-- Add menu Item 5 -->  
-  <item android:id="@+id/menuItem5"  
+  <!-- Add menu Item 6 -->  
+  <item android:id="@+id/menuItem6"  
         android:title="Log-out"/>  
   
 </menu>   
