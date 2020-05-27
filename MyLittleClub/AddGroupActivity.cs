@@ -46,7 +46,6 @@ namespace MyLittleClub
             SetContentView(Resource.Layout.AddGroupLayout);
             database = MyStuff.database;
             admin = MyStuff.GetAdmin();
-            arr = new bool[7];
             times = new List<string>();
             for (int i = 1; i<=7; i++)
             {
@@ -204,11 +203,6 @@ namespace MyLittleClub
         }
         //Building the AddGroup Screen
         LinearLayout.LayoutParams BLP = new LinearLayout.LayoutParams(350, 200);
-        bool[] arr;
-        public void HardFunc(int x)
-        {
-            arr[x] = true;
-        }
         Spinner FSpin;
         private void BuildFirstSpiner()
         {
@@ -273,18 +267,15 @@ namespace MyLittleClub
             DaysSV.AddView(SpinnersLayout);
             OverAllAddGroupLayout.AddView(DaysSV);
         }
-        int asd;
-        private void Spinners_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        List<DateTime> DaysSelected;
+        private void Spinners_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)//
         {
             Spinner spin = (Spinner)sender;
-            int a = 0;
-            int.TryParse(spin.GetItemAtPosition(e.Position).ToString(), out a);
-            asd = a;
-            HardFunc(asd);
+            Toasty.Info(this, "" + spin.SelectedItem, 3, true).Show();
         }
         private void AddGroupButton_Click(object sender, EventArgs e)
         {
-
+            
             if (InputValid(LocationAddGroupET.Text, AgeAddGroupET.Text, GroupLevelAddGroupET.Text, c))
             {
                 //add to firebase
@@ -296,6 +287,10 @@ namespace MyLittleClub
                 map.Put("Comp", group.competetive);
                 map.Put("Date", group.date);
                 map.Put("Time", group.time);
+                for (int k = 0; k<t; k++)
+                {
+                    map.Put("Day" + k, spinners[k].SelectedItem);
+                }
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Groups").Document(group.Location + " " + group.time + " " + group.age);
                 docref.Set(map);
                 HashMap map2 = new HashMap();
