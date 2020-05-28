@@ -72,6 +72,7 @@
     <Compile Include="EditAdminActivity.cs" />
     <Compile Include="Exercise.cs" />
     <Compile Include="Group.cs" />
+    <Compile Include="MyButton.cs" />
     <Compile Include="MyStuff.cs" />
     <Compile Include="QueryListener.cs" />
     <Compile Include="RegisterActivity.cs" />

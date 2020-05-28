@@ -6,6 +6,7 @@ using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using ES.DMoral.ToastyLib;
 using Firebase.Firestore;
 using Java.Util;
 using Newtonsoft.Json;
@@ -103,9 +104,143 @@ namespace MyLittleClub
         {
             GetGroups();
         }
-        ListView List;
         ViewGroup.LayoutParams VLP = new ViewGroup.LayoutParams(600, 800);
         private void BuildMainPageShowGroupsDialogRecycler()
+        {
+            d = new Dialog(this);
+            d.SetContentView(Resource.Layout.MyDialog);
+            d.SetCancelable(true);
+            LinearLayout DialogLayout = d.FindViewById<LinearLayout>(Resource.Id.AbcDEF);
+            LinearLayout[] LinearList = new LinearLayout[groups.Count];
+            LinearLayout[] BLinearList = new LinearLayout[groups.Count];
+            TextView[] TextViewList = new TextView[groups.Count];
+            TextView[] TextViewList2 = new TextView[groups.Count];
+            MyButton[] ButtonList = new MyButton[groups.Count];
+            MyButton[] ButtonList2 = new MyButton[groups.Count];
+            ScrollView SV = new ScrollView(this);
+            SV.LayoutParameters = new ViewGroup.LayoutParams(950, 1500);
+            DialogLayout.AddView(SV);
+            LinearLayout ll = new LinearLayout(this);
+            ll.LayoutParameters = MatchParentParams;
+            ll.Orientation = Orientation.Vertical;
+            ll.SetGravity(GravityFlags.CenterHorizontal);
+            for (int i = 0; i < groups.Count; i++)
+            {
+                LinearList[i] = new LinearLayout(this);
+                LinearList[i].LayoutParameters = new LinearLayout.LayoutParams(950, 450);
+                LinearList[i].Orientation = Orientation.Horizontal;
+                LinearList[i].SetBackgroundResource(Resource.Drawable.BlackOutLine);
+                //
+                TextViewList[i] = new TextView(this);
+                TextViewList[i].LayoutParameters = WrapContParams;
+                TextViewList[i].Text = "Location: " + "\nTime: " + "\nAge: ";
+                TextViewList[i].TextSize = 35;
+                TextViewList[i].Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+                TextViewList[i].SetTextColor(Color.Black);
+                //
+                TextViewList2[i] = new TextView(this);
+                TextViewList2[i].LayoutParameters = WrapContParams;
+                TextViewList2[i].Text = groups[i].Location + "\n" + groups[i].time + "\n" + groups[i].age;
+                TextViewList2[i].TextSize = 30;
+                TextViewList2[i].Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+                TextViewList2[i].SetTextColor(Color.Red);
+                //
+                BLinearList[i] = new LinearLayout(this);
+                BLinearList[i].LayoutParameters = new LinearLayout.LayoutParams(950, LinearLayout.LayoutParams.WrapContent);
+                BLinearList[i].Orientation = Orientation.Horizontal;
+                BLinearList[i].SetBackgroundResource(Resource.Drawable.BlackOutLine);
+                //
+                ButtonList[i] = new MyButton(this, i)
+                {
+                    Text = "Students",
+                    TextSize = 30,
+                    Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                };
+                ButtonList[i].SetTextColor(Color.DarkRed);
+                ButtonList[i].Click += this.ButtonList_Click;
+                //
+                ButtonList2[i] = new MyButton(this, i)
+                {
+                    Text = "Edit",
+                    TextSize = 30,
+                    Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                };
+                ButtonList2[i].SetTextColor(Color.DarkRed);
+                ButtonList2[i].Click += this.ButtonList2_Click;
+                //
+                LinearList[i].AddView(TextViewList[i]);
+                LinearList[i].AddView(TextViewList2[i]);
+                BLinearList[i].AddView(ButtonList[i]);
+                BLinearList[i].AddView(ButtonList2[i]);
+                ll.AddView(LinearList[i]);
+                ll.AddView(BLinearList[i]);
+            }
+            SV.AddView(ll);
+            d.Show();
+        }
+        private void ButtonList_Click(object sender, EventArgs e)
+        {
+            MyButton b = (MyButton)sender;
+            GetStudents(groups[b.id]);
+        }
+        private void ButtonList2_Click(object sender, EventArgs e)
+        {
+            MyButton b = (MyButton)sender;
+            BuildEditGroupDialog(groups[b.id].Location + " " + groups[b.id].time + " " + groups[b.id].age);
+        }
+        Dialog StuD, GrouD;
+        public void BuildStudentsDialog()
+        {
+            StuD = new Dialog(this);
+            StuD.SetContentView(Resource.Layout.MyDialog);
+            StuD.SetCancelable(true);
+            //
+            LinearLayout OAStusLayout = StuD.FindViewById<LinearLayout>(Resource.Id.AbcDEF);
+            //
+            LinearLayout[] LinearList = new LinearLayout[Students.Count];
+            TextView[] TextViewList = new TextView[Students.Count];
+            TextView[] TextViewList2 = new TextView[Students.Count];
+            ScrollView SV = new ScrollView(this);
+            SV.LayoutParameters = new ViewGroup.LayoutParams(950, 1500);
+            OAStusLayout.AddView(SV);
+            LinearLayout ll = new LinearLayout(this);
+            ll.LayoutParameters = MatchParentParams;
+            ll.Orientation = Orientation.Vertical;
+            ll.SetGravity(GravityFlags.CenterHorizontal);
+            if (Students.Count > 0)
+            {
+                for (int i = 0; i < Students.Count; i++)
+                {
+                    LinearList[i] = new LinearLayout(this);
+                    LinearList[i].LayoutParameters = new LinearLayout.LayoutParams(950, 600);
+                    LinearList[i].Orientation = Orientation.Horizontal;
+                    LinearList[i].SetBackgroundResource(Resource.Drawable.BlackOutLine);
+                    //
+                    TextViewList[i] = new TextView(this);
+                    TextViewList[i].Text = "Name: " + "\nPhoneNum: " + "\nEmail: " + "\nParent1: " + "\nParent2: " + "\nNotes";
+                    TextViewList[i].LayoutParameters = WrapContParams;
+                    TextViewList[i].TextSize = 30;
+                    TextViewList[i].Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+                    TextViewList[i].SetTextColor(Color.Black);
+                    //
+                    TextViewList2[i] = new TextView(this);
+                    TextViewList2[i].Text = Students[i].name + "\n" + Students[i].phoneNumber + "\n" + Students[i].email + "\n" + Students[i].parentName1 + "\n" + Students[i].parentName2 + "\n" + Students[i].notes;
+                    TextViewList2[i].LayoutParameters = WrapContParams;
+                    TextViewList2[i].TextSize = 25;
+                    TextViewList2[i].Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+                    TextViewList2[i].SetTextColor(Color.Red);
+                    //
+                    LinearList[i].AddView(TextViewList[i]);
+                    LinearList[i].AddView(TextViewList2[i]);
+                    ll.AddView(LinearList[i]);
+                }
+                SV.AddView(ll);
+                StuD.Show();
+            }
+            else
+                Toasty.Error(this, "Group Empty", 5, true).Show();
+        }
+        public void BuildEditGroupDialog(string groupName)
         {
 
         }
@@ -253,6 +388,39 @@ namespace MyLittleClub
                     }
                 }
                 BuildMainPage();
+            }
+            ));
+        }
+        List<Student> Students;
+        public void GetStudents(Group group)
+        {
+            Students = new List<Student>();
+            Query query = database.Collection("Users").Document(admin1.email).Collection("Students");
+            query.Get().AddOnCompleteListener(new QueryListener((task) =>
+            {
+                if (task.IsSuccessful)
+                {
+                    var snapshot = (QuerySnapshot)task.Result;
+                    if (!snapshot.IsEmpty)
+                    {
+                        var document = snapshot.Documents;
+                        foreach (DocumentSnapshot item in document)
+                        {
+                            string group1 = item.GetString("Group");
+                            if (group1 == group.Location + " " + group.time + " " + group.age)
+                            {
+                                string name = item.GetString("Name");
+                                string Email = item.GetString("Email");
+                                string notes = item.GetString("Notes");
+                                string p1 = item.GetString("Parent1");
+                                string p2 = item.GetString("Parent2");
+                                string PN = item.GetString("PhoneNum");
+                                Students.Add(new Student(name, PN, Email, p1, p2, notes, group1));
+                            }
+                        }
+                        BuildStudentsDialog();
+                    }
+                }
             }
             ));
         }

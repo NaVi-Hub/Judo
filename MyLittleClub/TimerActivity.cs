@@ -100,11 +100,7 @@ namespace MyLittleClub
         Timer timer;
         private void Start_Click(object sender, EventArgs e)
         {
-            timer = new Timer();
-            for (int i = 0; i < Edittexts.Length; i++)
-            {
-                timer.Change(int.Parse(Edittexts[i].Text), 1);
-            }
+
         }
         Button Start;
         private void Edittexts_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)//
