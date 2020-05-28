@@ -20,9 +20,13 @@
   <!-- Add menu Item 5 -->
   <item android:id="@+id/menuItem5"
         android:title="Edit Your User"/>
-
-  <!-- Add menu Item 6 -->  
-  <item android:id="@+id/menuItem6"  
+  
+  <!-- Add menu Item 6 -->
+  <item android:id="@+id/menuItem6"
+        android:title="Timer"/>
+  
+  <!-- Add menu Item 7 -->  
+  <item android:id="@+id/menuItem7"  
         android:title="Log-out"/>  
   
 </menu>   

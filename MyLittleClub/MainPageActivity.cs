@@ -103,6 +103,8 @@ namespace MyLittleClub
         {
             GetGroups();
         }
+        ListView List;
+        ViewGroup.LayoutParams VLP = new ViewGroup.LayoutParams(600, 800);
         private void BuildMainPageShowGroupsDialogRecycler()
         {
 
@@ -149,6 +151,12 @@ namespace MyLittleClub
                         return true;
                     }
                 case Resource.Id.menuItem6:
+                    {
+                        Intent tryIntent = new Intent(this, typeof(TimerActivity));
+                        StartActivity(tryIntent);
+                        return true;
+                    }
+                case Resource.Id.menuItem7:
                     {
                         MyStuff.RemoveFromShared();
                         Intent intent3 = new Intent(this, typeof(RegisterActivity));

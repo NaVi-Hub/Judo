@@ -298,6 +298,7 @@ namespace MyLittleClub
             if (OAduration <= 50 && OAduration >= 40)
             {
                 OAdurationTV.SetTextColor(Color.LawnGreen);
+                //Insert alertDialog
             }
             else if (OAduration > 50)
             {
