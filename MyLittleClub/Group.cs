@@ -9,14 +9,8 @@ namespace MyLittleClub
         public string geoupLevel { get; set; }
         public bool competetive { get; set; }
         public string Location { get; set; }
-        private bool GroupFull;
-        //Location loc;
-
         public string date { get; set; }
         public string time { get; set; }
-
-
-        private int numOfstudents = 0;
         public Training CurrentTraining { get; set; }
         public List<Training> Trainings { get; set; }
 

@@ -211,11 +211,12 @@ namespace MyLittleClub
             ProImg.SetMinimumHeight(650);
             OverAllEditAdminLayout.AddView(ProfileEditAdminLyout);
         }
-
+        //builds the screen
         private void MailEt_Click(object sender, EventArgs e)
         {
             EmailChanged = true;
         }
+        //Sets EmailChanged to true
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
@@ -266,11 +267,13 @@ namespace MyLittleClub
                 StartActivity(intent1);
             }
         }
+        //Saves Changes
         private void ProfilePicButton_Click(object sender, EventArgs e)
         {
             Intent intent = new Intent(MediaStore.ActionImageCapture);
             StartActivityForResult(intent, 0);
         }
+        //Intents to take picture
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
@@ -279,5 +282,6 @@ namespace MyLittleClub
             BitmapDrawable drawable = (BitmapDrawable)ProImg.Drawable;
             ProBit = drawable.Bitmap;
         }
+        //Gets called when picture is taked
     }
 }

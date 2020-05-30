@@ -326,9 +326,6 @@ namespace MyLittleClub
             //https://gist.github.com/icalderond/742f98f2f8cda1fae1b0bc877df76bbc @Javier Pardo
         }
         //Makes a big EditText
-
-
-        //Email Validaton
         public bool IsValidName(string name)
         {
             bool Tr = true;

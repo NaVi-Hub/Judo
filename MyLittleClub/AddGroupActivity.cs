@@ -36,7 +36,14 @@ namespace MyLittleClub
         List<string> times;
         List<string> days;
         bool c = false;
+        Spinner[] spinners;
+        LinearLayout SpinnersLayout;
+        ScrollView DaysSV;
+        LinearLayout.LayoutParams LLLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent, 1);
+        LinearLayout.LayoutParams BLP = new LinearLayout.LayoutParams(350, 200);
+        Spinner FSpin;
         public static bool firstLogin = true;
+        int t;
         ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -202,8 +209,6 @@ namespace MyLittleClub
             OverAllAddGroupLayout.AddView(FSpin);
         }
         //Building the AddGroup Screen
-        LinearLayout.LayoutParams BLP = new LinearLayout.LayoutParams(350, 200);
-        Spinner FSpin;
         private void BuildFirstSpiner()
         {
             FSpin = new Spinner(this);
@@ -215,17 +220,14 @@ namespace MyLittleClub
             FSpin.ItemSelected += this.FSpin_ItemSelected;
             FSpin.Selected = false;
         }
-        int t;
+        //Builds the first main spinner
         private void FSpin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             Spinner spin = (Spinner)sender;
             t = int.Parse(spin.GetItemAtPosition(e.Position).ToString());
             BuildallSpinners(t);
         }
-        Spinner[] spinners;
-        LinearLayout SpinnersLayout;
-        ScrollView DaysSV;
-        LinearLayout.LayoutParams LLLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent, 1);
+        //OnSelect of the first main spinner
         private void BuildallSpinners(int t)
         {
             try
@@ -267,12 +269,14 @@ namespace MyLittleClub
             DaysSV.AddView(SpinnersLayout);
             OverAllAddGroupLayout.AddView(DaysSV);
         }
+        //Gets the number of spinners to build and builds accordingly 
         List<DateTime> DaysSelected;
         private void Spinners_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)//
         {
             Spinner spin = (Spinner)sender;
             Toasty.Info(this, "" + spin.SelectedItem, 3, true).Show();
         }
+        //Regular spinners OnSelect
         private void AddGroupButton_Click(object sender, EventArgs e)
         {
             

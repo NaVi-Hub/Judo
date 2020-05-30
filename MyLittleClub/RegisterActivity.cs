@@ -206,12 +206,14 @@ namespace MyLittleClub
             OverAllLoginLayout.AddView(ButtonLoginLayout);
             OverAllLoginLayout.AddView(ImageViewProfileImage);
         }
+        //Builds the enitre screen
         Dialog d;
         private void Login1_Click(object sender, System.EventArgs e)
         {
             Login1.SetTextColor(Color.Purple);
             BuildLoginScreen();
         }
+        //Open Login Dialog
         LinearLayout LoginLoginLayout,dLayout, MailLoginLayout1, ButtonLoginLayout1,ImageViewProfileImageLayout;
         TextView MailLoginTV1;
         EditText MailLoginET1;
@@ -284,6 +286,7 @@ namespace MyLittleClub
             //
             d.Show();
         }
+        //Build login Dialog
         ImageView ImageViewProfileImage;
         Bitmap BitProfilePic;
         public void CameraUsage()
@@ -305,11 +308,13 @@ namespace MyLittleClub
             ImageViewProfileImageLayout.AddView(ImageViewProfileImageButton);
             OverAllLoginLayout.AddView(ImageViewProfileImageLayout);
         }
+        //Manages Camera
         private void ImageViewProfileImageButton_Click(object sender, System.EventArgs e)
         {
             Intent intent = new Intent(MediaStore.ActionImageCapture);
             StartActivityForResult(intent, 0);
         }
+        //Intents to Camera
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
@@ -318,6 +323,7 @@ namespace MyLittleClub
             BitmapDrawable drawable = (BitmapDrawable)ImageViewProfileImage.Drawable;
             BitProfilePic  = drawable.Bitmap;
         }
+        //This is called after camera took a picture
         private void LoginButton1_Click(object sender, System.EventArgs e)
         {
             ButtonLoginLayout1.RequestFocus();
@@ -335,6 +341,7 @@ namespace MyLittleClub
                 }
             }
         }
+        //Log-in process and validation email is clear
         public void GetAdmin(string email)
         {
             Query query = database.Collection("Users").WhereEqualTo("EMail", email);
@@ -398,8 +405,6 @@ namespace MyLittleClub
             }
         }
         //When LogIn Button Is Clicked
-        
-        //Sport Validation
         public List<string> GetEmails()
         {
             MyStuff.Emails = new List<string>();

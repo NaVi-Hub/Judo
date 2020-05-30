@@ -141,7 +141,7 @@ namespace MyLittleClub
             Spinner spin = (Spinner)sender;
             currGroup = spin.GetItemAtPosition(e.Position).ToString();
         }
-        //Sppiner item changed
+        //Spinner item changed
 
 
         private void Send_Click(object sender, System.EventArgs e)

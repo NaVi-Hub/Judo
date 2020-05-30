@@ -33,6 +33,7 @@ namespace MyLittleClub
         List<Group> groups;
         Button MainPageShowGroupsbtn;
         Dialog d;
+        ViewGroup.LayoutParams VLP = new ViewGroup.LayoutParams(600, 800);
         CalendarView calendar;
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -104,7 +105,7 @@ namespace MyLittleClub
         {
             GetGroups();
         }
-        ViewGroup.LayoutParams VLP = new ViewGroup.LayoutParams(600, 800);
+        //Calls GetGroups()
         private void BuildMainPageShowGroupsDialogRecycler()
         {
             d = new Dialog(this);
@@ -178,16 +179,19 @@ namespace MyLittleClub
             SV.AddView(ll);
             d.Show();
         }
+        //Builds Groups Dialog
         private void ButtonList_Click(object sender, EventArgs e)
         {
             MyButton b = (MyButton)sender;
             GetStudents(groups[b.id]);
         }
+        //Opens Students in this group dialog
         private void ButtonList2_Click(object sender, EventArgs e)
         {
             MyButton b = (MyButton)sender;
             BuildEditGroupDialog(groups[b.id].Location + " " + groups[b.id].time + " " + groups[b.id].age);
         }
+        //Edit Group
         Dialog StuD, GrouD;
         public void BuildStudentsDialog()
         {
@@ -240,6 +244,7 @@ namespace MyLittleClub
             else
                 Toasty.Error(this, "Group Empty", 5, true).Show();
         }
+        //Build Dialog Students in group
         public void BuildEditGroupDialog(string groupName)
         {
 
@@ -424,6 +429,6 @@ namespace MyLittleClub
             }
             ));
         }
-        //Retrives the Dates on which there are Groups from database
+        //Gets all students of received group
     }
 }

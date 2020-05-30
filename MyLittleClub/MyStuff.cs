@@ -63,7 +63,6 @@ namespace MyLittleClub
             string Profile = sp.GetString("Profile", null);
             return new Admin1(sport, name, phoneNum, email, Profile);
         }
-        //Name Validation
         public static bool IsValidSport(string sport, Activity a)
         {
             if (sport.Length > 3)
@@ -186,7 +185,6 @@ namespace MyLittleClub
             }
         }
         //makes sure the date is in legit 
-
         public static string ConvertBitMapToString (Bitmap TheBitMap)
         {
             string imageStr = string.Empty;

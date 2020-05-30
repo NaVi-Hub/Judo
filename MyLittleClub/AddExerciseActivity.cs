@@ -26,6 +26,7 @@ namespace MyLittleClub
         FirebaseFirestore database = Context.database;
         ISharedPreferences sp;
 
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);

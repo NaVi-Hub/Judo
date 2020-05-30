@@ -29,6 +29,7 @@ namespace MyLittleClub
                 Intent intent = new Intent(this, typeof(RegisterActivity));
                 StartActivity(intent);
             }
+
         }
         public FirebaseFirestore GetDataBase()
         {

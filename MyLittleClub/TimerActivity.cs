@@ -49,6 +49,7 @@ namespace MyLittleClub
             FSpin.Selected = false;
             OverAllTimerLayout.AddView(FSpin);
         }
+        //Builds first and mian spinner
         int t = 0;
         private void FSpin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
@@ -56,6 +57,7 @@ namespace MyLittleClub
             t = int.Parse(spin.GetItemAtPosition(e.Position).ToString());
             BuildallEdittexts(t);
         }
+        //Sets how many Edittext to build
         EditText[] Edittexts;
         LinearLayout EdittextsLayout;
         ScrollView DaysSV;
@@ -97,16 +99,19 @@ namespace MyLittleClub
             Start.Text = "START!";
             Start.Click += this.Start_Click;
         }
+        //Gets how many ET to build and builds them
         Timer timer;
         private void Start_Click(object sender, EventArgs e)
         {
 
         }
+        // Starts the timer that runs through all of the ET’s
         Button Start;
-        private void Edittexts_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)//
+        private void Edittexts_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             Spinner spin = (Spinner)sender;
             Toasty.Info(this, "" + spin.SelectedItem, 3, true).Show();
         }
+        //Toasts the selected number of ET’s
     }
 }
