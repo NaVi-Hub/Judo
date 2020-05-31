@@ -25,6 +25,15 @@ namespace MyLittleClub
         FirebaseFirestore database;
         ISharedPreferences sp;
         bool EmailChanged = false;
+        LinearLayout OverAllEditAdminLayout, NameEditAdminLayout, MailEditAdminLayout, SportEditAdminLayout, PhoneNumEditAdminLayout, ProfilePicEditAdminLayout, ButtonEditAdminLayout, ProfileEditAdminLyout;
+        EditText NameEt, SportEt, MailEt, PhoneNumEt;
+        TextView NameTv, SportTv, MailTv, phoneNumtv;
+        Button ProfilePicButton, SaveButton;
+        ImageView ProImg;
+        Bitmap ProBit;
+        LinearLayout.LayoutParams WrapContLay = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
+        LinearLayout.LayoutParams BLP = new LinearLayout.LayoutParams(400, 200);
+        LinearLayout.LayoutParams EtLP = new LinearLayout.LayoutParams(650, 200);
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -35,15 +44,6 @@ namespace MyLittleClub
             BuildScreen();
             // Create your application here
         }
-        LinearLayout OverAllEditAdminLayout, NameEditAdminLayout, MailEditAdminLayout, SportEditAdminLayout, PhoneNumEditAdminLayout, ProfilePicEditAdminLayout, ButtonEditAdminLayout, ProfileEditAdminLyout;
-        EditText NameEt, SportEt, MailEt, PhoneNumEt;
-        TextView NameTv, SportTv, MailTv, phoneNumtv;
-        Button ProfilePicButton, SaveButton;
-        ImageView ProImg;
-        Bitmap ProBit;
-        LinearLayout.LayoutParams WrapContLay = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
-        LinearLayout.LayoutParams BLP = new LinearLayout.LayoutParams(400, 200);
-        LinearLayout.LayoutParams EtLP = new LinearLayout.LayoutParams(650, 200);
         public void BuildScreen()
         {
             OverAllEditAdminLayout = FindViewById<LinearLayout>(Resource.Id.EdaitAdminLinearLayout);
@@ -209,6 +209,8 @@ namespace MyLittleClub
             ProfileEditAdminLyout.AddView(ProImg);
             ProImg.SetMinimumWidth(400);
             ProImg.SetMinimumHeight(650);
+            BitmapDrawable drawable = (BitmapDrawable)ProImg.Drawable;
+            ProBit = drawable.Bitmap;
             OverAllEditAdminLayout.AddView(ProfileEditAdminLyout);
         }
         //builds the screen
@@ -250,6 +252,7 @@ namespace MyLittleClub
             }
             else
             {
+
                 string image = MyStuff.ConvertBitMapToString(ProBit);
                 //if(MailLoginET.text   Not in   database)
                 admin = new Admin1(SportEt.Text, NameEt.Text, PhoneNumEt.Text, MailEt.Text, image);

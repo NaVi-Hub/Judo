@@ -95,7 +95,7 @@ namespace MyLittleClub
             OnSelectedDayChange(calendar, int.Parse(DateTime.Today.Year.ToString()), int.Parse(DateTime.Today.Month.ToString()) - 1, int.Parse(DateTime.Today.Day.ToString()));
             //Button
             MainPageShowGroupsbtn = new Button(this);
-            MainPageShowGroupsbtn.LayoutParameters = new LinearLayout.LayoutParams(1100, 600);
+            MainPageShowGroupsbtn.LayoutParameters = new LinearLayout.LayoutParams(500, 250);
             MainPageShowGroupsbtn.Text = "Show Groups";
             MainPageOverallLayout.AddView(MainPageShowGroupsbtn);
             MainPageShowGroupsbtn.Click += this.MainPageShowGroupsbtn_Click;
