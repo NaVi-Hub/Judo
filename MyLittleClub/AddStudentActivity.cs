@@ -195,7 +195,7 @@ namespace MyLittleClub
             //Adding views to layout
             AddStudentExplenationLayout.AddView(AddStudentExplenationTV);
             OverAllAddStudentLayout.AddView(AddStudentExplenationLayout);
-            //Defining The AddStudent Explenation ET layout
+            //Defining The AddStudent notes ET layout
             AddStudentExplenationETLayout = new LinearLayout(this);
             AddStudentExplenationETLayout.LayoutParameters = new LinearLayout.LayoutParams(1100, 400);
             AddStudentExplenationETLayout.Orientation = Orientation.Vertical;

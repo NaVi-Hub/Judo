@@ -228,7 +228,6 @@ namespace MyLittleClub
                 if (MyStuff.IsValidName(NameEt.Text, this) && MyStuff.IsValidSport(SportEt.Text, this) & MyStuff.isValidEmail(MailEt.Text, this) && PhoneNumEt.Text.Length == 10)
                 {
                     string image = MyStuff.ConvertBitMapToString(ProBit);
-                    //if(MailLoginET.text   Not in   database)
                     admin = new Admin1(SportEt.Text, NameEt.Text, PhoneNumEt.Text, MailEt.Text, image);
                     HashMap map = new HashMap();
                     map.Put("Name", admin.name);
@@ -254,7 +253,6 @@ namespace MyLittleClub
             {
 
                 string image = MyStuff.ConvertBitMapToString(ProBit);
-                //if(MailLoginET.text   Not in   database)
                 admin = new Admin1(SportEt.Text, NameEt.Text, PhoneNumEt.Text, MailEt.Text, image);
                 HashMap map = new HashMap();
                 map.Put("Name", admin.name);

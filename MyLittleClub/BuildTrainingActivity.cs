@@ -127,7 +127,7 @@ namespace MyLittleClub
             //
             Send = new Button(this);
             Send.LayoutParameters = BLP;
-            Send.Text = "Finish Exercise";
+            Send.Text = "Finish Training";
             Send.Click += this.Send_Click;
             Overalllayout.AddView(ScrollViewsLayout);
             Overalllayout.AddView(Send);

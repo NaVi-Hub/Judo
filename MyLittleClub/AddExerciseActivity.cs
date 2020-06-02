@@ -50,7 +50,7 @@ namespace MyLittleClub
             //Defining the Label AddTraining TextView
             AddTrainingLabelTV = new TextView(this);
             AddTrainingLabelTV.LayoutParameters = WrapContParams;
-            AddTrainingLabelTV.Text = "New Training";
+            AddTrainingLabelTV.Text = "New Exercise";
             AddTrainingLabelTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             AddTrainingLabelTV.SetTextColor(Android.Graphics.Color.DarkRed);
             AddTrainingLabelTV.TextSize = 60;
