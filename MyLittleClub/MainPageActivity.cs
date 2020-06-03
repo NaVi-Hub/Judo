@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Locations;
 using Android.OS;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
@@ -9,7 +10,9 @@ using Android.Widget;
 using ES.DMoral.ToastyLib;
 using Firebase.Firestore;
 using Java.Util;
+using Java.Util.Logging;
 using Newtonsoft.Json;
+using Org.Apache.Http.Impl.Client;
 using System;
 using System.Collections.Generic;
 using static Android.Widget.CalendarView;
@@ -189,7 +192,7 @@ namespace MyLittleClub
         private void ButtonList2_Click(object sender, EventArgs e)
         {
             MyButton b = (MyButton)sender;
-            BuildEditGroupDialog(groups[b.id].Location + " " + groups[b.id].time + " " + groups[b.id].age);
+            BuildEditGroupDialog(groups[b.id]);
         }
         //Edit Group
         Dialog StuD, GrouD;
@@ -245,10 +248,378 @@ namespace MyLittleClub
                 Toasty.Error(this, "Group Empty", 5, true).Show();
         }
         //Build Dialog Students in group
-        public void BuildEditGroupDialog(string groupName)
+        LinearLayout TitleLayout, LocationLayout, AgeLayout, LVLLayout, TimeAndDateLayout, SaveLayout;
+        TextView TitleTV, LocTV, AgeTV, LVLTV, CompTV, TimeTV, DateTV;
+        EditText LocET, AgeET, LVLET;
+        bool c = false;
+        RadioGroup CompRG;
+        RadioButton CompRB, NotCompRB;
+        Button TimeButton, DateButton, SaveButton;
+        public void BuildEditGroupDialog(Group group)
         {
+            GrouD = new Dialog(this);
+            GrouD.SetContentView(Resource.Layout.MyDialog);
+            GrouD.SetCancelable(true);
+            //
+            LinearLayout OAGroupsLayout = GrouD.FindViewById<LinearLayout>(Resource.Id.AbcDEF);
+            OAGroupsLayout.Orientation = Orientation.Vertical;
 
+            LinearLayout l2 = new LinearLayout(this);
+            l2.LayoutParameters = new LinearLayout.LayoutParams(750, 850);
+            l2.Orientation = Orientation.Vertical;
+            l2.SetBackgroundResource(Resource.Drawable.BlackOutLine);
+            //
+            #region Title
+            TitleLayout = new LinearLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            TitleTV = new TextView(this)
+            {
+                LayoutParameters = WrapContParams,
+                Text = "Edit Group ",
+                TextSize = 40,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            TitleLayout.AddView(TitleTV);
+            #endregion
+
+            #region Location Defining
+            LocationLayout = new LinearLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            //
+            LocTV = new TextView(this)
+            {
+                LayoutParameters = WrapContParams,
+                Text = "Location: ",
+                TextSize = 25,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            LocTV.SetTextColor(Color.DarkRed);
+            //
+            LocET = new EditText(this)
+            {
+                LayoutParameters = WrapContParams,
+                Text = group.Location,
+                TextSize = 20,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            LocationLayout.AddView(LocTV);
+            LocationLayout.AddView(LocET);
+            #endregion
+
+            #region Age Defining
+            AgeLayout = new LinearLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            //
+            AgeTV = new TextView(this)
+            {
+                LayoutParameters = WrapContParams,
+                Text = "Age: ",
+                TextSize = 25,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            AgeTV.SetTextColor(Color.DarkRed);
+            //
+            AgeET = new EditText(this)
+            {
+                LayoutParameters = WrapContParams,
+                Text = group.age,
+                TextSize = 20,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            AgeLayout.AddView(AgeTV);
+            AgeLayout.AddView(AgeET);
+            #endregion
+
+            #region Level Defining
+            LVLLayout = new LinearLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            //
+            LVLTV = new TextView(this)
+            {
+                LayoutParameters = WrapContParams,
+                Text = "Group Level: ",
+                TextSize = 25,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            LVLTV.SetTextColor(Color.DarkRed);
+            //
+            LVLET = new EditText(this)
+            {
+                LayoutParameters = WrapContParams,
+                Text = group.geoupLevel,
+                TextSize = 20,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            LVLLayout.AddView(LVLTV);
+            LVLLayout.AddView(LVLET);
+            #endregion
+
+            #region Competetive defining
+            CompRG = new RadioGroup(this);
+            CompRG.Orientation = Orientation.Vertical;
+            //Defining Competitive group Radio Button
+            CompRB = new RadioButton(this)
+            { 
+                Text = "Competetive",
+                TextSize = 25,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            CompRB.SetTextColor(Android.Graphics.Color.DarkBlue);
+            CompRB.Click += this.RB_Click;
+            //Defining not Competetive group radio Button
+            NotCompRB = new RadioButton(this)
+            {
+                Text = "Not Competetive",
+                TextSize = 25,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            NotCompRB.SetTextColor(Android.Graphics.Color.DarkBlue);
+            NotCompRB.Click += this.RB_Click;
+
+            CompRG.AddView(CompRB);
+            CompRG.AddView(NotCompRB);
+            if (group.competetive)
+            {
+                CompRG.Check(CompRB.Id);
+            }
+            else
+            {
+                CompRG.Check(NotCompRB.Id);
+            }
+            #endregion
+
+            #region Time And Date
+            TimeAndDateLayout = new LinearLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            TimeButton = new Button(this)
+            {
+                LayoutParameters = WrapContParams,
+                Text = group.time,
+                TextSize = 25,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            TimeButton.SetTextColor(Color.Red);
+            TimeButton.Click += this.TimeButton_Click;
+
+            DateButton = new Button(this)
+            {
+                LayoutParameters = WrapContParams,
+                Text = group.date,
+                TextSize = 25,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            DateButton.SetTextColor(Color.Red);
+            DateButton.Click += this.DateButton_Click;
+            #endregion
+
+            #region Save Button
+            SaveLayout = new LinearLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            SaveButton = new Button(this)
+            {
+                LayoutParameters = WrapContParams,
+                Text = "Save",
+                TextSize = 25,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            SaveButton.SetBackgroundColor(Color.BurlyWood);
+            SaveButton.Click += this.SaveButton_Click;
+            SaveLayout.AddView(SaveButton);
+            #endregion
+            l2.AddView(TitleLayout);
+            l2.AddView(LocationLayout);
+            l2.AddView(AgeLayout);
+            l2.AddView(LVLLayout);
+            l2.AddView(CompRG);
+            l2.AddView(SaveLayout);
+            OAGroupsLayout.AddView(l2);
+            //
+            GrouD.Show();
         }
+        private bool InputValid(string location, string ageRange, string grouplvl, bool cb)
+        {
+            int x = -1;
+            if (location != "" && ageRange != "" && grouplvl != "" && TimeButton.Text != "Select Time" && DateButton.Text != "Select Date")
+            {
+                return true;
+            }
+            else
+            {
+                if (location == "" && ageRange != "" && grouplvl != "" && cb)
+                {
+                    x = 0;
+                }
+                else if (location != "" && ageRange == "" && grouplvl != "" && cb)
+                {
+                    x = 1;
+                }
+                else if (location != "" && ageRange != "" && grouplvl == "" && cb)
+                {
+                    x = 2;
+                }
+                else if (location != "" && ageRange != "" && grouplvl != "" && !cb)
+                {
+                    x = 4;
+                }
+                else if (location != "" && ageRange != "" && grouplvl != "" && cb)
+                {
+                    x = 5;
+                }
+                else
+                {
+                    x = 3;
+                }
+            }
+            switch (x)
+            {
+                case 0:
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Location InValid", 5, true).Show();
+                    return false;
+                case 1:
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Age Range InValid", 5, true).Show();
+                    return false;
+                case 2:
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Group Level InValid", 5, true).Show();
+                    return false;
+                case 3:
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "Some Imputs Are InValid", 5, true).Show();
+                    return false;
+                case 4:
+                    Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Error(this, "The Competitivness Was'nt Clicked", 5, true).Show();
+                    return false;
+                default:
+                    return false;
+            }
+        }
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            if (InputValid(LocET.Text, AgeET.Text, LVLET.Text, c))
+            {
+                //add to firebase
+                Group group = new Group(AgeET.Text, LVLET.Text, CompRB.Selected, LocET.Text, DateButton.Text, TimeButton.Text);
+                HashMap map = new HashMap();
+                map.Put("Location", group.Location);
+                map.Put("Level", group.geoupLevel);
+                map.Put("Age", group.age);
+                map.Put("Comp", group.competetive);
+                map.Put("Date", group.date);
+                map.Put("Time", group.time);
+                DocumentReference docref = database.Collection("Users").Document(admin1.email).Collection("Groups").Document(group.Location + " " + group.time + " " + group.age);
+                docref.Set(map);
+                HashMap map2 = new HashMap();
+                Toasty.Config.Instance
+                    .TintIcon(true)
+                    .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Success(this, "Group Added Sucesfully", 5, true).Show();
+                GrouD.Dismiss();
+            }
+        }
+
+        #region Time And Date Funcs
+        private void DateButton_Click(object sender, EventArgs e)
+        {
+            DateTime today = DateTime.Today;
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, OnDateSet, today.Year, today.Month - 1, today.Day);
+            datePickerDialog.Show();
+        }
+        private void TimeButton_Click(object sender, EventArgs e)
+        {
+            DateTime today = DateTime.Today;
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, OnTimeSet, today.Hour, today.Minute, true);
+            timePickerDialog.Show();
+        }
+        private void OnTimeSet(object sender, TimePickerDialog.TimeSetEventArgs e)
+        {
+            string str;
+            if (e.Minute < 10)
+            {
+                str = e.HourOfDay + ":0" + e.Minute;
+            }
+            else
+            {
+                str = e.HourOfDay + ":" + e.Minute;
+            }
+
+            TimeButton.Text = str;
+        }
+        private void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
+        {
+            string txt;
+            if (e.Date.Month < 10 && e.Date.Day < 10)
+            {
+                txt = string.Format("0{0}.0{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
+            else if (e.Date.Day < 10)
+            {
+                txt = string.Format("0{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
+            else if (e.Date.Month < 10)
+            {
+                txt = string.Format("{0}.0{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
+            else
+            {
+                txt = string.Format("{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
+
+            if (MyStuff.IsDateLegit(e.Date, this))
+            {
+                DateButton.Text = txt;
+            }
+            else
+            {
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Error(this, "InValid Date", 5, true).Show();
+            }
+        }
+        //formats the string in DD/MM/YYYY format
+        #endregion
+
+        private void RB_Click(object sender, EventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+            Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+            Toasty.Info(this, rb.Text, 5, false).Show();
+            c = true;
+        }
+
         //Defining and adding views to layout
         public override bool OnCreateOptionsMenu(IMenu menu)
         {

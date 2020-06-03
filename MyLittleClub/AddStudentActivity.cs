@@ -49,7 +49,7 @@ namespace MyLittleClub
             //Defining the parent layout
             OverAllAddStudentLayout = (LinearLayout)FindViewById(Resource.Id.AddStudentl);
             OverAllAddStudentLayout.Orientation = Orientation.Vertical;
-            OverAllAddStudentLayout.SetGravity(Android.Views.GravityFlags.CenterHorizontal);
+            OverAllAddStudentLayout.SetGravity(GravityFlags.CenterHorizontal);
             //=======================================================================================================================================
             //=======================================================================================================================================
             //Defining the Label AddStudent Layout

@@ -205,78 +205,8 @@ namespace MyLittleClub
             //=======================================================================================================================================
             //=======================================================================================================================================
             BuildTimeAndDate();
-            BuildFirstSpiner();
-            OverAllAddGroupLayout.AddView(FSpin);
         }
         //Building the AddGroup Screen
-        private void BuildFirstSpiner()
-        {
-            FSpin = new Spinner(this);
-            BLP.SetMargins(5, 5, 5, 5);
-            FSpin.LayoutParameters = BLP;
-            var adapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleSpinnerItem, times);
-            adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-            FSpin.Adapter = adapter;
-            FSpin.ItemSelected += this.FSpin_ItemSelected;
-            FSpin.Selected = false;
-        }
-        //Builds the first main spinner
-        private void FSpin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
-        {
-            Spinner spin = (Spinner)sender;
-            t = int.Parse(spin.GetItemAtPosition(e.Position).ToString());
-            BuildallSpinners(t);
-        }
-        //OnSelect of the first main spinner
-        private void BuildallSpinners(int t)
-        {
-            try
-            {
-                DaysSV.RemoveAllViews();
-                SpinnersLayout.RemoveAllViews();
-                OverAllAddGroupLayout.RemoveView(DaysSV);
-            }
-            catch 
-            {
-                Toasty.Normal(this, "First Inital", 5).Show();
-                SpinnersLayout = new LinearLayout(this);
-                SpinnersLayout.LayoutParameters = WrapContParams;
-                SpinnersLayout.Orientation = Orientation.Vertical;
-                SpinnersLayout.SetGravity(GravityFlags.Center);
-                DaysSV = new ScrollView(this);
-                DaysSV.LayoutParameters = LLLP;
-            }
-            spinners = new Spinner[7];
-            try { OverAllAddGroupLayout.RemoveView(SpinnersLayout); }
-            catch { Toasty.Normal(this, "Not Cleared", 5).Show(); }
-            for (int k = 0; k < 7; k++)
-            {
-                spinners[k] = null;
-            }
-            ////////////////////////////////
-            for (int i = 0; i < t; i++)
-            {
-                spinners[i] = new Spinner(this);
-                BLP.SetMargins(5, 5, 5, 5);
-                spinners[i].LayoutParameters = BLP;
-                var adapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleSpinnerItem, days);
-                adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-                spinners[i].Adapter = adapter;
-                spinners[i].ItemSelected += this.Spinners_ItemSelected;
-                spinners[i].Selected = false;
-                SpinnersLayout.AddView(spinners[i]);
-            }
-            DaysSV.AddView(SpinnersLayout);
-            OverAllAddGroupLayout.AddView(DaysSV);
-        }
-        //Gets the number of spinners to build and builds accordingly 
-        List<DateTime> DaysSelected;
-        private void Spinners_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)//
-        {
-            Spinner spin = (Spinner)sender;
-            Toasty.Info(this, "" + spin.SelectedItem, 3, true).Show();
-        }
-        //Regular spinners OnSelect
         private void AddGroupButton_Click(object sender, EventArgs e)
         {
             
@@ -291,10 +221,6 @@ namespace MyLittleClub
                 map.Put("Comp", group.competetive);
                 map.Put("Date", group.date);
                 map.Put("Time", group.time);
-                for (int k = 0; k<t; k++)
-                {
-                    map.Put("Day" + k, spinners[k].SelectedItem);
-                }
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Groups").Document(group.Location + " " + group.time + " " + group.age);
                 docref.Set(map);
                 HashMap map2 = new HashMap();
@@ -387,6 +313,8 @@ namespace MyLittleClub
                     return false;
             }
         }
+
+        #region Time And Date
         //Checks all inputs and Toasts Whom Crashed the test
         public void BuildTimeAndDate()
         {
@@ -425,13 +353,22 @@ namespace MyLittleClub
         private void OnTimeSet(object sender, TimePickerDialog.TimeSetEventArgs e)
         {
             string str;
+            string hour = "";
             if (e.Minute < 10)
             {
-                str = e.HourOfDay + ":0" + e.Minute;
+                if (e.HourOfDay < 10)
+                {
+                    hour = 0 + "" + e.HourOfDay;
+                }
+                str = hour + ":0" + e.Minute;
             }
             else
             {
-                str = e.HourOfDay + ":" + e.Minute;
+                if (e.HourOfDay < 10)
+                {
+                    hour = 0 + "" + e.HourOfDay;
+                }
+                str = hour + ":" + e.Minute;
             }
 
             AddGroupTimeButton.Text = str;
@@ -477,5 +414,6 @@ namespace MyLittleClub
             }
         }
         //formats the string in DD/MM/YYYY format
+        #endregion
     }
 }

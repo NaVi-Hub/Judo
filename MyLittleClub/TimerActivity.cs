@@ -98,12 +98,26 @@ namespace MyLittleClub
             Start.LayoutParameters = BLP;
             Start.Text = "START!";
             Start.Click += this.Start_Click;
+            OverAllTimerLayout.AddView(Start);
         }
         //Gets how many ET to build and builds them
         Timer timer;
         private void Start_Click(object sender, EventArgs e)
         {
+            System.Timers.Timer Timer1 = new System.Timers.Timer();
+            for (int i = 0; i<Edittexts.Length; i++)
+            {
 
+                Timer1.Start();
+                Timer1.Interval = 1000;
+                Timer1.Enabled = true;
+                Timer1.Elapsed += (object sender, System.Timers.ElapsedEventArgs e) =>
+                {
+
+
+                };
+                Timer1.Start();
+            }
         }
         // Starts the timer that runs through all of the ET’s
         Button Start;
