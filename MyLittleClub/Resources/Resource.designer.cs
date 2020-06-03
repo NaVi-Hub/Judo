@@ -3260,13 +3260,16 @@ namespace MyLittleClub
 			public const int notify_panel_notification_icon_bg = 2131230845;
 			
 			// aapt resource value: 0x7F08007E
-			public const int toast_frame = 2131230846;
+			public const int ShameLogo = 2131230846;
 			
 			// aapt resource value: 0x7F08007F
-			public const int tooltip_frame_dark = 2131230847;
+			public const int toast_frame = 2131230847;
 			
 			// aapt resource value: 0x7F080080
-			public const int tooltip_frame_light = 2131230848;
+			public const int tooltip_frame_dark = 2131230848;
+			
+			// aapt resource value: 0x7F080081
+			public const int tooltip_frame_light = 2131230849;
 			
 			static Drawable()
 			{

@@ -107,16 +107,8 @@ namespace MyLittleClub
             System.Timers.Timer Timer1 = new System.Timers.Timer();
             for (int i = 0; i<Edittexts.Length; i++)
             {
-
-                Timer1.Start();
-                Timer1.Interval = 1000;
-                Timer1.Enabled = true;
-                Timer1.Elapsed += (object sender, System.Timers.ElapsedEventArgs e) =>
-                {
-
-
-                };
-                Timer1.Start();
+                MyTimer timer = new MyTimer(Edittexts[i]);
+                timer.Execute(new int[] { 1, 2, 3 });
             }
         }
         // Starts the timer that runs through all of the ET’s

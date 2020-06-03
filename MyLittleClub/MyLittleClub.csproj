@@ -74,6 +74,7 @@
     <Compile Include="Group.cs" />
     <Compile Include="MyButton.cs" />
     <Compile Include="MyStuff.cs" />
+    <Compile Include="MyTimer.cs" />
     <Compile Include="QueryListener.cs" />
     <Compile Include="RegisterActivity.cs" />
     <Compile Include="MainPageActivity.cs" />
@@ -205,6 +206,9 @@
     <AndroidResource Include="Resources\layout\TimerLayout.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ShameLogo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

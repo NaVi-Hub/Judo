@@ -13,6 +13,7 @@ using ES.DMoral.ToastyLib;
 using Android.Text;
 using Javax.Xml.Datatype;
 using Android.Graphics.Drawables;
+using System.Linq;
 
 namespace MyLittleClub
 {
@@ -20,6 +21,7 @@ namespace MyLittleClub
     public class BuildTrainingActivity : Activity
     {
         //https://pumpingco.de/blog/adding-drag-and-drop-to-your-android-application-with-xamarin/ 
+        #region Parameters
         FirebaseFirestore database;
         Admin1 admin;
         Button[] buttons;
@@ -52,9 +54,8 @@ namespace MyLittleClub
         private int OAduration = 0;
         ISharedPreferences sp;
         List<Exercise> exes;
-        List<Exercise> ex = new List<Exercise>();
-
-
+        List<Exercise> selectedExercises = new List<Exercise>();
+        #endregion
         protected override void OnCreate(Bundle savedInstanceState)
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
@@ -65,9 +66,6 @@ namespace MyLittleClub
             GetExercises();
             // Create your application here
         }
-
-
-
         public void BuildAddExScreen()
         {
             Overalllayout = (LinearLayout)FindViewById(Resource.Id.AddGroupL);
@@ -134,46 +132,77 @@ namespace MyLittleClub
 
         }
         //Build the Screen
-
-
         private void spin_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             Spinner spin = (Spinner)sender;
             currGroup = spin.GetItemAtPosition(e.Position).ToString();
         }
         //Spinner item changed
-
-
         private void Send_Click(object sender, System.EventArgs e)
         {
             if (InputLegit())
             {
-                HashMap map = new HashMap();
-                Training training = new Training(ex);
-                for (int i = 0; i < ex.Count; i++)
+                if (int.Parse(OAdurationTV.Text) > 50 || int.Parse(OAdurationTV.Text) < 40 )
                 {
-                    map.Put("Ex" + i, ex[i].name);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    alert.SetTitle("Alert!");
+                    alert.SetMessage("Are you sure you want to add a group\nwith time setting difrent from the recommended");
+                    alert.SetCancelable(false);
+                    alert.SetIcon(Resource.Drawable.ShameLogo);
+                    alert.SetPositiveButton("YES", (senderAlert, args) =>
+                    {
+                        HashMap map = new HashMap();
+                        Training training = new Training(selectedExercises);
+                        for (int i = 0; i < selectedExercises.Count; i++)
+                        {
+                            map.Put("Ex" + i, selectedExercises[i].name);
+                        }
+                        DocumentReference doref = database.Collection("Users").Document(admin.email).Collection("Trainings").Document(currGroup);
+                        doref.Set(map);
+                        Intent inte = new Intent(this, typeof(MainPageActivity));
+                        inte.PutExtra("Email", admin.email);
+                        StartActivity(inte);
+                        Toasty.Config.Instance
+                           .TintIcon(true)
+                           .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                        Toasty.Success(this, "Training Built Successfuly", 10, true).Show();
+                    });
+
+                    alert.SetNegativeButton("NO", (senderAlert, args) =>
+                    {
+                        Dialog d = alert.Create();
+                        d.Dismiss();
+                    });
+
+                    Dialog dialog = alert.Create();
+                    dialog.Show();
                 }
-                DocumentReference doref = database.Collection("Trainings").Document(currGroup);
-                doref.Set(map);
-                Intent inte = new Intent(this, typeof(MainPageActivity));
-                inte.PutExtra("Email", admin.email);
-                StartActivity(inte);
-                Toasty.Config.Instance
-                   .TintIcon(true)
-                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-                Toasty.Success(this, "Training Built Successfuly", 10, true).Show();
+                else
+                {
+                    HashMap map = new HashMap();
+                    for (int i = 0; i < selectedExercises.Count; i++)
+                    {
+                        map.Put("Ex" + i, selectedExercises[i].name);
+                    }
+                    DocumentReference doref = database.Collection("Users").Document(admin.email).Collection("Trainings").Document(currGroup);
+                    doref.Set(map);
+                    Intent inte = new Intent(this, typeof(MainPageActivity));
+                    inte.PutExtra("Email", admin.email);
+                    StartActivity(inte);
+                    Toasty.Config.Instance
+                       .TintIcon(true)
+                       .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                    Toasty.Success(this, "Training Built Successfuly", 10, true).Show();
+                }
             }
             else
             {
+                
             }
         }
         //Final Send Button
-
         private bool InputLegit()
         {
-            int a = 0;
-            int.TryParse(OAdurationTV.Text, out a);
             bool tr = false;
             if (currGroup != "Choose Group")
             {
@@ -184,20 +213,9 @@ namespace MyLittleClub
                 Toasty.Error(this, "Choose Group", 5, true).Show();
                 tr = false;
             }
-            if (a < 51 && a > 39)
-            {
-                tr =  tr && true;
-            }
-            else
-            {
-                Toasty.Error(this, "Watch The Time", 5, true).Show();
-                tr = false;
-            }
             return tr;
         }
         //Input Validation
-
-        
         public void Button_Drag(object sender, View.DragEventArgs e)
         {
             Button a = CurrButton;
@@ -232,6 +250,13 @@ namespace MyLittleClub
                         var data = e.Event.ClipData;
                         if (data != null)
                             a.Text = data.GetItemAt(0).Text;
+                        for (int i = 0; i < exes.Count; i++)
+                        {
+                            if (exes[i].name.Equals(a.Text))
+                            {
+                                selectedExercises.Add(exes[i]);
+                            }
+                        }
                         BuildDialog();
                     }
                     else
@@ -243,8 +268,6 @@ namespace MyLittleClub
             }
         }
         //Drag Events
-
-
         public void BuildDialog()
         {
             //Dialog
@@ -287,8 +310,6 @@ namespace MyLittleClub
             MyStuff.showSoftKeyboard(this, DurationDialogET);
         }
         //Build Duration Dialog
-
-
         private void DialogButton_Click(object sender, EventArgs e)
         {
             int a;
@@ -311,7 +332,6 @@ namespace MyLittleClub
             DurationDialog.Dismiss();
         }
         //Dialog Button Click
-
         public void BuildDialog(object sender)
         {
             Button b = (Button)sender;
@@ -355,20 +375,16 @@ namespace MyLittleClub
             d1.Show();
         }
         //Builds Ex Dialog
-
-
         private void Copy_Click(object sender, EventArgs e)
         {
             BuildDialog(sender);
         }
         //Calls BuildDialog(object sender)
-
         private void BuildTrainingActivity_Click(object sender, EventArgs e)
         {
             BuildDialog(sender);
         }
         //Calls BuildDialog(object sender)
-
         private void BuildExerciseActivity_LongClick(object sender, Android.Views.View.LongClickEventArgs e)
         {
             CurrButton = (Button)sender;
@@ -376,7 +392,6 @@ namespace MyLittleClub
             CurrButton.StartDrag(data, new View.DragShadowBuilder(CurrButton), null, 0);
         }
         //Start Drag
-        
         public void GetExercises()
         {
             exes = new List<Exercise>();
@@ -397,12 +412,12 @@ namespace MyLittleClub
                         }
                     }
                 }
+                OrganizeList(exes);
                 GetGroups();
             }
             ));
         }
         //Retreiving Exercies From FireBase
-
         public List<String> GetGroups()
         {
             groups = new List<string>();
@@ -428,5 +443,9 @@ namespace MyLittleClub
             return groups;
         }
         //Retreiving Groups From FireBase
+        public void OrganizeList(List<Exercise> list)
+        {
+            list.OrderBy(w => w.name);
+        }
     }
 }

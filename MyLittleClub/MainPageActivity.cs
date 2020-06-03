@@ -77,6 +77,7 @@ namespace MyLittleClub
             Profile.SetImageBitmap(MyStuff.ConvertStringToBitMap(admin1.ProfilePic));
             Profile.SetMaxWidth(250);
             Profile.SetMinimumHeight(400);
+            Profile.Click += this.Profile_Click;
             MainPageProfilePictureLayout.AddView(Profile);
             //Title TV 2
             MainPageTitleTV2 = new TextView(this);
@@ -103,6 +104,13 @@ namespace MyLittleClub
             MainPageOverallLayout.AddView(MainPageShowGroupsbtn);
             MainPageShowGroupsbtn.Click += this.MainPageShowGroupsbtn_Click;
         }
+
+        private void Profile_Click(object sender, EventArgs e)
+        {
+            System.Random rnd = new System.Random();
+;            Toast.MakeText(this, rnd.Next(1, 11) + "/10", ToastLength.Short).Show();
+        }
+
         //Build Main Page's Views
         private void MainPageShowGroupsbtn_Click(object sender, EventArgs e)
         {
