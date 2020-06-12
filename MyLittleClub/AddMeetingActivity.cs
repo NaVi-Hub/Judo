@@ -6,11 +6,13 @@ using System.Text;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Locations;
 using Android.OS;
 using Android.Runtime;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
+using ES.DMoral.ToastyLib;
 using Firebase.Firestore;
 
 namespace MyLittleClub
@@ -18,9 +20,9 @@ namespace MyLittleClub
     [Activity(Label = "AddMeetingActivity")]
     public class AddMeetingActivity : Activity
     {
-        LinearLayout TitleLayout, SpinnerLayout;
+        LinearLayout TitleLayout, SpinnerLayout, LocLayout, AgeLayout, LevelLayout, CompLayout, TimeLayout, DateLayout, SendLayout, OALayout;
         Spinner spin;
-        TextView TitleTV;
+        TextView TitleTV, LocTV, AgeTV, LVLTV;
         string currGroup;
         List<string> groups;
         List<Group> GGroups;
@@ -30,7 +32,7 @@ namespace MyLittleClub
         Button TimeBtn, DateBtn;
         RadioGroup compRG;
         RadioButton compRB, nonCompRB;
-        LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(530, 160);
+        LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(420, 180);
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
         //https://docs.microsoft.com/en-us/xamarin/android/app-fundamentals/graphics-and-animation
         protected override void OnCreate(Bundle savedInstanceState)
@@ -39,6 +41,7 @@ namespace MyLittleClub
             SetContentView(Resource.Layout.AddMeetingLayout);
             database = MyStuff.database;
             admin = MyStuff.GetAdmin();
+            GetGroups();
         }
 
         public void BuildScreen()
@@ -53,10 +56,12 @@ namespace MyLittleClub
             TitleTV = new TextView(this)
             {
                 Text = "Add Meeting",
-                TextSize = 35,
+                TextSize = 50,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
                 LayoutParameters = WrapContParams,
             };
+            TitleTV.SetTextColor(Color.DarkRed);
+            TitleLayout.SetGravity(GravityFlags.CenterHorizontal);
             //
             TitleLayout.AddView(TitleTV);
             #endregion
@@ -76,9 +81,204 @@ namespace MyLittleClub
             SpinnerLayout.AddView(spin);
             #endregion
 
+            #region Location
+            LocLayout = new LinearLayout(this)
+            {
+                Orientation = Orientation.Horizontal,
+                LayoutParameters = WrapContParams,
+            };
+            LocTV = new TextView(this)
+            {
+                LayoutParameters = OneTwentyParams,
+                Text = "Location: ",
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                TextSize = 35,
+            };
+            LocTV.SetTextColor(Color.DarkRed);
+            LocationET = new EditText(this)
+            {
+                LayoutParameters = OneTwentyParams,
+                Text = "Location",
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                TextSize = 35,
+            };
+            LocationET.Enabled = false;
+            LocLayout.AddView(LocTV);
+            LocLayout.AddView(LocationET);
+            #endregion
 
+            #region Time
+            TimeLayout = new LinearLayout(this)
+            {
+                Orientation = Orientation.Horizontal,
+                LayoutParameters = WrapContParams,
+            };
+            TimeBtn = new Button(this)
+            {
+                LayoutParameters = OneTwentyParams,
+                Text = "Time",
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                TextSize = 35,
+                Enabled = false,
+            };
+            TimeBtn.SetTextColor(Color.DarkRed);
+            TimeLayout.AddView(TimeBtn);
+            #endregion
+
+            #region Age
+            AgeLayout = new LinearLayout(this)
+            {
+                Orientation = Orientation.Horizontal,
+                LayoutParameters = WrapContParams,
+            };
+            AgeTV = new TextView(this)
+            {
+                LayoutParameters = OneTwentyParams,
+                Text = "Age: ",
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                TextSize = 35,
+            };
+            AgeTV.SetTextColor(Color.DarkRed);
+            AgeET = new EditText(this)
+            {
+                LayoutParameters = OneTwentyParams,
+                Text = "Age",
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                TextSize = 35,
+            };
+            AgeET.Enabled = false;
+            AgeLayout.AddView(AgeTV);
+            AgeLayout.AddView(AgeET);
+            #endregion
+
+            #region Radio
+            CompLayout = new LinearLayout(this)
+            {
+                Orientation = Orientation.Horizontal,
+                LayoutParameters = WrapContParams,
+            };
+            compRG = new RadioGroup(this);
+            compRG.Orientation = Orientation.Vertical;
+            //Defining Competitive group Radio Button
+            compRB = new RadioButton(this)
+            {
+                Text = "Competetive",
+                TextSize = 35,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            compRB.SetTextColor(Color.DarkBlue);
+            //Defining not Competetive group radio Button
+            nonCompRB = new RadioButton(this)
+            {
+                Text = "Not Competetive",
+                TextSize = 35,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            nonCompRB.SetTextColor(Color.DarkBlue);
+            compRG.AddView(compRB);
+            compRG.AddView(nonCompRB);
+            CompLayout.AddView(compRG);
+            compRB.Enabled = false;
+            nonCompRB.Enabled = false;
+            #endregion
+
+            #region Level
+            LevelLayout = new LinearLayout(this)
+            {
+                Orientation = Orientation.Horizontal,
+                LayoutParameters = WrapContParams,
+            };
+            LVLTV = new TextView(this)
+            {
+                LayoutParameters = OneTwentyParams,
+                Text = "Level: ",
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                TextSize = 35,
+            };
+            LVLTV.SetTextColor(Color.DarkRed);
+            LVLET = new EditText(this)
+            {
+                LayoutParameters = OneTwentyParams,
+                Text = "Level",
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                TextSize = 35,
+            };
+            LVLET.Enabled = false;
+            LevelLayout.AddView(LVLTV);
+            LevelLayout.AddView(LVLET);
+            #endregion
+
+            #region Date
+            DateLayout = new LinearLayout(this)
+            {
+                Orientation = Orientation.Horizontal,
+                LayoutParameters = WrapContParams,
+            };
+            DateBtn = new Button(this)
+            {
+                Text = "Date",
+                TextSize = 35,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                LayoutParameters = OneTwentyParams,
+            };
+            DateBtn.SetTextColor(Color.DarkRed);
+            DateBtn.Click += this.DateBtn_Click;
+            DateLayout.AddView(DateBtn);
+            #endregion
+
+            #region Adding To Views
+            OALayout = FindViewById<LinearLayout>(Resource.Id.AddMeetingL);
+            OALayout.SetGravity(GravityFlags.CenterHorizontal);
+            OALayout.AddView(TitleLayout);
+            OALayout.AddView(SpinnerLayout);
+            OALayout.AddView(LocLayout);
+            OALayout.AddView(TimeLayout);
+            OALayout.AddView(AgeLayout);
+            OALayout.AddView(LevelLayout);
+            OALayout.AddView(CompLayout);
+            OALayout.AddView(DateLayout);
+            #endregion
         }
 
+        private void DateBtn_Click(object sender, EventArgs e)
+        {
+            DateTime today = DateTime.Today;
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, OnDateSet, today.Year, today.Month - 1, today.Day);
+            datePickerDialog.Show();
+        }
+        private void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
+        {
+            string txt;
+            if (e.Date.Month < 10 && e.Date.Day < 10)
+            {
+                txt = string.Format("0{0}.0{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
+            else if (e.Date.Day < 10)
+            {
+                txt = string.Format("0{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
+            else if (e.Date.Month < 10)
+            {
+                txt = string.Format("{0}.0{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
+            else
+            {
+                txt = string.Format("{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
+            }
+
+            if (MyStuff.IsDateLegit(e.Date, this))
+            {
+                DateBtn.Text = txt;
+            }
+            else
+            {
+                Toasty.Config.Instance
+                   .TintIcon(true)
+                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                Toasty.Error(this, "InValid Date", 5, true).Show();
+            }
+        }
+        //formats the string in DD/MM/YYYY format
         private void spinner_ItemSelected(object sender, AdapterView.ItemSelectedEventArgs e)
         {
             Spinner spinner = (Spinner)sender;
@@ -104,9 +304,9 @@ namespace MyLittleClub
         }
         //Toasts the Selected item from the Spinner and saves it to CurrGroup
         Group GCurrentGroup;
-        public void GetSpecificGroup(Group group)
+        public void GetGroups()
         {
-            groups = new List<string>();
+            GGroups = new List<Group>();
             Query query = database.Collection("Users").Document(admin.email).Collection("Groups");
             query.Get().AddOnCompleteListener(new QueryListener((task) =>
             {
@@ -137,6 +337,7 @@ namespace MyLittleClub
         //Gets Specified Groups
         public void GetAStringGroupList()
         {
+            groups = new List<string>();
             for(int i = 0; i<GGroups.Count; i++)
             {
                 groups.Add(GGroups[i].Location + " " + GGroups[i].time + " " + GGroups[i].age);

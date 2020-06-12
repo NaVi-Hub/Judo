@@ -648,35 +648,41 @@ namespace MyLittleClub
                     }
                 case Resource.Id.menuItem2:
                     {
-                        Intent tryIntent = new Intent(this, typeof(AddExerciseActivity));
+                        Intent tryIntent = new Intent(this, typeof(AddMeetingActivity));
                         StartActivity(tryIntent);
                         return true;
                     }
                 case Resource.Id.menuItem3:
                     {
-                        Intent tryIntent = new Intent(this, typeof(AddStudentActivity));
+                        Intent tryIntent = new Intent(this, typeof(AddExerciseActivity));
                         StartActivity(tryIntent);
                         return true;
                     }
                 case Resource.Id.menuItem4:
                     {
+                        Intent tryIntent = new Intent(this, typeof(AddStudentActivity));
+                        StartActivity(tryIntent);
+                        return true;
+                    }
+                case Resource.Id.menuItem5:
+                    {
                         Intent tryIntent = new Intent(this, typeof(BuildTrainingActivity));
                         StartActivity(tryIntent);
                         return true;
                     }
-                case Resource.Id.menuItem5: 
+                case Resource.Id.menuItem6: 
                     {
                         Intent tryIntent = new Intent(this, typeof(EditAdminActivity));
                         StartActivity(tryIntent);
                         return true;
                     }
-                case Resource.Id.menuItem6:
+                case Resource.Id.menuItem7:
                     {
                         Intent tryIntent = new Intent(this, typeof(TimerActivity));
                         StartActivity(tryIntent);
                         return true;
                     }
-                case Resource.Id.menuItem7:
+                case Resource.Id.menuItem8:
                     {
                         MyStuff.RemoveFromShared();
                         Intent intent3 = new Intent(this, typeof(RegisterActivity));

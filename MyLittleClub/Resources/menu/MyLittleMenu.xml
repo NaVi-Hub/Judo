@@ -7,26 +7,30 @@
     
   <!-- Add menu Item 2 -->  
   <item android:id="@+id/menuItem2"  
+         android:title="New Meeting"/>
+  
+  <!-- Add menu Item 3 -->  
+  <item android:id="@+id/menuItem3"  
          android:title="New Exercise"/>
 
-  <!-- Add menu Item 3 -->
-  <item android:id="@+id/menuItem3"
+  <!-- Add menu Item 4 -->
+  <item android:id="@+id/menuItem4"
       android:title="New Student"/>
   
-    <!-- Add menu Item 4 -->  
-  <item android:id="@+id/menuItem4"  
+    <!-- Add menu Item 5 -->  
+  <item android:id="@+id/menuItem5"  
         android:title="Build Training"/>
-  
-  <!-- Add menu Item 5 -->
-  <item android:id="@+id/menuItem5"
-        android:title="Edit Your User"/>
   
   <!-- Add menu Item 6 -->
   <item android:id="@+id/menuItem6"
+        android:title="Edit Your User"/>
+  
+  <!-- Add menu Item 7 -->
+  <item android:id="@+id/menuItem7"
         android:title="Timer"/>
   
-  <!-- Add menu Item 7 -->  
-  <item android:id="@+id/menuItem7"  
+  <!-- Add menu Item 8 -->  
+  <item android:id="@+id/menuItem8"  
         android:title="Log-out"/>  
   
 </menu>   
