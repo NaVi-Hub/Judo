@@ -225,7 +225,7 @@ namespace MyLittleClub
             if (EmailChanged && !MyStuff.Emails.Contains(MailEt.Text))
             {
                 //validation of input
-                if (MyStuff.IsValidName(NameEt.Text, this) && MyStuff.IsValidSport(SportEt.Text, this) & MyStuff.isValidEmail(MailEt.Text, this) && PhoneNumEt.Text.Length == 10)
+                if (MyStuff.IsValidName(NameEt.Text, NameEt, this) && MyStuff.IsValidSport(SportEt.Text, this) & MyStuff.isValidEmail(MailEt.Text, this) && PhoneNumEt.Text.Length == 10)
                 {
                     string image = MyStuff.ConvertBitMapToString(ProBit);
                     admin = new Admin1(SportEt.Text, NameEt.Text, PhoneNumEt.Text, MailEt.Text, image);

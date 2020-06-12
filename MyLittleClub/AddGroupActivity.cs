@@ -360,6 +360,10 @@ namespace MyLittleClub
                 {
                     hour = 0 + "" + e.HourOfDay;
                 }
+                else
+                {
+                    hour = e.HourOfDay.ToString();
+                }
                 str = hour + ":0" + e.Minute;
             }
             else
@@ -367,6 +371,10 @@ namespace MyLittleClub
                 if (e.HourOfDay < 10)
                 {
                     hour = 0 + "" + e.HourOfDay;
+                }
+                else
+                {
+                    hour = e.HourOfDay.ToString();
                 }
                 str = hour + ":" + e.Minute;
             }

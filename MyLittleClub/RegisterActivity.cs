@@ -21,6 +21,8 @@ using Android.Provider;
 using Android.Runtime;
 using System;
 using Android.Graphics.Drawables;
+using Android.Views.Animations;
+using System.Linq;
 
 namespace MyLittleClub
 {
@@ -47,6 +49,9 @@ namespace MyLittleClub
             database = MyStuff.database;
             GetEmails();
         }
+
+
+
         void BuildRegisterScreen()
         {
             //Defining the parent layout
@@ -377,7 +382,7 @@ namespace MyLittleClub
             if (!MyStuff.Emails.Contains(MailLoginET.Text))
             {
                 //validation of input
-                if (MyStuff.IsValidName(NameLoginET.Text, this) && MyStuff.IsValidSport(SportLoginET.Text, this) & MyStuff.isValidEmail(MailLoginET.Text, this) && PhoneNumberLoginET.Text.Length == 10)
+                if (MyStuff.IsValidName(NameLoginET.Text, NameLoginET, this) && MyStuff.IsValidSport(SportLoginET.Text, this) & MyStuff.isValidEmail(MailLoginET.Text, this) && PhoneNumberLoginET.Text.Length == 10 && PhoneNumberLoginET.Text.ToString().All(c => Char.IsLetterOrDigit(c)))
                 {
                     string image = MyStuff.ConvertBitMapToString(BitProfilePic);
                     Toasty.Config.Instance

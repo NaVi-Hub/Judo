@@ -18,13 +18,14 @@ using Firebase.Firestore;
 using Android.Util;
 using System.Globalization;
 using System.IO;
+using Android.Views.Animations;
 
 namespace MyLittleClub
 {
     static class MyStuff
     {
         public static List<string> Emails = new List<string>();
-        public static bool IsValidName(string name ,Activity a)
+        public static bool IsValidName(string name, EditText NameET ,Activity a)
         {
             bool Tr = true;
             List<string> FN = new List<string>();
@@ -39,7 +40,7 @@ namespace MyLittleClub
             Tr = name.Length >= 4 && name.Length <= 16;
             for (int i = 0; i < FN.Count; i++)
             {
-                if (name.Contains(FN[i]))
+                if (name.Contains(FN[i]) || !name.All(c => Char.IsLetterOrDigit(c)))
                 {
                     Tr = false;
                 }
@@ -65,7 +66,7 @@ namespace MyLittleClub
         }
         public static bool IsValidSport(string sport, Activity a)
         {
-            if (sport.Length > 3)
+            if (sport.Length > 3 && sport.All(c => Char.IsLetterOrDigit(c)))
             {
                 return true;
             }

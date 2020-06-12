@@ -452,6 +452,7 @@ namespace MyLittleClub
             SaveButton.Click += this.SaveButton_Click;
             SaveLayout.AddView(SaveButton);
             #endregion
+
             l2.AddView(TitleLayout);
             l2.AddView(LocationLayout);
             l2.AddView(AgeLayout);
