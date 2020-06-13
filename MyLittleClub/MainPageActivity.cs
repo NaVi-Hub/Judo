@@ -3,12 +3,15 @@ using Android.Content;
 using Android.Graphics;
 using Android.Locations;
 using Android.OS;
+using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using ES.DMoral.ToastyLib;
 using Firebase.Firestore;
+using Java.Lang;
+using Java.Security;
 using Java.Util;
 using Java.Util.Logging;
 using Newtonsoft.Json;
@@ -22,6 +25,7 @@ namespace MyLittleClub
     [Activity(Theme = "@style/AppTheme")]
     public class MainPageActivity : AppCompatActivity, IOnDateChangeListener
     {
+        
         ISharedPreferences sp;
         LinearLayout MainPageOverallLayout, MainPageTitleLayout, MainPageProfilePictureLayout;
         TextView MainPageTitleTV, MainPageTitleTV2;
@@ -32,7 +36,7 @@ namespace MyLittleClub
         FirebaseFirestore database;
         ImageView Profile;
         int abc = 0;
-        List<String> dates;
+        List<string> dates;
         List<Group> groups;
         Button MainPageShowGroupsbtn;
         Dialog d;
@@ -40,6 +44,7 @@ namespace MyLittleClub
         CalendarView calendar;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            WrapContParams.SetMargins(5, 5, 5, 5);
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.MainPageLayout);
@@ -54,7 +59,6 @@ namespace MyLittleClub
             MainPageOverallLayout.Orientation = Orientation.Vertical;
             MainPageOverallLayout.SetGravity(Android.Views.GravityFlags.CenterHorizontal);
             BuildCalendar();
-
             //Tile layout
             MainPageTitleLayout = new LinearLayout(this);
             MainPageTitleLayout.LayoutParameters = WrapContParams;
@@ -153,7 +157,7 @@ namespace MyLittleClub
                 TextViewList2[i] = new TextView(this);
                 TextViewList2[i].LayoutParameters = WrapContParams;
                 TextViewList2[i].Text = groups[i].Location + "\n" + groups[i].time + "\n" + groups[i].age;
-                TextViewList2[i].TextSize = 30;
+                TextViewList2[i].TextSize = 45;
                 TextViewList2[i].Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
                 TextViewList2[i].SetTextColor(Color.Red);
                 //
@@ -165,7 +169,7 @@ namespace MyLittleClub
                 ButtonList[i] = new MyButton(this, i)
                 {
                     Text = "Students",
-                    TextSize = 30,
+                    TextSize = 45,
                     Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
                 };
                 ButtonList[i].SetTextColor(Color.DarkRed);
@@ -174,7 +178,7 @@ namespace MyLittleClub
                 ButtonList2[i] = new MyButton(this, i)
                 {
                     Text = "Edit",
-                    TextSize = 30,
+                    TextSize = 45,
                     Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
                 };
                 ButtonList2[i].SetTextColor(Color.DarkRed);
@@ -234,7 +238,7 @@ namespace MyLittleClub
                     TextViewList[i] = new TextView(this);
                     TextViewList[i].Text = "Name: " + "\nPhoneNum: " + "\nEmail: " + "\nParent1: " + "\nParent2: " + "\nNotes";
                     TextViewList[i].LayoutParameters = WrapContParams;
-                    TextViewList[i].TextSize = 30;
+                    TextViewList[i].TextSize = 45;
                     TextViewList[i].Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
                     TextViewList[i].SetTextColor(Color.Black);
                     //
@@ -257,12 +261,12 @@ namespace MyLittleClub
         }
         //Build Dialog Students in group
         LinearLayout TitleLayout, LocationLayout, AgeLayout, LVLLayout, TimeAndDateLayout, SaveLayout;
-        TextView TitleTV, LocTV, AgeTV, LVLTV, CompTV, TimeTV, DateTV;
-        EditText LocET, AgeET, LVLET;
+        TextView TitleTV, LocTV, AgeTV, LVLTV, CompTV, TimeTV;
+        TextInputEditText LocET, AgeET, LVLET;
         bool c = false;
         RadioGroup CompRG;
         RadioButton CompRB, NotCompRB;
-        Button TimeButton, DateButton, SaveButton;
+        Button TimeButton, SaveButton;
         public void BuildEditGroupDialog(Group group)
         {
             GrouD = new Dialog(this);
@@ -309,15 +313,22 @@ namespace MyLittleClub
             };
             LocTV.SetTextColor(Color.DarkRed);
             //
-            LocET = new EditText(this)
+            LocET = new TextInputEditText(this)
             {
                 LayoutParameters = WrapContParams,
                 Text = group.Location,
                 TextSize = 20,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
+            LocET.SetBackgroundResource(Resource.Drawable.MyBackground);
+            TextInputLayout Loc = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
             LocationLayout.AddView(LocTV);
-            LocationLayout.AddView(LocET);
+            Loc.AddView(LocET);
+            LocationLayout.AddView(Loc);
             #endregion
 
             #region Age Defining
@@ -336,15 +347,22 @@ namespace MyLittleClub
             };
             AgeTV.SetTextColor(Color.DarkRed);
             //
-            AgeET = new EditText(this)
+            AgeET = new TextInputEditText(this)
             {
                 LayoutParameters = WrapContParams,
                 Text = group.age,
                 TextSize = 20,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
+            AgeET.SetBackgroundResource(Resource.Drawable.MyBackground);
+            TextInputLayout Age = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
             AgeLayout.AddView(AgeTV);
-            AgeLayout.AddView(AgeET);
+            Age.AddView(AgeET);
+            AgeLayout.AddView(Age);
             #endregion
 
             #region Level Defining
@@ -363,15 +381,22 @@ namespace MyLittleClub
             };
             LVLTV.SetTextColor(Color.DarkRed);
             //
-            LVLET = new EditText(this)
+            LVLET = new TextInputEditText(this)
             {
                 LayoutParameters = WrapContParams,
                 Text = group.geoupLevel,
                 TextSize = 20,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
+            LVLET.SetBackgroundResource(Resource.Drawable.MyBackground);
+            TextInputLayout LVL = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
             LVLLayout.AddView(LVLTV);
-            LVLLayout.AddView(LVLET);
+            LVL.AddView(LVLET);
+            LVLLayout.AddView(LVL);
             #endregion
 
             #region Competetive defining
@@ -423,16 +448,7 @@ namespace MyLittleClub
             };
             TimeButton.SetTextColor(Color.Red);
             TimeButton.Click += this.TimeButton_Click;
-
-            DateButton = new Button(this)
-            {
-                LayoutParameters = WrapContParams,
-                Text = group.date,
-                TextSize = 25,
-                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
-            };
-            DateButton.SetTextColor(Color.Red);
-            DateButton.Click += this.DateButton_Click;
+            TimeAndDateLayout.AddView(TimeButton);
             #endregion
 
             #region Save Button
@@ -458,6 +474,7 @@ namespace MyLittleClub
             l2.AddView(AgeLayout);
             l2.AddView(LVLLayout);
             l2.AddView(CompRG);
+            l2.AddView(TimeAndDateLayout);
             l2.AddView(SaveLayout);
             OAGroupsLayout.AddView(l2);
             //
@@ -466,7 +483,7 @@ namespace MyLittleClub
         private bool InputValid(string location, string ageRange, string grouplvl, bool cb)
         {
             int x = -1;
-            if (location != "" && ageRange != "" && grouplvl != "" && TimeButton.Text != "Select Time" && DateButton.Text != "Select Date")
+            if (location != "" && ageRange != "" && grouplvl != "" && TimeButton.Text != "Select Time")
             {
                 return true;
             }
@@ -538,13 +555,12 @@ namespace MyLittleClub
             if (InputValid(LocET.Text, AgeET.Text, LVLET.Text, c))
             {
                 //add to firebase
-                Group group = new Group(AgeET.Text, LVLET.Text, CompRB.Selected, LocET.Text, DateButton.Text, TimeButton.Text);
+                Group group = new Group(AgeET.Text, LVLET.Text, CompRB.Checked, LocET.Text, TimeButton.Text);
                 HashMap map = new HashMap();
                 map.Put("Location", group.Location);
                 map.Put("Level", group.geoupLevel);
                 map.Put("Age", group.age);
                 map.Put("Comp", group.competetive);
-                map.Put("Date", group.date);
                 map.Put("Time", group.time);
                 DocumentReference docref = database.Collection("Users").Document(admin1.email).Collection("Groups").Document(group.Location + " " + group.time + " " + group.age);
                 docref.Set(map);
@@ -554,6 +570,8 @@ namespace MyLittleClub
                     .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
                 Toasty.Success(this, "Group Added Sucesfully", 5, true).Show();
                 GrouD.Dismiss();
+                d.Dismiss();
+                this.Recreate();
             }
         }
 
@@ -604,20 +622,9 @@ namespace MyLittleClub
                 txt = string.Format("{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
             }
 
-            if (MyStuff.IsDateLegit(e.Date, this))
-            {
-                DateButton.Text = txt;
-            }
-            else
-            {
-                Toasty.Config.Instance
-                   .TintIcon(true)
-                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-                Toasty.Error(this, "InValid Date", 5, true).Show();
-            }
         }
-        //formats the string in DD/MM/YYYY format
-        #endregion
+            //formats the string in DD/MM/YYYY format
+            #endregion
 
         private void RB_Click(object sender, EventArgs e)
         {
@@ -677,12 +684,6 @@ namespace MyLittleClub
                         return true;
                     }
                 case Resource.Id.menuItem7:
-                    {
-                        Intent tryIntent = new Intent(this, typeof(TimerActivity));
-                        StartActivity(tryIntent);
-                        return true;
-                    }
-                case Resource.Id.menuItem8:
                     {
                         MyStuff.RemoveFromShared();
                         Intent intent3 = new Intent(this, typeof(RegisterActivity));
@@ -744,7 +745,7 @@ namespace MyLittleClub
                             bool comp = item.GetBoolean("Comp").BooleanValue();
                             string level = (item.GetString("Level")).ToString();
                             string time = (item.GetString("Time")).ToString();
-                            Group group1 = new Group(Age, level, comp, loc, date, time);
+                            Group group1 = new Group(Age, level, comp, loc, time);
                             groups.Add(group1);
                         }
                     }
@@ -768,6 +769,7 @@ namespace MyLittleClub
                         var document = snapshot.Documents;
                         foreach (DocumentSnapshot item in document)
                         {
+
                             string day = (item.GetString("Date").ToString())[0] + "" + (item.GetString("Date").ToString())[1];
                             string month = (item.GetString("Date").ToString())[3] + "" + (item.GetString("Date").ToString())[4];
                             string year = (item.GetString("Date").ToString())[6] + "" + (item.GetString("Date").ToString())[7] + (item.GetString("Date").ToString())[8] + "" + (item.GetString("Date").ToString())[9];

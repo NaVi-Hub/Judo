@@ -19,13 +19,14 @@ using Android.Util;
 using System.Globalization;
 using System.IO;
 using Android.Views.Animations;
+using Android.Support.Design.Widget;
 
 namespace MyLittleClub
 {
     static class MyStuff
     {
         public static List<string> Emails = new List<string>();
-        public static bool IsValidName(string name, EditText NameET ,Activity a)
+        public static bool IsValidName(string name, TextInputEditText NameET ,Activity a)
         {
             bool Tr = true;
             List<string> FN = new List<string>();

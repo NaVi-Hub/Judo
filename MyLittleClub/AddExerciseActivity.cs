@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
+using Android.Support.Design.Widget;
 using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
@@ -19,8 +20,9 @@ namespace MyLittleClub
         LinearLayout AddTrainingOverAllLayout, AddTrainingLabelLayout, AddTrainingNameLayout, ButtonAddTrainingLayout, AddTrainingExplenationLayout, AddTrainingExplenationETLayout;
         TextView AddTrainingLabelTV, AddTrainingNameTV, AddTrainingExplenationTV;
         Button AddTrainingButton;
-        EditText AddTrainingNameET, AddTrainingExplenationET;
+        TextInputEditText AddTrainingNameET, AddTrainingExplenationET;
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
+        
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(420, 180);
         Admin1 admin;
         FirebaseFirestore database = Context.database;
@@ -33,6 +35,8 @@ namespace MyLittleClub
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddTrainingLayout);
             admin = MyStuff.GetAdmin();
+            WrapContParams.SetMargins(5, 5, 5, 5);
+            OneTwentyParams.SetMargins(5, 5, 5, 5);
             BuildAddTrainingScreen();
         }
         
@@ -64,16 +68,23 @@ namespace MyLittleClub
             AddTrainingNameTV = new TextView(this);
             AddTrainingNameTV.LayoutParameters = WrapContParams;
             AddTrainingNameTV.Text = "Exercise Name: ";
-            AddTrainingNameTV.TextSize = 30;
+            AddTrainingNameTV.TextSize = 45;
             AddTrainingNameTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Name AddTraining EditText
-            AddTrainingNameET = new EditText(this);
+            //Defining the Name AddTraining TextInputEditText
+            TextInputLayout nameLayout = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            AddTrainingNameET = new TextInputEditText(this);
+            AddTrainingNameET.SetBackgroundResource(Resource.Drawable.MyBackground);
             AddTrainingNameET.LayoutParameters = OneTwentyParams;
             AddTrainingNameET.Hint = "name";
             AddTrainingNameET.TextSize = 30;
             //Adding views to layout
             AddTrainingNameLayout.AddView(AddTrainingNameTV);
-            AddTrainingNameLayout.AddView(AddTrainingNameET);
+            nameLayout.AddView(AddTrainingNameET);
+            AddTrainingNameLayout.AddView(nameLayout);
             AddTrainingOverAllLayout.AddView(AddTrainingNameLayout);
             //----------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
@@ -85,7 +96,7 @@ namespace MyLittleClub
             AddTrainingExplenationTV = new TextView(this);
             AddTrainingExplenationTV.LayoutParameters = WrapContParams;
             AddTrainingExplenationTV.Text = "Exercise Explenation: ";
-            AddTrainingExplenationTV.TextSize = 30;
+            AddTrainingExplenationTV.TextSize = 45;
             AddTrainingExplenationTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Adding views to layout
             AddTrainingExplenationLayout.AddView(AddTrainingExplenationTV);
@@ -96,8 +107,9 @@ namespace MyLittleClub
             AddTrainingExplenationETLayout.Orientation = Orientation.Vertical;
             AddTrainingExplenationETLayout.SetBackgroundResource(Resource.Drawable.BlackOutLine);
             AddTrainingExplenationETLayout.Click += this.AddTrainingExplenationETLayout_Click;
-            //Defining the Explenation AddTraining EditText
-            AddTrainingExplenationET = new EditText(this);
+            //Defining the Explenation AddTraining TextInputEditText
+            AddTrainingExplenationET = new TextInputEditText(this);
+            AddTrainingExplenationET.SetBackgroundResource(Resource.Drawable.MyBackground);
             AddTrainingExplenationET.SetWidth(LinearLayout.LayoutParams.MatchParent);
             AddTrainingExplenationET.Hint = "Explenation";
             AddTrainingExplenationET.TextSize = 25;
@@ -162,7 +174,7 @@ namespace MyLittleClub
             //https://gist.github.com/icalderond/742f98f2f8cda1fae1b0bc877df76bbc @Javier Pardo
 
         }
-        //Makes a big EditText
+        //Makes a big TextInputEditText
         public void showSoftKeyboard(Activity activity, View view)
         {
             InputMethodManager inputMethodManager = (InputMethodManager)activity.GetSystemService(Android.Content.Context.InputMethodService);

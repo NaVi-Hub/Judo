@@ -10,6 +10,7 @@ using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Provider;
 using Android.Runtime;
+using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
 using ES.DMoral.ToastyLib;
@@ -26,7 +27,8 @@ namespace MyLittleClub
         ISharedPreferences sp;
         bool EmailChanged = false;
         LinearLayout OverAllEditAdminLayout, NameEditAdminLayout, MailEditAdminLayout, SportEditAdminLayout, PhoneNumEditAdminLayout, ProfilePicEditAdminLayout, ButtonEditAdminLayout, ProfileEditAdminLyout;
-        EditText NameEt, SportEt, MailEt, PhoneNumEt;
+        LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
+        TextInputEditText NameEt, SportEt, MailEt, PhoneNumEt;
         TextView NameTv, SportTv, MailTv, phoneNumtv;
         Button ProfilePicButton, SaveButton;
         ImageView ProImg;
@@ -36,6 +38,7 @@ namespace MyLittleClub
         LinearLayout.LayoutParams EtLP = new LinearLayout.LayoutParams(650, 200);
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            WrapContParams.SetMargins(5, 5, 5, 5);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.EditAminLayout);
             admin = MyStuff.GetAdmin();
@@ -61,20 +64,27 @@ namespace MyLittleClub
                 LayoutParameters = BLP,
                 Text = "Name: ",
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
-                TextSize = 30,
+                TextSize = 45,
             };
             NameTv.SetTextColor(Color.DarkRed);
             //
-            NameEt = new EditText(this)
+            NameEt = new TextInputEditText(this)
             {
                 LayoutParameters = EtLP,
                 Text = admin.name,
                 TextSize = 30,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
+            NameEt.SetBackgroundResource(Resource.Drawable.MyBackground);
+            TextInputLayout nameLayout = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
             //
             NameEditAdminLayout.AddView(NameTv);
-            NameEditAdminLayout.AddView(NameEt);
+            nameLayout.AddView(NameEt);
+            NameEditAdminLayout.AddView(nameLayout);
             OverAllEditAdminLayout.AddView(NameEditAdminLayout);
 
             //
@@ -90,20 +100,27 @@ namespace MyLittleClub
                 LayoutParameters = BLP,
                 Text = "Email: ",
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
-                TextSize = 30,
+                TextSize = 45,
             };
             MailTv.SetTextColor(Color.DarkRed);
             //
-            MailEt = new EditText(this)
+            MailEt = new TextInputEditText(this)
             {
                 LayoutParameters = EtLP,
                 Text = admin.email,
                 TextSize = 30,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
+            MailEt.SetBackgroundResource(Resource.Drawable.MyBackground);
+            TextInputLayout mail = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
             MailEt.Click += this.MailEt_Click; 
             MailEditAdminLayout.AddView(MailTv);
-            MailEditAdminLayout.AddView(MailEt);
+            mail.AddView(MailEt);
+            MailEditAdminLayout.AddView(mail);
             OverAllEditAdminLayout.AddView(MailEditAdminLayout);
 
             //
@@ -119,19 +136,26 @@ namespace MyLittleClub
                 LayoutParameters = BLP,
                 Text = "PhonenNum: ",
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
-                TextSize = 30,
+                TextSize = 45,
             };
             phoneNumtv.SetTextColor(Color.DarkRed);
             //
-            PhoneNumEt = new EditText(this)
+            PhoneNumEt = new TextInputEditText(this)
             {
                 LayoutParameters = EtLP,
                 Text = admin.phoneNumber,
                 TextSize = 30,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
+            PhoneNumEt.SetBackgroundResource(Resource.Drawable.MyBackground);
+            TextInputLayout phon = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
             PhoneNumEditAdminLayout.AddView(phoneNumtv);
-            PhoneNumEditAdminLayout.AddView(PhoneNumEt);
+            phon.AddView(PhoneNumEt);
+            PhoneNumEditAdminLayout.AddView(phon);
             OverAllEditAdminLayout.AddView(PhoneNumEditAdminLayout);
 
             //
@@ -146,20 +170,27 @@ namespace MyLittleClub
                 LayoutParameters = BLP,
                 Text = "Sport: ",
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
-                TextSize = 30,
+                TextSize = 45,
             };
             SportTv.SetTextColor(Color.DarkRed);
             //
-            SportEt = new EditText(this)
+            SportEt = new TextInputEditText(this)
             {
                 LayoutParameters = EtLP,
                 Text = admin.sport,
                 TextSize = 30,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
+            SportEt.SetBackgroundResource(Resource.Drawable.MyBackground);
+            TextInputLayout spo = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
             //
             SportEditAdminLayout.AddView(SportTv);
-            SportEditAdminLayout.AddView(SportEt);
+            spo.AddView(SportEt);
+            SportEditAdminLayout.AddView(spo);
             OverAllEditAdminLayout.AddView(SportEditAdminLayout);
 
             //
@@ -172,7 +203,7 @@ namespace MyLittleClub
             ProfilePicButton = new Button(this)
             {
                 Text = "Take Pic",
-                TextSize = 30,
+                TextSize = 45,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
             ProfilePicButton.SetTextColor(Color.DarkRed);
@@ -190,7 +221,7 @@ namespace MyLittleClub
             SaveButton = new Button(this)
             {
                 Text = "Save",
-                TextSize = 30,
+                TextSize = 45,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
             SaveButton.SetTextColor(Color.DarkRed);

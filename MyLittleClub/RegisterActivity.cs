@@ -23,6 +23,7 @@ using System;
 using Android.Graphics.Drawables;
 using Android.Views.Animations;
 using System.Linq;
+using Android.Support.Design.Widget;
 
 namespace MyLittleClub
 {
@@ -32,7 +33,7 @@ namespace MyLittleClub
         Admin1 admin;
         LinearLayout OverAllLoginLayout, NameLoginLayout, MailLoginLayout, SportLoginLayout, ButtonLoginLayout, LabelLoginLayout, PhoneNumberLoginLayout;
         TextView LabelLoginTV, LabelLoginTV1, NameLoginTV, MailLoginTV, SportLoginTV, PhoneNumberLoginTV, Login1;
-        EditText NameLoginET, MailLoginET, SportLoginET, PhoneNumberLoginET;
+        TextInputEditText NameLoginET, MailLoginET, SportLoginET, PhoneNumberLoginET;
         Button LoginButton;
         LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(420, 180);
@@ -43,6 +44,8 @@ namespace MyLittleClub
         protected override void OnCreate(Bundle savedInstanceState)
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
+            OneTwentyParams.SetMargins(5, 5, 5, 5);
+            WrapContParams.SetMargins(5, 5, 5, 5);
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.RegisterLayout);
@@ -92,10 +95,11 @@ namespace MyLittleClub
             NameLoginTV = new TextView(this);
             NameLoginTV.LayoutParameters = WrapContParams;
             NameLoginTV.Text = "Name: ";
-            NameLoginTV.TextSize = 30;
+            NameLoginTV.TextSize = 45;
             NameLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Name Login EditText
-            NameLoginET = new EditText(this);
+            //Defining the Name Login TextInputEditText
+            NameLoginET = new TextInputEditText(this);
+            NameLoginET.SetBackgroundResource(Resource.Drawable.MyBackground);
             NameLoginET.LayoutParameters = OneTwentyParams;
             NameLoginET.Hint = "Enter Name";
             NameLoginET.TextSize = 30;
@@ -115,12 +119,13 @@ namespace MyLittleClub
             MailLoginTV = new TextView(this);
             MailLoginTV.LayoutParameters = WrapContParams;
             MailLoginTV.Text = "EMail: ";
-            MailLoginTV.TextSize = 30;
+            MailLoginTV.TextSize = 45;
             MailLoginTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             MailLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Mail Login EditText
-            MailLoginET = new EditText(this);
+            //Defining the Mail Login TextInputEditText
+            MailLoginET = new TextInputEditText(this);
             MailLoginET.LayoutParameters = OneTwentyParams;
+            MailLoginET.SetBackgroundResource(Resource.Drawable.MyBackground);
             MailLoginET.Hint = "Enter EMail";
             MailLoginET.InputType = InputTypes.TextVariationEmailAddress;
             MailLoginET.TextSize = 30;
@@ -139,11 +144,12 @@ namespace MyLittleClub
             SportLoginTV = new TextView(this);
             SportLoginTV.LayoutParameters = WrapContParams;
             SportLoginTV.Text = "Sport: ";
-            SportLoginTV.TextSize = 30;
+            SportLoginTV.TextSize = 45;
             SportLoginTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             SportLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Sport Login EditText
-            SportLoginET = new EditText(this);
+            //Defining the Sport Login TextInputEditText
+            SportLoginET = new TextInputEditText(this);
+            SportLoginET.SetBackgroundResource(Resource.Drawable.MyBackground);
             SportLoginET.LayoutParameters = OneTwentyParams;
             SportLoginET.Hint = "Sport";
             SportLoginET.TextSize = 30;
@@ -163,11 +169,12 @@ namespace MyLittleClub
             PhoneNumberLoginTV = new TextView(this);
             PhoneNumberLoginTV.LayoutParameters = WrapContParams;
             PhoneNumberLoginTV.Text = "PhoneNum: ";
-            PhoneNumberLoginTV.TextSize = 30;
+            PhoneNumberLoginTV.TextSize = 45;
             PhoneNumberLoginTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             PhoneNumberLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the PhoneNumber Login EditText
-            PhoneNumberLoginET = new EditText(this);
+            //Defining the PhoneNumber Login TextInputEditText
+            PhoneNumberLoginET = new TextInputEditText(this);
+            PhoneNumberLoginET.SetBackgroundResource(Resource.Drawable.MyBackground);
             PhoneNumberLoginET.LayoutParameters = OneTwentyParams;
             PhoneNumberLoginET.Text = "05";
             PhoneNumberLoginET.TextSize = 30;
@@ -189,7 +196,7 @@ namespace MyLittleClub
             Login1.Text = "Log-In";
             Login1.SetTextColor(Color.Blue);
             Login1.Click += this.Login1_Click;
-            Login1.TextSize = 30;
+            Login1.TextSize = 45;
             LoginLoginLayout.AddView(Login1);
             OverAllLoginLayout.AddView(LoginLoginLayout);
             //=======================================================================================================================================
@@ -221,7 +228,7 @@ namespace MyLittleClub
         //Open Login Dialog
         LinearLayout LoginLoginLayout,dLayout, MailLoginLayout1, ButtonLoginLayout1,ImageViewProfileImageLayout;
         TextView MailLoginTV1;
-        EditText MailLoginET1;
+        TextInputEditText MailLoginET1;
         Button LoginButton1, ImageViewProfileImageButton;
         private void BuildLoginScreen()
         {
@@ -255,11 +262,17 @@ namespace MyLittleClub
             WrapContParams.SetMargins(20, 20, 5, 10);
             MailLoginTV1.LayoutParameters = WrapContParams;
             MailLoginTV1.Text = "EMail: ";
-            MailLoginTV1.TextSize = 30;
+            MailLoginTV1.TextSize = 45;
             MailLoginTV1.SetForegroundGravity(Android.Views.GravityFlags.Center);
             MailLoginTV1.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Mail Login EditText
-            MailLoginET1 = new EditText(this);
+            //Defining the Mail Login TextInputEditText
+            TextInputLayout a = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            MailLoginET1 = new TextInputEditText(this);
+            MailLoginET.SetBackgroundResource(Resource.Drawable.MyBackground);
             OneTwentyParams.SetMargins(5, 20, 20, 10);
             MailLoginET1.LayoutParameters = OneTwentyParams;
             MailLoginET1.Hint = "Enter EMail";
@@ -440,8 +453,8 @@ namespace MyLittleClub
  */
 
 /*@Racil Hilan
- * https://stackoverflow.com/questions/22254479/xamarin-edittext-inputtype-password 
- * edittext inputtype
+ * https://stackoverflow.com/questions/22254479/xamarin-TextInputEditText-inputtype-password 
+ * TextInputEditText inputtype
  */
 
 /* taking an image

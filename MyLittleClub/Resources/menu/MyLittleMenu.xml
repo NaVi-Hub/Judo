@@ -25,12 +25,8 @@
   <item android:id="@+id/menuItem6"
         android:title="Edit Your User"/>
   
-  <!-- Add menu Item 7 -->
-  <item android:id="@+id/menuItem7"
-        android:title="Timer"/>
-  
-  <!-- Add menu Item 8 -->  
-  <item android:id="@+id/menuItem8"  
+  <!-- Add menu Item 7 -->  
+  <item android:id="@+id/menuItem7"  
         android:title="Log-out"/>  
   
 </menu>   

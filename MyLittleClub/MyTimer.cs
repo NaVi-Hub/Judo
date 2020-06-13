@@ -7,6 +7,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.Design.Widget;
 using Android.Views;
 using Android.Widget;
 
@@ -14,9 +15,9 @@ namespace MyLittleClub
 {
     class MyTimer : AsyncTask<Int32, Int32, Int32>
     {
-        EditText Time;
+        TextInputEditText Time;
         int counter;
-        public MyTimer(EditText time)
+        public MyTimer(TextInputEditText time)
         {
             this.Time = time;
             this.counter = 0;

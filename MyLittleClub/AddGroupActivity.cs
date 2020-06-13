@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Graphics;
 using Android.Hardware;
 using Android.OS;
+using Android.Support.Design.Widget;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
@@ -21,7 +22,7 @@ namespace MyLittleClub
         public static Admin1 admin;
         LinearLayout AddGroupSvLayout, InsideSVLayout, OverSVLayout, AddGroupTimeAndDateLayout, OverAllAddGroupLayout, LocationAddGroupLayout, AgeAddGroupLayout, GroupLevelAddGroupLayout, ButtonAddGroupLayout, LabelAddGroupLayout;
         TextView StudTV, LabelAddGroupTV, LocationAddGroupTV, AgeAddGroupTV, GroupLevelAddGroupTV;
-        EditText LocationAddGroupET, AgeAddGroupET, GroupLevelAddGroupET;
+        TextInputEditText LocationAddGroupET, AgeAddGroupET, GroupLevelAddGroupET;
         Button AddGroupButton, AddGroupTimeButton, AddGroupDateButton;
         LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(530, 180);
@@ -47,6 +48,8 @@ namespace MyLittleClub
         ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            WrapContParams.SetMargins(5, 5, 5, 5);
+            OneTwentyParams.SetMargins(5, 5, 5, 5);
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             CheckBoxList = new List<CheckBox>();
             base.OnCreate(savedInstanceState);
@@ -101,17 +104,24 @@ namespace MyLittleClub
             LocationAddGroupTV = new TextView(this);
             LocationAddGroupTV.LayoutParameters = WrapContParams;
             LocationAddGroupTV.Text = "Location: ";
-            LocationAddGroupTV.TextSize = 30;
+            LocationAddGroupTV.TextSize = 45;
             LocationAddGroupTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Location AddGroup EditText
-            LocationAddGroupET = new EditText(this);
+            //Defining the Location AddGroup TextInputEditText
+            TextInputLayout Location = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            LocationAddGroupET = new TextInputEditText(this);
+            LocationAddGroupET.SetBackgroundResource(Resource.Drawable.MyBackground);
             LocationAddGroupET.LayoutParameters = OneTwentyParams;
             LocationAddGroupET.Hint = "Enter Adress";
             LocationAddGroupET.TextSize = 30;
             LocationAddGroupET.InputType = InputTypes.TextVariationPersonName;
+            Location.AddView(LocationAddGroupET);
             //Adding views to layout
             LocationAddGroupLayout.AddView(LocationAddGroupTV);
-            LocationAddGroupLayout.AddView(LocationAddGroupET);
+            LocationAddGroupLayout.AddView(Location);
             OverAllAddGroupLayout.AddView(LocationAddGroupLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -123,18 +133,25 @@ namespace MyLittleClub
             AgeAddGroupTV = new TextView(this);
             AgeAddGroupTV.LayoutParameters = WrapContParams;
             AgeAddGroupTV.Text = "Age Range: ";
-            AgeAddGroupTV.TextSize = 30;
+            AgeAddGroupTV.TextSize = 45;
             AgeAddGroupTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             AgeAddGroupTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Age AddGroup EditText
-            AgeAddGroupET = new EditText(this);
+            //Defining the Age AddGroup TextInputEditText
+            TextInputLayout Age = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            AgeAddGroupET = new TextInputEditText(this);
+            AgeAddGroupET.SetBackgroundResource(Resource.Drawable.MyBackground);
             AgeAddGroupET.LayoutParameters = OneTwentyParams;
             AgeAddGroupET.Hint = "Enter Age Range";
             AgeAddGroupET.TextSize = 30;
             AgeAddGroupET.SetSingleLine();
             //Adding views to layout
             AgeAddGroupLayout.AddView(AgeAddGroupTV);
-            AgeAddGroupLayout.AddView(AgeAddGroupET);
+            Age.AddView(AgeAddGroupET);
+            AgeAddGroupLayout.AddView(Age);
             OverAllAddGroupLayout.AddView(AgeAddGroupLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -146,17 +163,24 @@ namespace MyLittleClub
             GroupLevelAddGroupTV = new TextView(this);
             GroupLevelAddGroupTV.LayoutParameters = WrapContParams;
             GroupLevelAddGroupTV.Text = "Group Level: ";
-            GroupLevelAddGroupTV.TextSize = 30;
+            GroupLevelAddGroupTV.TextSize = 45;
             GroupLevelAddGroupTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             GroupLevelAddGroupTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the GroupLevel AddGroup EditText
-            GroupLevelAddGroupET = new EditText(this);
+            //Defining the GroupLevel AddGroup TextInputEditText
+            TextInputLayout LVL = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            GroupLevelAddGroupET = new TextInputEditText(this);
+            GroupLevelAddGroupET.SetBackgroundResource(Resource.Drawable.MyBackground);
             GroupLevelAddGroupET.LayoutParameters = OneTwentyParams;
             GroupLevelAddGroupET.Hint = "Enter Level";
             GroupLevelAddGroupET.TextSize = 30;
             //Adding views to layout
             GroupLevelAddGroupLayout.AddView(GroupLevelAddGroupTV);
-            GroupLevelAddGroupLayout.AddView(GroupLevelAddGroupET);
+            LVL.AddView(GroupLevelAddGroupET);
+            GroupLevelAddGroupLayout.AddView(LVL);
             OverAllAddGroupLayout.AddView(GroupLevelAddGroupLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -213,13 +237,12 @@ namespace MyLittleClub
             if (InputValid(LocationAddGroupET.Text, AgeAddGroupET.Text, GroupLevelAddGroupET.Text, c))
             {
                 //add to firebase
-                Group group = new Group(AgeAddGroupET.Text, GroupLevelAddGroupET.Text, CompRBAddGroup.Selected, LocationAddGroupET.Text, AddGroupDateButton.Text, AddGroupTimeButton.Text);
+                Group group = new Group(AgeAddGroupET.Text, GroupLevelAddGroupET.Text, CompRBAddGroup.Selected, LocationAddGroupET.Text, AddGroupTimeButton.Text);
                 HashMap map = new HashMap();
                 map.Put("Location", group.Location);
                 map.Put("Level", group.geoupLevel);
                 map.Put("Age", group.age);
                 map.Put("Comp", group.competetive);
-                map.Put("Date", group.date);
                 map.Put("Time", group.time);
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Groups").Document(group.Location + " " + group.time + " " + group.age);
                 docref.Set(map);
@@ -330,26 +353,10 @@ namespace MyLittleClub
             AddGroupTimeButton.Click += this.AddGroupTimeButton_Click;
             AddGroupTimeButton.SetTextColor(Color.DarkRed);
             //
-            AddGroupDateButton = new Button(this);
-            AddGroupDateButton.LayoutParameters = WrapContParams;
-            AddGroupDateButton.Text = "Select Date";
-            AddGroupDateButton.TextSize = 35;
-            AddGroupDateButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            AddGroupDateButton.Click += this.AddGroupDateButton_Click;
-            AddGroupDateButton.SetTextColor(Color.DarkRed);
-            //
             AddGroupTimeAndDateLayout.AddView(AddGroupTimeButton);
-            AddGroupTimeAndDateLayout.AddView(AddGroupDateButton);
             OverAllAddGroupLayout.AddView(AddGroupTimeAndDateLayout);
         }
         //Builds time and date selection buttons
-        private void AddGroupDateButton_Click(object sender, EventArgs e)
-        {
-            DateTime today = DateTime.Today;
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, OnDateSet, today.Year, today.Month - 1, today.Day);
-            datePickerDialog.Show();
-        }
-        //inflates date picker dialog
         private void OnTimeSet(object sender, TimePickerDialog.TimeSetEventArgs e)
         {
             string str;
@@ -389,39 +396,6 @@ namespace MyLittleClub
             timePickerDialog.Show();
         }
         //inflates time picker dialog
-        private void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
-        {
-            string txt;
-            if (e.Date.Month < 10 && e.Date.Day < 10)
-            {
-                txt = string.Format("0{0}.0{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
-            }
-            else if (e.Date.Day < 10)
-            {
-                txt = string.Format("0{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
-            }
-            else if (e.Date.Month < 10)
-            {
-                txt = string.Format("{0}.0{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
-            }
-            else
-            {
-                txt = string.Format("{0}.{1}.{2}", e.Date.Day, e.Date.Month, e.Date.Year);
-            }
-
-            if (MyStuff.IsDateLegit(e.Date, this))
-            {
-                AddGroupDateButton.Text = txt;
-            }
-            else
-            {
-                Toasty.Config.Instance
-                   .TintIcon(true)
-                   .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-                Toasty.Error(this, "InValid Date",5, true).Show();
-            }
-        }
-        //formats the string in DD/MM/YYYY format
         #endregion
     }
 }

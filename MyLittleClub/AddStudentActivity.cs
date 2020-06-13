@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
+using Android.Support.Design.Widget;
 using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
@@ -21,7 +22,7 @@ namespace MyLittleClub
         public static Admin1 admin;
         LinearLayout ButtonSendToMainPageLayout, OverAllAddStudentLayout, NameAddStudentLayout, PhoneNumAddStudentLayout, Parent1NameAddStudentLayout, Parent2NameAddStudentLayout, ButtonAddStudentLayout, AddStudentExplenationETLayout, LabelAddStudentLayout, EmailAddStudentLayout, CompetetiveRadioStudentLayout, AddStudentExplenationLayout;
         TextView LabelAddStudentTV, NameAddStudentTV, PhoneNumAddStudentTV, Parent1NameAddStudentTV, Parent2NameAddStudentTV, EmailAddStudentTV, AddStudentExplenationTV;
-        EditText NameAddStudentET, PhoneNumAddStudentET, Parent1NameAddStudentET, Parent2NameAddStudentET, EmailAddStudentET, AddStudentExplenationET;
+        TextInputEditText NameAddStudentET, PhoneNumAddStudentET, Parent1NameAddStudentET, Parent2NameAddStudentET, EmailAddStudentET, AddStudentExplenationET;
         Button AddStudentButton, SendBackToMainButton;
         LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(530, 160);
@@ -34,7 +35,10 @@ namespace MyLittleClub
         string groupname;
         ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
+
         {
+            WrapContParams.SetMargins(5, 5, 5, 5);
+            OneTwentyParams.SetMargins(5, 5, 5, 5);
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddStudentsLayout);
@@ -76,17 +80,24 @@ namespace MyLittleClub
             NameAddStudentTV = new TextView(this);
             NameAddStudentTV.LayoutParameters = WrapContParams;
             NameAddStudentTV.Text = "Name: ";
-            NameAddStudentTV.TextSize = 30;
+            NameAddStudentTV.TextSize = 45;
             NameAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Name AddStudent EditText
-            NameAddStudentET = new EditText(this);
+            //Defining the Name AddStudent TextInputEditText
+            TextInputLayout nameLayout = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            NameAddStudentET = new TextInputEditText(this);
+            NameAddStudentET.SetBackgroundResource(Resource.Drawable.MyBackground);
             NameAddStudentET.LayoutParameters = OneTwentyParams;
             NameAddStudentET.Hint = "Full Name";
             NameAddStudentET.TextSize = 30;
             NameAddStudentET.FirstBaselineToTopHeight = 10;
             //Adding views to layout
             NameAddStudentLayout.AddView(NameAddStudentTV);
-            NameAddStudentLayout.AddView(NameAddStudentET);
+            nameLayout.AddView(NameAddStudentET);
+            NameAddStudentLayout.AddView(nameLayout);
             OverAllAddStudentLayout.AddView(NameAddStudentLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -98,11 +109,17 @@ namespace MyLittleClub
             PhoneNumAddStudentTV = new TextView(this);
             PhoneNumAddStudentTV.LayoutParameters = WrapContParams;
             PhoneNumAddStudentTV.Text = "Phone # ";
-            PhoneNumAddStudentTV.TextSize = 30;
+            PhoneNumAddStudentTV.TextSize = 45;
             PhoneNumAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             PhoneNumAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the PhoneNum AddStudent EditText
-            PhoneNumAddStudentET = new EditText(this);
+            //Defining the PhoneNum AddStudent TextInputEditText
+            TextInputLayout phone = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            PhoneNumAddStudentET = new TextInputEditText(this);
+            PhoneNumAddStudentET.SetBackgroundResource(Resource.Drawable.MyBackground);
             PhoneNumAddStudentET.LayoutParameters = OneTwentyParams;
             PhoneNumAddStudentET.Text = "05";
             PhoneNumAddStudentET.TextSize = 30;
@@ -110,7 +127,8 @@ namespace MyLittleClub
             PhoneNumAddStudentET.InputType = InputTypes.ClassPhone;
             //Adding views to layout
             PhoneNumAddStudentLayout.AddView(PhoneNumAddStudentTV);
-            PhoneNumAddStudentLayout.AddView(PhoneNumAddStudentET);
+            phone.AddView(PhoneNumAddStudentET);
+            PhoneNumAddStudentLayout.AddView(phone);
             OverAllAddStudentLayout.AddView(PhoneNumAddStudentLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -122,11 +140,17 @@ namespace MyLittleClub
             EmailAddStudentTV = new TextView(this);
             EmailAddStudentTV.LayoutParameters = WrapContParams;
             EmailAddStudentTV.Text = "Enter Email: ";
-            EmailAddStudentTV.TextSize = 30;
+            EmailAddStudentTV.TextSize = 45;
             EmailAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             EmailAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Email AddStudent EditText
-            EmailAddStudentET = new EditText(this);
+            //Defining the Email AddStudent TextInputEditText
+            TextInputLayout Email = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            EmailAddStudentET = new TextInputEditText(this);
+            EmailAddStudentET.SetBackgroundResource(Resource.Drawable.MyBackground);
             EmailAddStudentET.LayoutParameters = OneTwentyParams;
             EmailAddStudentET.Hint = "Email";
             EmailAddStudentET.InputType = InputTypes.TextVariationEmailAddress;
@@ -134,7 +158,8 @@ namespace MyLittleClub
             EmailAddStudentET.SetSingleLine();
             //Adding views to layout
             EmailAddStudentLayout.AddView(EmailAddStudentTV);
-            EmailAddStudentLayout.AddView(EmailAddStudentET);
+            Email.AddView(EmailAddStudentET);
+            EmailAddStudentLayout.AddView(Email);
             OverAllAddStudentLayout.AddView(EmailAddStudentLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -146,17 +171,24 @@ namespace MyLittleClub
             Parent1NameAddStudentTV = new TextView(this);
             Parent1NameAddStudentTV.LayoutParameters = WrapContParams;
             Parent1NameAddStudentTV.Text = "Parent1 Name: ";
-            Parent1NameAddStudentTV.TextSize = 30;
+            Parent1NameAddStudentTV.TextSize = 45;
             Parent1NameAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             Parent1NameAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Parent1Name AddStudent EditText
-            Parent1NameAddStudentET = new EditText(this);
+            //Defining the Parent1Name AddStudent TextInputEditText
+            TextInputLayout p1 = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            Parent1NameAddStudentET = new TextInputEditText(this);
+            Parent1NameAddStudentET.SetBackgroundResource(Resource.Drawable.MyBackground);
             Parent1NameAddStudentET.LayoutParameters = OneTwentyParams;
             Parent1NameAddStudentET.Hint = "Parent1";
             Parent1NameAddStudentET.TextSize = 30;
             //Adding views to layout
             Parent1NameAddStudentLayout.AddView(Parent1NameAddStudentTV);
-            Parent1NameAddStudentLayout.AddView(Parent1NameAddStudentET);
+            p1.AddView(Parent1NameAddStudentET);
+            Parent1NameAddStudentLayout.AddView(p1);
             OverAllAddStudentLayout.AddView(Parent1NameAddStudentLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -168,17 +200,24 @@ namespace MyLittleClub
             Parent2NameAddStudentTV = new TextView(this);
             Parent2NameAddStudentTV.LayoutParameters = WrapContParams;
             Parent2NameAddStudentTV.Text = "Parent2 Name: ";
-            Parent2NameAddStudentTV.TextSize = 30;
+            Parent2NameAddStudentTV.TextSize = 45;
             Parent2NameAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             Parent2NameAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            //Defining the Parent2Name AddStudent EditText
-            Parent2NameAddStudentET = new EditText(this);
+            //Defining the Parent2Name AddStudent TextInputEditText
+            TextInputLayout p2 = new TextInputLayout(this)
+            {
+                LayoutParameters = WrapContParams,
+                Orientation = Orientation.Horizontal,
+            };
+            Parent2NameAddStudentET = new TextInputEditText(this);
             Parent2NameAddStudentET.LayoutParameters = OneTwentyParams;
+            Parent2NameAddStudentET.SetBackgroundResource(Resource.Drawable.MyBackground);
             Parent2NameAddStudentET.Hint = "Parent2";
             Parent2NameAddStudentET.TextSize = 30;
             //Adding views to layout
             Parent2NameAddStudentLayout.AddView(Parent2NameAddStudentTV);
-            Parent2NameAddStudentLayout.AddView(Parent2NameAddStudentET);
+            p2.AddView(Parent2NameAddStudentET);
+            Parent2NameAddStudentLayout.AddView(p2);
             OverAllAddStudentLayout.AddView(Parent2NameAddStudentLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -190,7 +229,7 @@ namespace MyLittleClub
             AddStudentExplenationTV = new TextView(this);
             AddStudentExplenationTV.LayoutParameters = WrapContParams;
             AddStudentExplenationTV.Text = "Student Notes: ";
-            AddStudentExplenationTV.TextSize = 30;
+            AddStudentExplenationTV.TextSize = 45;
             AddStudentExplenationTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Adding views to layout
             AddStudentExplenationLayout.AddView(AddStudentExplenationTV);
@@ -201,8 +240,8 @@ namespace MyLittleClub
             AddStudentExplenationETLayout.Orientation = Orientation.Vertical;
             AddStudentExplenationETLayout.SetBackgroundResource(Resource.Drawable.BlackOutLine);
             AddStudentExplenationETLayout.Click += this.AddStudentExplenationETLayout_Click;
-            //Defining the Explenation AddStudent EditText
-            AddStudentExplenationET = new EditText(this);
+            //Defining the Explenation AddStudent TextInputEditText
+            AddStudentExplenationET = new TextInputEditText(this);
             AddStudentExplenationET.SetWidth(LinearLayout.LayoutParams.MatchParent);
             AddStudentExplenationET.Hint = "Notes";
             AddStudentExplenationET.TextSize = 25;
@@ -325,7 +364,7 @@ namespace MyLittleClub
             //@Tomer
             //https://gist.github.com/icalderond/742f98f2f8cda1fae1b0bc877df76bbc @Javier Pardo
         }
-        //Makes a big EditText
+        //Makes a big TextInputEditText
         public bool IsValidName(string name)
         {
             bool Tr = true;

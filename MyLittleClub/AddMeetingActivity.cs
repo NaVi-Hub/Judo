@@ -9,11 +9,13 @@ using Android.Graphics;
 using Android.Locations;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.Design.Widget;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
 using ES.DMoral.ToastyLib;
 using Firebase.Firestore;
+using Java.Util;
 
 namespace MyLittleClub
 {
@@ -28,8 +30,8 @@ namespace MyLittleClub
         List<Group> GGroups;
         FirebaseFirestore database;
         Admin1 admin;
-        EditText LocationET, AgeET, LVLET;
-        Button TimeBtn, DateBtn;
+        TextInputEditText LocationET, AgeET, LVLET;
+        Button TimeBtn, DateBtn, SendBtn;
         RadioGroup compRG;
         RadioButton compRB, nonCompRB;
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(420, 180);
@@ -37,6 +39,8 @@ namespace MyLittleClub
         //https://docs.microsoft.com/en-us/xamarin/android/app-fundamentals/graphics-and-animation
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            WrapContParams.SetMargins(5, 5, 5, 5);
+            OneTwentyParams.SetMargins(5, 5, 5, 5);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddMeetingLayout);
             database = MyStuff.database;
@@ -95,13 +99,14 @@ namespace MyLittleClub
                 TextSize = 35,
             };
             LocTV.SetTextColor(Color.DarkRed);
-            LocationET = new EditText(this)
+            LocationET = new TextInputEditText(this)
             {
                 LayoutParameters = OneTwentyParams,
                 Text = "Location",
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
                 TextSize = 35,
             };
+            LocationET.SetBackgroundResource(Resource.Drawable.MyBackground);
             LocationET.Enabled = false;
             LocLayout.AddView(LocTV);
             LocLayout.AddView(LocationET);
@@ -139,13 +144,14 @@ namespace MyLittleClub
                 TextSize = 35,
             };
             AgeTV.SetTextColor(Color.DarkRed);
-            AgeET = new EditText(this)
+            AgeET = new TextInputEditText(this)
             {
                 LayoutParameters = OneTwentyParams,
                 Text = "Age",
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
                 TextSize = 35,
             };
+            AgeET.SetBackgroundResource(Resource.Drawable.MyBackground);
             AgeET.Enabled = false;
             AgeLayout.AddView(AgeTV);
             AgeLayout.AddView(AgeET);
@@ -196,16 +202,34 @@ namespace MyLittleClub
                 TextSize = 35,
             };
             LVLTV.SetTextColor(Color.DarkRed);
-            LVLET = new EditText(this)
+            LVLET = new TextInputEditText(this)
             {
                 LayoutParameters = OneTwentyParams,
                 Text = "Level",
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
                 TextSize = 35,
             };
+            LVLET.SetBackgroundResource(Resource.Drawable.MyBackground);
             LVLET.Enabled = false;
             LevelLayout.AddView(LVLTV);
             LevelLayout.AddView(LVLET);
+            #endregion
+
+            #region Save Button
+            SendLayout = new LinearLayout(this)
+            {
+                Orientation = Orientation.Horizontal,
+                LayoutParameters = WrapContParams,
+            };
+            SendBtn = new Button(this)
+            {
+                Text = "Save Meeting",
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                TextSize = 35,
+                LayoutParameters = OneTwentyParams,
+            };
+            SendBtn.Click += this.SendBtn_Click;
+
             #endregion
 
             #region Date
@@ -238,6 +262,27 @@ namespace MyLittleClub
             OALayout.AddView(CompLayout);
             OALayout.AddView(DateLayout);
             #endregion
+        }
+
+        private void SendBtn_Click(object sender, EventArgs e)
+        {
+            //add to firebase
+            HashMap map = new HashMap();
+            map.Put("Location", GCurrentGroup.Location);
+            map.Put("Level", GCurrentGroup.geoupLevel);
+            map.Put("Age", GCurrentGroup.age);
+            map.Put("Comp", GCurrentGroup.competetive);
+            map.Put("Time", GCurrentGroup.time);
+            map.Put("Date", DateBtn.Text);
+            DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Groups").Document(GCurrentGroup.Location + " " + GCurrentGroup.time + " " + GCurrentGroup.age).Collection("Meetings").Document(DateBtn.Text);
+            docref.Set(map);
+            HashMap map2 = new HashMap();
+            Toasty.Config.Instance
+                .TintIcon(true)
+                .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+            Toasty.Success(this, "Group Added Sucesfully", 5, true).Show();
+            Intent intent1 = new Intent(this, typeof(MainPageActivity));
+            StartActivity(intent1);
         }
 
         private void DateBtn_Click(object sender, EventArgs e)
@@ -287,6 +332,7 @@ namespace MyLittleClub
             {
                 if(GGroups[i].Location + " " + GGroups[i].time + " " + GGroups[i].age == currGroup)
                 {
+                    GCurrentGroup = GGroups[i];
                     LocationET.Text = GGroups[i].Location;
                     TimeBtn.Text = GGroups[i].time;
                     AgeET.Text = GGroups[i].age;
@@ -324,8 +370,7 @@ namespace MyLittleClub
                             string date = item.GetString("Date");
                             bool comp = bool.Parse(item.GetBoolean("Comp").ToString());
                             string lvl = item.GetString("Level");
-                            GCurrentGroup = new Group(age, lvl, comp, loc, date, tim);
-                            GGroups.Add(GCurrentGroup);
+                            GGroups.Add(new Group(age, lvl, comp, loc, tim));
                         }
                     }
                     GetAStringGroupList();

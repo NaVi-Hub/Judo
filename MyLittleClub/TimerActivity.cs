@@ -7,6 +7,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.Design.Widget;
 using Android.Text;
 using Android.Views;
 using Android.Widget;
@@ -21,6 +22,7 @@ namespace MyLittleClub
         LinearLayout OverAllTimerLayout;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            WrapContParams.SetMargins(5, 5, 5, 5);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.TimerLayout);
             OverAllTimerLayout = FindViewById<LinearLayout>(Resource.Id.TimerLLayout);
@@ -57,8 +59,9 @@ namespace MyLittleClub
             t = int.Parse(spin.GetItemAtPosition(e.Position).ToString());
             BuildallEdittexts(t);
         }
-        //Sets how many Edittext to build
-        EditText[] Edittexts;
+        //Sets how many TextInputEditText to build
+        TextInputEditText[] Edittexts;
+        TextInputLayout[] EdittextL;
         LinearLayout EdittextsLayout;
         ScrollView DaysSV;
         LinearLayout.LayoutParams LLLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent, 1);
@@ -80,17 +83,25 @@ namespace MyLittleClub
                 DaysSV = new ScrollView(this);
                 DaysSV.LayoutParameters = LLLP;
             }
-            Edittexts = new EditText[50];
+            Edittexts = new TextInputEditText[50];
+            EdittextL = new TextInputLayout[50];
             ////////////////////////////////
             for (int i = 0; i < t; i++)
             {
-                Edittexts[i] = new EditText(this);
+                EdittextL[i] = new TextInputLayout(this)
+                {
+                    LayoutParameters = WrapContParams,
+                    Orientation = Orientation.Horizontal,
+                };
+                Edittexts[i] = new TextInputEditText(this);
+                Edittexts[i].SetBackgroundResource(Resource.Drawable.MyBackground);
                 BLP.SetMargins(5, 5, 5, 5);
                 Edittexts[i].LayoutParameters = BLP;
                 Edittexts[i].Selected = false;
                 Edittexts[i].Hint = "Seconds";
                 Edittexts[i].InputType = InputTypes.DatetimeVariationTime;
-                EdittextsLayout.AddView(Edittexts[i]);
+                EdittextL[i].AddView(Edittexts[i]);
+                EdittextsLayout.AddView(EdittextL[i]);
             }
             DaysSV.AddView(EdittextsLayout);
             OverAllTimerLayout.AddView(DaysSV);
