@@ -39,7 +39,7 @@ namespace MyLittleClub
         //https://docs.microsoft.com/en-us/xamarin/android/app-fundamentals/graphics-and-animation
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            WrapContParams.SetMargins(5, 5, 5, 5);
+                        WrapContParams.SetMargins(5, 5, 5, 5);
             OneTwentyParams.SetMargins(5, 5, 5, 5);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddMeetingLayout);
@@ -229,7 +229,7 @@ namespace MyLittleClub
                 LayoutParameters = OneTwentyParams,
             };
             SendBtn.Click += this.SendBtn_Click;
-
+            SendLayout.AddView(SendBtn);
             #endregion
 
             #region Date
@@ -261,28 +261,28 @@ namespace MyLittleClub
             OALayout.AddView(LevelLayout);
             OALayout.AddView(CompLayout);
             OALayout.AddView(DateLayout);
+            OALayout.AddView(SendLayout);
             #endregion
         }
 
         private void SendBtn_Click(object sender, EventArgs e)
         {
-            //add to firebase
-            HashMap map = new HashMap();
-            map.Put("Location", GCurrentGroup.Location);
-            map.Put("Level", GCurrentGroup.geoupLevel);
-            map.Put("Age", GCurrentGroup.age);
-            map.Put("Comp", GCurrentGroup.competetive);
-            map.Put("Time", GCurrentGroup.time);
-            map.Put("Date", DateBtn.Text);
-            DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Groups").Document(GCurrentGroup.Location + " " + GCurrentGroup.time + " " + GCurrentGroup.age).Collection("Meetings").Document(DateBtn.Text);
-            docref.Set(map);
-            HashMap map2 = new HashMap();
-            Toasty.Config.Instance
-                .TintIcon(true)
-                .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-            Toasty.Success(this, "Group Added Sucesfully", 5, true).Show();
-            Intent intent1 = new Intent(this, typeof(MainPageActivity));
-            StartActivity(intent1);
+            if (DateBtn.Text != "Date")
+            {
+                //add to firebase
+                HashMap map = new HashMap();
+                map.Put("Date", DateBtn.Text);
+                DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Meetings").Document();
+                docref.Set(map);
+                HashMap map2 = new HashMap();
+                Toasty.Success(this, "Meeting Added Sucesfully", 5, true).Show();
+                Intent intent1 = new Intent(this, typeof(MainPageActivity));
+                StartActivity(intent1);
+            }
+            else
+            {
+                Toasty.Error(this, "Pick Date", 5, true).Show();
+            }
         }
 
         private void DateBtn_Click(object sender, EventArgs e)

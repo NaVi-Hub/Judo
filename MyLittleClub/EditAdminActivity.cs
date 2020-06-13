@@ -64,7 +64,7 @@ namespace MyLittleClub
                 LayoutParameters = BLP,
                 Text = "Name: ",
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
-                TextSize = 45,
+                TextSize = 30,
             };
             NameTv.SetTextColor(Color.DarkRed);
             //
@@ -100,7 +100,7 @@ namespace MyLittleClub
                 LayoutParameters = BLP,
                 Text = "Email: ",
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
-                TextSize = 45,
+                TextSize = 30,
             };
             MailTv.SetTextColor(Color.DarkRed);
             //
@@ -136,7 +136,7 @@ namespace MyLittleClub
                 LayoutParameters = BLP,
                 Text = "PhonenNum: ",
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
-                TextSize = 45,
+                TextSize = 30,
             };
             phoneNumtv.SetTextColor(Color.DarkRed);
             //
@@ -170,7 +170,7 @@ namespace MyLittleClub
                 LayoutParameters = BLP,
                 Text = "Sport: ",
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
-                TextSize = 45,
+                TextSize = 30,
             };
             SportTv.SetTextColor(Color.DarkRed);
             //
@@ -203,7 +203,7 @@ namespace MyLittleClub
             ProfilePicButton = new Button(this)
             {
                 Text = "Take Pic",
-                TextSize = 45,
+                TextSize = 30,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
             ProfilePicButton.SetTextColor(Color.DarkRed);
@@ -221,7 +221,7 @@ namespace MyLittleClub
             SaveButton = new Button(this)
             {
                 Text = "Save",
-                TextSize = 45,
+                TextSize = 30,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
             SaveButton.SetTextColor(Color.DarkRed);

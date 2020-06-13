@@ -36,7 +36,7 @@ namespace MyLittleClub
             SetContentView(Resource.Layout.AddTrainingLayout);
             admin = MyStuff.GetAdmin();
             WrapContParams.SetMargins(5, 5, 5, 5);
-            OneTwentyParams.SetMargins(5, 5, 5, 5);
+            OneTwentyParams.SetMargins(5,5,5,5);
             BuildAddTrainingScreen();
         }
         
@@ -68,7 +68,7 @@ namespace MyLittleClub
             AddTrainingNameTV = new TextView(this);
             AddTrainingNameTV.LayoutParameters = WrapContParams;
             AddTrainingNameTV.Text = "Exercise Name: ";
-            AddTrainingNameTV.TextSize = 45;
+            AddTrainingNameTV.TextSize = 30;
             AddTrainingNameTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Name AddTraining TextInputEditText
             TextInputLayout nameLayout = new TextInputLayout(this)
@@ -96,7 +96,7 @@ namespace MyLittleClub
             AddTrainingExplenationTV = new TextView(this);
             AddTrainingExplenationTV.LayoutParameters = WrapContParams;
             AddTrainingExplenationTV.Text = "Exercise Explenation: ";
-            AddTrainingExplenationTV.TextSize = 45;
+            AddTrainingExplenationTV.TextSize = 30;
             AddTrainingExplenationTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Adding views to layout
             AddTrainingExplenationLayout.AddView(AddTrainingExplenationTV);

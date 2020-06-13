@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Org.Apache.Http.Impl.Client;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using static Android.Widget.CalendarView;
 
 namespace MyLittleClub
@@ -108,14 +109,14 @@ namespace MyLittleClub
             MainPageOverallLayout.AddView(MainPageShowGroupsbtn);
             MainPageShowGroupsbtn.Click += this.MainPageShowGroupsbtn_Click;
         }
+        //Build Main Page's Views
 
         private void Profile_Click(object sender, EventArgs e)
         {
             System.Random rnd = new System.Random();
-;            Toast.MakeText(this, rnd.Next(1, 11) + "/10", ToastLength.Short).Show();
+;           Toast.MakeText(this, rnd.Next(1, 11) + "/10", ToastLength.Short).Show();
         }
 
-        //Build Main Page's Views
         private void MainPageShowGroupsbtn_Click(object sender, EventArgs e)
         {
             GetGroups();
@@ -157,7 +158,7 @@ namespace MyLittleClub
                 TextViewList2[i] = new TextView(this);
                 TextViewList2[i].LayoutParameters = WrapContParams;
                 TextViewList2[i].Text = groups[i].Location + "\n" + groups[i].time + "\n" + groups[i].age;
-                TextViewList2[i].TextSize = 45;
+                TextViewList2[i].TextSize = 30;
                 TextViewList2[i].Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
                 TextViewList2[i].SetTextColor(Color.Red);
                 //
@@ -169,7 +170,7 @@ namespace MyLittleClub
                 ButtonList[i] = new MyButton(this, i)
                 {
                     Text = "Students",
-                    TextSize = 45,
+                    TextSize = 30,
                     Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
                 };
                 ButtonList[i].SetTextColor(Color.DarkRed);
@@ -178,7 +179,7 @@ namespace MyLittleClub
                 ButtonList2[i] = new MyButton(this, i)
                 {
                     Text = "Edit",
-                    TextSize = 45,
+                    TextSize = 30,
                     Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
                 };
                 ButtonList2[i].SetTextColor(Color.DarkRed);
@@ -238,7 +239,7 @@ namespace MyLittleClub
                     TextViewList[i] = new TextView(this);
                     TextViewList[i].Text = "Name: " + "\nPhoneNum: " + "\nEmail: " + "\nParent1: " + "\nParent2: " + "\nNotes";
                     TextViewList[i].LayoutParameters = WrapContParams;
-                    TextViewList[i].TextSize = 45;
+                    TextViewList[i].TextSize = 30;
                     TextViewList[i].Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
                     TextViewList[i].SetTextColor(Color.Black);
                     //
@@ -758,7 +759,7 @@ namespace MyLittleClub
         public void GetDates()
         {
             dates = new List<string>();
-            Query query = database.Collection("Users").Document(admin1.email).Collection("Groups");
+            Query query = database.Collection("Users").Document(admin1.email).Collection("Meetings");
             query.Get().AddOnCompleteListener(new QueryListener((task) =>
             {
                 if (task.IsSuccessful)
@@ -769,14 +770,20 @@ namespace MyLittleClub
                         var document = snapshot.Documents;
                         foreach (DocumentSnapshot item in document)
                         {
-
-                            string day = (item.GetString("Date").ToString())[0] + "" + (item.GetString("Date").ToString())[1];
-                            string month = (item.GetString("Date").ToString())[3] + "" + (item.GetString("Date").ToString())[4];
-                            string year = (item.GetString("Date").ToString())[6] + "" + (item.GetString("Date").ToString())[7] + (item.GetString("Date").ToString())[8] + "" + (item.GetString("Date").ToString())[9];
-                            int inday = int.Parse(day);
-                            int inmonth = int.Parse(month);
-                            int inyear = int.Parse(year);
-                            dates.Add(MyStuff.MakeDateString(inyear, inmonth, inday));
+                            try
+                            {
+                                string day = (item.GetString("Date").ToString())[0] + "" + (item.GetString("Date").ToString())[1];
+                                string month = (item.GetString("Date").ToString())[3] + "" + (item.GetString("Date").ToString())[4];
+                                string year = (item.GetString("Date").ToString())[6] + "" + (item.GetString("Date").ToString())[7] + "" + (item.GetString("Date").ToString())[8] + "" + (item.GetString("Date").ToString())[9];
+                                int inday = int.Parse(day);
+                                int inmonth = int.Parse(month);
+                                int inyear = int.Parse(year);
+                                dates.Add(MyStuff.MakeDateString(inyear, inmonth, inday));
+                            }
+                            catch
+                            {
+                                Toasty.Normal(this, "Empty", 5).Show();
+                            }
                         }
                     }
                 }

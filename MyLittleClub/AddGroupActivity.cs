@@ -104,7 +104,7 @@ namespace MyLittleClub
             LocationAddGroupTV = new TextView(this);
             LocationAddGroupTV.LayoutParameters = WrapContParams;
             LocationAddGroupTV.Text = "Location: ";
-            LocationAddGroupTV.TextSize = 45;
+            LocationAddGroupTV.TextSize = 30;
             LocationAddGroupTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Location AddGroup TextInputEditText
             TextInputLayout Location = new TextInputLayout(this)
@@ -133,7 +133,7 @@ namespace MyLittleClub
             AgeAddGroupTV = new TextView(this);
             AgeAddGroupTV.LayoutParameters = WrapContParams;
             AgeAddGroupTV.Text = "Age Range: ";
-            AgeAddGroupTV.TextSize = 45;
+            AgeAddGroupTV.TextSize = 30;
             AgeAddGroupTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             AgeAddGroupTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Age AddGroup TextInputEditText
@@ -163,7 +163,7 @@ namespace MyLittleClub
             GroupLevelAddGroupTV = new TextView(this);
             GroupLevelAddGroupTV.LayoutParameters = WrapContParams;
             GroupLevelAddGroupTV.Text = "Group Level: ";
-            GroupLevelAddGroupTV.TextSize = 45;
+            GroupLevelAddGroupTV.TextSize = 30;
             GroupLevelAddGroupTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             GroupLevelAddGroupTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the GroupLevel AddGroup TextInputEditText

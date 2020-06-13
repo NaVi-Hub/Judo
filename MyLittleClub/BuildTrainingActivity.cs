@@ -60,7 +60,7 @@ namespace MyLittleClub
         #endregion
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            WrapContParams.SetMargins(5, 5, 5, 5);
+                        WrapContParams.SetMargins(5, 5, 5, 5);
             OneTwentyParams.SetMargins(5, 5, 5, 5);
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
@@ -89,7 +89,7 @@ namespace MyLittleClub
             OAdurationTV.LayoutParameters = BLP;
             OAdurationTV.Text = "";
             OAdurationTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            OAdurationTV.TextSize = 45;
+            OAdurationTV.TextSize = 30;
             Overalllayout.AddView(OAdurationTV);
             //
             ScrollViewsLayout = new LinearLayout(this);
@@ -286,7 +286,7 @@ namespace MyLittleClub
             DurationDialogTV.LayoutParameters = vlp;
             DurationDialogTV.Text = "Duration: ";
             DurationDialogTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            DurationDialogTV.TextSize = 45;
+            DurationDialogTV.TextSize = 30;
             //Edit text
             TextInputLayout dur = new TextInputLayout(this)
             {
@@ -313,7 +313,7 @@ namespace MyLittleClub
             Button DialogButton = new Button(this);
             DialogButton.LayoutParameters = vlp;
             DialogButton.Text = "Add";
-            DialogButton.TextSize = 45;
+            DialogButton.TextSize = 30;
             DialogButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             DialogButton.Click += this.DialogButton_Click;
             DurationDialogLayout.AddView(DialogButton);
@@ -376,7 +376,7 @@ namespace MyLittleClub
             //
             DialogExplenationTextView = new TextView(this);
             DialogExplenationTextView.Text = ab1.explenatiotn.ToString();
-            DialogExplenationTextView.TextSize = 45;
+            DialogExplenationTextView.TextSize = 30;
             DialogExplenationTextView.SetTextColor(Color.Black);
             //
             ////Add BitMap

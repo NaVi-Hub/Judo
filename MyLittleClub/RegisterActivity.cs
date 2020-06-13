@@ -44,10 +44,10 @@ namespace MyLittleClub
         protected override void OnCreate(Bundle savedInstanceState)
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
+            base.OnCreate(savedInstanceState);
             OneTwentyParams.SetMargins(5, 5, 5, 5);
             WrapContParams.SetMargins(5, 5, 5, 5);
-            base.OnCreate(savedInstanceState);
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.RegisterLayout);
             database = MyStuff.database;
             GetEmails();
@@ -95,7 +95,7 @@ namespace MyLittleClub
             NameLoginTV = new TextView(this);
             NameLoginTV.LayoutParameters = WrapContParams;
             NameLoginTV.Text = "Name: ";
-            NameLoginTV.TextSize = 45;
+            NameLoginTV.TextSize = 30;
             NameLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Name Login TextInputEditText
             NameLoginET = new TextInputEditText(this);
@@ -119,7 +119,7 @@ namespace MyLittleClub
             MailLoginTV = new TextView(this);
             MailLoginTV.LayoutParameters = WrapContParams;
             MailLoginTV.Text = "EMail: ";
-            MailLoginTV.TextSize = 45;
+            MailLoginTV.TextSize = 30;
             MailLoginTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             MailLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Mail Login TextInputEditText
@@ -144,7 +144,7 @@ namespace MyLittleClub
             SportLoginTV = new TextView(this);
             SportLoginTV.LayoutParameters = WrapContParams;
             SportLoginTV.Text = "Sport: ";
-            SportLoginTV.TextSize = 45;
+            SportLoginTV.TextSize = 30;
             SportLoginTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             SportLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Sport Login TextInputEditText
@@ -169,7 +169,7 @@ namespace MyLittleClub
             PhoneNumberLoginTV = new TextView(this);
             PhoneNumberLoginTV.LayoutParameters = WrapContParams;
             PhoneNumberLoginTV.Text = "PhoneNum: ";
-            PhoneNumberLoginTV.TextSize = 45;
+            PhoneNumberLoginTV.TextSize = 30;
             PhoneNumberLoginTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             PhoneNumberLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the PhoneNumber Login TextInputEditText
@@ -196,7 +196,7 @@ namespace MyLittleClub
             Login1.Text = "Log-In";
             Login1.SetTextColor(Color.Blue);
             Login1.Click += this.Login1_Click;
-            Login1.TextSize = 45;
+            Login1.TextSize = 30;
             LoginLoginLayout.AddView(Login1);
             OverAllLoginLayout.AddView(LoginLoginLayout);
             //=======================================================================================================================================
@@ -262,7 +262,7 @@ namespace MyLittleClub
             WrapContParams.SetMargins(20, 20, 5, 10);
             MailLoginTV1.LayoutParameters = WrapContParams;
             MailLoginTV1.Text = "EMail: ";
-            MailLoginTV1.TextSize = 45;
+            MailLoginTV1.TextSize = 30;
             MailLoginTV1.SetForegroundGravity(Android.Views.GravityFlags.Center);
             MailLoginTV1.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Mail Login TextInputEditText

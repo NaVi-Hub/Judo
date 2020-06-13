@@ -80,7 +80,7 @@ namespace MyLittleClub
             NameAddStudentTV = new TextView(this);
             NameAddStudentTV.LayoutParameters = WrapContParams;
             NameAddStudentTV.Text = "Name: ";
-            NameAddStudentTV.TextSize = 45;
+            NameAddStudentTV.TextSize = 30;
             NameAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Name AddStudent TextInputEditText
             TextInputLayout nameLayout = new TextInputLayout(this)
@@ -109,7 +109,7 @@ namespace MyLittleClub
             PhoneNumAddStudentTV = new TextView(this);
             PhoneNumAddStudentTV.LayoutParameters = WrapContParams;
             PhoneNumAddStudentTV.Text = "Phone # ";
-            PhoneNumAddStudentTV.TextSize = 45;
+            PhoneNumAddStudentTV.TextSize = 30;
             PhoneNumAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             PhoneNumAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the PhoneNum AddStudent TextInputEditText
@@ -140,7 +140,7 @@ namespace MyLittleClub
             EmailAddStudentTV = new TextView(this);
             EmailAddStudentTV.LayoutParameters = WrapContParams;
             EmailAddStudentTV.Text = "Enter Email: ";
-            EmailAddStudentTV.TextSize = 45;
+            EmailAddStudentTV.TextSize = 30;
             EmailAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             EmailAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Email AddStudent TextInputEditText
@@ -171,7 +171,7 @@ namespace MyLittleClub
             Parent1NameAddStudentTV = new TextView(this);
             Parent1NameAddStudentTV.LayoutParameters = WrapContParams;
             Parent1NameAddStudentTV.Text = "Parent1 Name: ";
-            Parent1NameAddStudentTV.TextSize = 45;
+            Parent1NameAddStudentTV.TextSize = 30;
             Parent1NameAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             Parent1NameAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Parent1Name AddStudent TextInputEditText
@@ -200,7 +200,7 @@ namespace MyLittleClub
             Parent2NameAddStudentTV = new TextView(this);
             Parent2NameAddStudentTV.LayoutParameters = WrapContParams;
             Parent2NameAddStudentTV.Text = "Parent2 Name: ";
-            Parent2NameAddStudentTV.TextSize = 45;
+            Parent2NameAddStudentTV.TextSize = 30;
             Parent2NameAddStudentTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             Parent2NameAddStudentTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Parent2Name AddStudent TextInputEditText
@@ -229,7 +229,7 @@ namespace MyLittleClub
             AddStudentExplenationTV = new TextView(this);
             AddStudentExplenationTV.LayoutParameters = WrapContParams;
             AddStudentExplenationTV.Text = "Student Notes: ";
-            AddStudentExplenationTV.TextSize = 45;
+            AddStudentExplenationTV.TextSize = 30;
             AddStudentExplenationTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Adding views to layout
             AddStudentExplenationLayout.AddView(AddStudentExplenationTV);
