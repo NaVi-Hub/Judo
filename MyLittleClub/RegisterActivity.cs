@@ -45,8 +45,6 @@ namespace MyLittleClub
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
-            OneTwentyParams.SetMargins(5, 5, 5, 5);
-            WrapContParams.SetMargins(5, 5, 5, 5);
             Platform.Init(this, savedInstanceState);
             SetContentView(Resource.Layout.RegisterLayout);
             database = MyStuff.database;
@@ -335,11 +333,15 @@ namespace MyLittleClub
         //Intents to Camera
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
-            base.OnActivityResult(requestCode, resultCode, data);
-            Bitmap bitmap = (Bitmap)data.Extras.Get("data");
-            ImageViewProfileImage.SetImageBitmap(bitmap);
-            BitmapDrawable drawable = (BitmapDrawable)ImageViewProfileImage.Drawable;
-            BitProfilePic  = drawable.Bitmap;
+            try
+            {
+                base.OnActivityResult(requestCode, resultCode, data);
+                Bitmap bitmap = (Bitmap)data.Extras.Get("data");
+                ImageViewProfileImage.SetImageBitmap(bitmap);
+                BitmapDrawable drawable = (BitmapDrawable)ImageViewProfileImage.Drawable;
+                BitProfilePic = drawable.Bitmap;
+            }
+            catch { }
         }
         //This is called after camera took a picture
         private void LoginButton1_Click(object sender, System.EventArgs e)

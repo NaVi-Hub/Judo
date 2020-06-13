@@ -48,8 +48,6 @@ namespace MyLittleClub
         ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            WrapContParams.SetMargins(5, 5, 5, 5);
-            OneTwentyParams.SetMargins(5, 5, 5, 5);
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             CheckBoxList = new List<CheckBox>();
             base.OnCreate(savedInstanceState);

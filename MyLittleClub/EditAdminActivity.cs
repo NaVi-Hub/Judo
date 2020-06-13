@@ -38,7 +38,6 @@ namespace MyLittleClub
         LinearLayout.LayoutParams EtLP = new LinearLayout.LayoutParams(650, 200);
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            WrapContParams.SetMargins(5, 5, 5, 5);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.EditAminLayout);
             admin = MyStuff.GetAdmin();

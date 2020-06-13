@@ -37,8 +37,6 @@ namespace MyLittleClub
         protected override void OnCreate(Bundle savedInstanceState)
 
         {
-            WrapContParams.SetMargins(5, 5, 5, 5);
-            OneTwentyParams.SetMargins(5, 5, 5, 5);
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddStudentsLayout);

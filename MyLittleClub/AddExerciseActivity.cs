@@ -35,8 +35,6 @@ namespace MyLittleClub
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddTrainingLayout);
             admin = MyStuff.GetAdmin();
-            WrapContParams.SetMargins(5, 5, 5, 5);
-            OneTwentyParams.SetMargins(5,5,5,5);
             BuildAddTrainingScreen();
         }
         

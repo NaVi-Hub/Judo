@@ -39,8 +39,6 @@ namespace MyLittleClub
         //https://docs.microsoft.com/en-us/xamarin/android/app-fundamentals/graphics-and-animation
         protected override void OnCreate(Bundle savedInstanceState)
         {
-                        WrapContParams.SetMargins(5, 5, 5, 5);
-            OneTwentyParams.SetMargins(5, 5, 5, 5);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.AddMeetingLayout);
             database = MyStuff.database;

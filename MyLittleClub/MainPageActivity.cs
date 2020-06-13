@@ -45,7 +45,6 @@ namespace MyLittleClub
         CalendarView calendar;
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            WrapContParams.SetMargins(5, 5, 5, 5);
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.MainPageLayout);
@@ -321,15 +320,13 @@ namespace MyLittleClub
                 TextSize = 20,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
-            LocET.SetBackgroundResource(Resource.Drawable.MyBackground);
             TextInputLayout Loc = new TextInputLayout(this)
             {
                 LayoutParameters = WrapContParams,
                 Orientation = Orientation.Horizontal,
             };
             LocationLayout.AddView(LocTV);
-            Loc.AddView(LocET);
-            LocationLayout.AddView(Loc);
+            LocationLayout.AddView(LocET);
             #endregion
 
             #region Age Defining
@@ -355,15 +352,8 @@ namespace MyLittleClub
                 TextSize = 20,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
-            AgeET.SetBackgroundResource(Resource.Drawable.MyBackground);
-            TextInputLayout Age = new TextInputLayout(this)
-            {
-                LayoutParameters = WrapContParams,
-                Orientation = Orientation.Horizontal,
-            };
             AgeLayout.AddView(AgeTV);
-            Age.AddView(AgeET);
-            AgeLayout.AddView(Age);
+            AgeLayout.AddView(AgeET);
             #endregion
 
             #region Level Defining
@@ -389,15 +379,8 @@ namespace MyLittleClub
                 TextSize = 20,
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
-            LVLET.SetBackgroundResource(Resource.Drawable.MyBackground);
-            TextInputLayout LVL = new TextInputLayout(this)
-            {
-                LayoutParameters = WrapContParams,
-                Orientation = Orientation.Horizontal,
-            };
             LVLLayout.AddView(LVLTV);
-            LVL.AddView(LVLET);
-            LVLLayout.AddView(LVL);
+            LVLLayout.AddView(LVLET);
             #endregion
 
             #region Competetive defining

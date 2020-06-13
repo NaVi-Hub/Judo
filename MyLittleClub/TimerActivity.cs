@@ -22,7 +22,6 @@ namespace MyLittleClub
         LinearLayout OverAllTimerLayout;
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            WrapContParams.SetMargins(5, 5, 5, 5);
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.TimerLayout);
             OverAllTimerLayout = FindViewById<LinearLayout>(Resource.Id.TimerLLayout);
