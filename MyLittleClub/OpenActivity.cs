@@ -13,7 +13,7 @@ namespace MyLittleClub
         ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            sp = this.GetSharedPreferences("detailss", FileCreationMode.Private);
+            sp = this.GetSharedPreferences("details2", FileCreationMode.Private);
             var editor = sp.Edit();
             base.OnCreate(savedInstanceState);
             database = GetDataBase();
@@ -35,11 +35,11 @@ namespace MyLittleClub
         {
             FirebaseFirestore database;
             var options = new FirebaseOptions.Builder()
-                .SetProjectId("mylittleclubproject")
-                .SetApplicationId("mylittleclubproject")
-                .SetApiKey("AIzaSyDG3jgrxvbvW8pwKZRPXjsm1EHNAkM_k5U")
-                .SetDatabaseUrl("https://mylittleclubproject.firebaseio.com")
-                .SetStorageBucket("mylittleclubproject.appspot.com")
+                .SetProjectId("mylittleclub2")
+                .SetApplicationId("mylittleclub2")
+                .SetApiKey("AIzaSyDITEqmraj1mxYhwV2wUP6fOtPacPNTtrM")
+                .SetDatabaseUrl("https://mylittleclub2.firebaseio.com")
+                .SetStorageBucket("mylittleclub2.appspot.com")
                 .Build();
             var app = FirebaseApp.InitializeApp(this, options);
             database = FirebaseFirestore.GetInstance(app);

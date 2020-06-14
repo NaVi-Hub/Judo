@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "534348360802",
+    "firebase_url": "https://mylittleclub2.firebaseio.com",
+    "project_id": "mylittleclub2",
+    "storage_bucket": "mylittleclub2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:534348360802:android:4c25db0e03ce1b19f4353b",
+        "android_client_info": {
+          "package_name": "com.companyname.mylittleclub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "534348360802-u74703ols9u2q6rc2bbpmmoit88ujl54.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDITEqmraj1mxYhwV2wUP6fOtPacPNTtrM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "534348360802-u74703ols9u2q6rc2bbpmmoit88ujl54.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
