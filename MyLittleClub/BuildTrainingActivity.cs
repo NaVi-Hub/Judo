@@ -60,6 +60,7 @@ namespace MyLittleClub
         #endregion
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            Times = new List<int>();
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
             this.SetContentView(Resource.Layout.BuildGroupLayout);
@@ -156,10 +157,11 @@ namespace MyLittleClub
                         alert.SetPositiveButton("YES", (senderAlert, args) =>
                         {
                             HashMap map = new HashMap();
-                            Training training = new Training(selectedExercises);
                             for (int i = 0; i < selectedExercises.Count; i++)
                             {
                                 map.Put("Ex" + i, selectedExercises[i].name);
+                                map.Put("Ex" + i + " Explenation", selectedExercises[i].explenatiotn);
+                                map.Put("Ex" + i + " Time", Times[i]);
                             }
                             DocumentReference doref = database.Collection("Users").Document(admin.email).Collection("Trainings").Document(currGroup);
                             doref.Set(map);
@@ -187,6 +189,8 @@ namespace MyLittleClub
                         for (int i = 0; i < selectedExercises.Count; i++)
                         {
                             map.Put("Ex" + i, selectedExercises[i].name);
+                            map.Put("Ex" + i + " Explenation", selectedExercises[i].explenatiotn);
+                            map.Put("Ex" + i + " Time", Times[i]);
                         }
                         DocumentReference doref = database.Collection("Users").Document(admin.email).Collection("Trainings").Document(currGroup);
                         doref.Set(map);
@@ -336,6 +340,7 @@ namespace MyLittleClub
                 OAdurationTV.SetTextColor(Color.Black);
             }
             CurrMyButton.Time = a;
+            Times.Add(int.Parse(DurationDialogET.Text));
             DurationDialog.Dismiss();
         }
         bool h = false;
@@ -385,6 +390,7 @@ namespace MyLittleClub
                         if (buttons[i].Text == b.Text)
                         {
                             b.Time = buttons[i].Time;
+
                             h = true;
                         }
                     }
@@ -459,9 +465,10 @@ namespace MyLittleClub
             ll.AddView(DialogLayout);
             d1.Show();
         }
+        //Builds Ex Dialog
         EditText dur;
         MyButton Save;
-        //Builds Ex Dialog
+        List<int> Times;
         private void Copy_Click(object sender, EventArgs e)
         {
             BuildDialog(sender, 1);

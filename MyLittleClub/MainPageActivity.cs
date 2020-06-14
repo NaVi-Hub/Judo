@@ -173,6 +173,8 @@ namespace MyLittleClub
             TextView[] TextViewList2 = new TextView[groups.Count];
             MyButton[] ButtonList = new MyButton[groups.Count];
             MyButton[] ButtonList2 = new MyButton[groups.Count];
+            MyButton[] ButtonList3 = new MyButton[groups.Count];
+            MyButton[] ButtonList4 = new MyButton[groups.Count];
             ScrollView SV = new ScrollView(this);
             SV.LayoutParameters = new ViewGroup.LayoutParams(950, 1500);
             DialogLayout.AddView(SV);
@@ -223,6 +225,24 @@ namespace MyLittleClub
                 };
                 ButtonList2[i].SetTextColor(Color.DarkRed);
                 ButtonList2[i].Click += this.ButtonList2_Click;
+                //                
+                ButtonList3[i] = new MyButton(this, i)
+                {
+                    Text = "Training",
+                    TextSize = 30,
+                    Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                };
+                ButtonList3[i].SetTextColor(Color.DarkRed);
+                ButtonList3[i].Click += this.Training_Click;
+                //
+                ButtonList4[i] = new MyButton(this, i)
+                {
+                    Text = "Edit",
+                    TextSize = 30,
+                    Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                };
+                ButtonList4[i].SetTextColor(Color.DarkRed);
+                ButtonList4[i].Click += this.Delete_Click;
                 //
                 LinearList[i].AddView(TextViewList[i]);
                 LinearList[i].AddView(TextViewList2[i]);
@@ -234,6 +254,20 @@ namespace MyLittleClub
             SV.AddView(ll);
             d.Show();
         }
+
+        private void Delete_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Training_Click(object sender, EventArgs e)
+        {
+            d = new Dialog(this);
+            d.SetContentView(Resource.Layout.MyDialog);
+            d.SetCancelable(true);
+            LinearLayout DialogLayout = d.FindViewById<LinearLayout>(Resource.Id.AbcDEF);
+        }
+
         //Builds Groups Dialog
         private void ButtonList_Click(object sender, EventArgs e)
         {
@@ -841,6 +875,40 @@ namespace MyLittleClub
                             }
                         }
                         BuildStudentsDialog();
+                    }
+                }
+            }
+            ));
+        }
+        //Gets all students of received group
+
+        List<int> Times;
+        public void GetTraining(Group group)
+        {
+            Students = new List<Student>();
+            Query query = database.Collection("Users").Document(admin1.email).Collection("Trainings");
+            query.Get().AddOnCompleteListener(new QueryListener((task) =>
+            {
+                if (task.IsSuccessful)
+                {
+                    var snapshot = (QuerySnapshot)task.Result;
+                    if (!snapshot.IsEmpty)
+                    {
+                        var document = snapshot.Documents;
+                        foreach (DocumentSnapshot item in document)
+                        {
+                            string group1 = item.GetString("Group");
+                            if (group1 == group.Location + " " + group.time + " " + group.age)
+                            {
+                                int i = 0;
+                                while (item.GetString("Ex" + i) != null)
+                                {
+                                    Training tr = new Training();
+                                    tr.AddTraining(new Exercise(item.GetString("Ex" + i), item.GetString("Ex" + i + " Explenation")));
+                                    Times.Add(int.Parse(item.GetString("Ex" + i + " Time")));
+                                }
+                            }
+                        }
                     }
                 }
             }
