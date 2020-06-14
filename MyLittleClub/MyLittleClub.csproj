@@ -138,7 +138,7 @@
     <AndroidResource Include="Resources\drawable\BlackOutLine.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\menu\MyLittleMenu.xml">
+    <AndroidResource Include="Resources\menu\menu.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

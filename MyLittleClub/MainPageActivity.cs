@@ -20,6 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using static Android.Widget.CalendarView;
+using V7Toolbar = Android.Support.V7.Widget.Toolbar;
+using Android.Support.V7.App;
+using Android.Support.V4.Widget;
 
 namespace MyLittleClub
 {
@@ -44,22 +47,31 @@ namespace MyLittleClub
         ViewGroup.LayoutParams VLP = new ViewGroup.LayoutParams(600, 800);
         CalendarView calendar;
         Switch Swi;
+        DrawerLayout drawerLayout;
+        NavigationView navigationView;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
             base.OnCreate(savedInstanceState);
-            SetContentView(Resource.Layout.MainPageLayout);
             admin1 = MyStuff.GetAdmin();
             database = MyStuff.database;
+            SetContentView(Resource.Layout.MainPageLayout);
             GetDates();
         }
         public void BuildMainPage()
         {
             //Main Page Overall Layout defining
-            MainPageOverallLayout = FindViewById<LinearLayout>(Resource.Id.MainPageLayout1);
+            MainPageOverallLayout = FindViewById<LinearLayout>(Resource.Id.AAA);
             MainPageOverallLayout.Orientation = Orientation.Vertical;
-            MainPageOverallLayout.SetGravity(Android.Views.GravityFlags.CenterHorizontal);
+            MainPageOverallLayout.SetGravity(GravityFlags.CenterHorizontal);
             BuildCalendar();
+            var toolbar = FindViewById<V7Toolbar>(Resource.Id.toolbar);
+            SetSupportActionBar(toolbar);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(true);
+            SupportActionBar.SetDisplayShowTitleEnabled(false);
+            SupportActionBar.SetHomeButtonEnabled(true);
+            drawerLayout = FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+            navigationView = FindViewById<NavigationView>(Resource.Id.nav_view);
             //Tile layout
             MainPageTitleLayout = new LinearLayout(this);
             MainPageTitleLayout.LayoutParameters = WrapContParams;
@@ -118,8 +130,12 @@ namespace MyLittleClub
             MainPageShowGroupsbtn.Text = "Show Groups";
             MainPageOverallLayout.AddView(MainPageShowGroupsbtn);
             MainPageShowGroupsbtn.Click += this.MainPageShowGroupsbtn_Click;
-        }
+            //
 
+        }
+        //Build Main Page's Views
+
+        #region Service
         private void Swi_CheckedChange(object sender, CompoundButton.CheckedChangeEventArgs e)
         {
 
@@ -144,7 +160,7 @@ namespace MyLittleClub
             Intent i = new Intent(this, typeof(MyService));
             this.StopService(i);
         }
-        //Build Main Page's Views
+        #endregion
 
         private void Profile_Click(object sender, EventArgs e)
         {
@@ -657,13 +673,13 @@ namespace MyLittleClub
         }
 
         //Defining and adding views to layout
-        public override bool OnCreateOptionsMenu(IMenu menu)
+        /*public override bool OnCreateOptionsMenu(IMenu menu)
         {
-            MenuInflater.Inflate(Resource.Menu.MyLittleMenu, menu);
+            MenuInflater.Inflate(Resource.Menu.menu, menu);
             return base.OnCreateOptionsMenu(menu);
-        }
+        } */
         //Menu inflator
-        public override bool OnOptionsItemSelected(IMenuItem item)
+        /*public override bool OnOptionsItemSelected(IMenuItem item)
         {
             switch (item.ItemId)
             {
@@ -710,6 +726,16 @@ namespace MyLittleClub
                         StartActivity(intent3);
                         return true;
                     }
+            }
+            return base.OnOptionsItemSelected(item);
+        }*/
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            switch (item.ItemId)
+            {
+                case Android.Resource.Id.Home:
+                    drawerLayout.OpenDrawer(Android.Support.V4.View.GravityCompat.Start);
+                    return true;
             }
             return base.OnOptionsItemSelected(item);
         }
