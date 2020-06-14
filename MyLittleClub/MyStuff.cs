@@ -20,11 +20,14 @@ using System.Globalization;
 using System.IO;
 using Android.Views.Animations;
 using Android.Support.Design.Widget;
+using Android.Media;
+using System.Runtime.CompilerServices;
 
 namespace MyLittleClub
 {
     static class MyStuff
     {
+        public static MediaPlayer player;
         public static List<string> Emails = new List<string>();
         public static bool IsValidName(string name, TextInputEditText NameET ,Activity a)
         {
@@ -171,6 +174,7 @@ namespace MyLittleClub
             editor.Remove("Sport");
             editor.Remove("PhoneNum");
             editor.Remove("Email");
+            editor.Remove("Profile");
             editor.Commit();
         }
         //Firebase defining
@@ -209,5 +213,6 @@ namespace MyLittleClub
             return img;
         }
         // @Raz Shefer
+        
     }
 }

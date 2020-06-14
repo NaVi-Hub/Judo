@@ -4,9 +4,14 @@
     <padding 
       android:left="10dp"
       android:right="10dp"
-      android:top="5dp" 
+      android:top="10dp" 
       android:bottom="10dp"/>
   <stroke
       android:width="3dp"
-      android:color="@android:color/black" />
+      android:color="@android:color/holo_blue_dark" />
+  <corners
+    android:radius="2dp" />
+  <gradient 
+android:startColor="@android:color/white"
+android:endColor="@android:color/darker_gray"/>
 </shape>

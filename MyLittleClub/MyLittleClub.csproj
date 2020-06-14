@@ -74,6 +74,7 @@
     <Compile Include="Exercise.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="MyButton.cs" />
+    <Compile Include="MyService.cs" />
     <Compile Include="MyStuff.cs" />
     <Compile Include="MyTimer.cs" />
     <Compile Include="QueryListener.cs" />
@@ -218,6 +219,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\MyBackground.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Raw\BGmusic.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

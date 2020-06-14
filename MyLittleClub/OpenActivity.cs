@@ -13,7 +13,7 @@ namespace MyLittleClub
         ISharedPreferences sp;
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            sp = this.GetSharedPreferences("details", FileCreationMode.Private);
+            sp = this.GetSharedPreferences("detailss", FileCreationMode.Private);
             var editor = sp.Edit();
             base.OnCreate(savedInstanceState);
             database = GetDataBase();

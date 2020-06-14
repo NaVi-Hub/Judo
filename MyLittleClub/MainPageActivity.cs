@@ -26,7 +26,7 @@ namespace MyLittleClub
     [Activity(Theme = "@style/AppTheme")]
     public class MainPageActivity : AppCompatActivity, IOnDateChangeListener
     {
-        
+        protected Android.Media.MediaPlayer player = MyStuff.player;
         ISharedPreferences sp;
         LinearLayout MainPageOverallLayout, MainPageTitleLayout, MainPageProfilePictureLayout;
         TextView MainPageTitleTV, MainPageTitleTV2;
@@ -43,6 +43,7 @@ namespace MyLittleClub
         Dialog d;
         ViewGroup.LayoutParams VLP = new ViewGroup.LayoutParams(600, 800);
         CalendarView calendar;
+        Switch Swi;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             sp = this.GetSharedPreferences("details", FileCreationMode.Private);
@@ -74,7 +75,7 @@ namespace MyLittleClub
             //Profile Picture Layout
             MainPageProfilePictureLayout = new LinearLayout(this);
             MainPageProfilePictureLayout.LayoutParameters = WrapContParams;
-            MainPageProfilePictureLayout.Orientation = Orientation.Vertical;
+            MainPageProfilePictureLayout.Orientation = Orientation.Horizontal;
             MainPageProfilePictureLayout.SetGravity(Android.Views.GravityFlags.Center);
             //Profile Pic
             Profile = new ImageView(this);
@@ -83,6 +84,16 @@ namespace MyLittleClub
             Profile.SetMinimumHeight(400);
             Profile.Click += this.Profile_Click;
             MainPageProfilePictureLayout.AddView(Profile);
+            //
+            Swi = new Switch(this);
+            Swi.SetHeight(15);
+            Swi.SetWidth(70);
+            Swi.Checked = false;
+            Swi.TextOff = "Off";
+            Swi.TextOn = "On";
+            Swi.CheckedChange += this.Swi_CheckedChange;
+            MainPageProfilePictureLayout.AddView(Swi);
+            //
             //Title TV 2
             MainPageTitleTV2 = new TextView(this);
             MainPageTitleTV2.LayoutParameters = WrapContParams;
@@ -107,6 +118,31 @@ namespace MyLittleClub
             MainPageShowGroupsbtn.Text = "Show Groups";
             MainPageOverallLayout.AddView(MainPageShowGroupsbtn);
             MainPageShowGroupsbtn.Click += this.MainPageShowGroupsbtn_Click;
+        }
+
+        private void Swi_CheckedChange(object sender, CompoundButton.CheckedChangeEventArgs e)
+        {
+
+            if(e.IsChecked)
+            {
+                Toasty.Success(this, "Music Started", 5, false).Show();
+                StartMyService();
+            }
+            else
+            {
+                Toasty.Success(this, "Music Stopped", 5, false).Show();
+                StopMyService();
+            }
+        }
+        public void StartMyService()
+        {
+            Intent i = new Intent(this, typeof(MyService));
+            this.StartService(i);
+        }
+        public void StopMyService()
+        {
+            Intent i = new Intent(this, typeof(MyService));
+            this.StopService(i);
         }
         //Build Main Page's Views
 
@@ -725,7 +761,6 @@ namespace MyLittleClub
                         {
                             string loc = (item.GetString("Location")).ToString();
                             string Age = (item.GetString("Age")).ToString();
-                            string date = (item.GetString("Date")).ToString();
                             bool comp = item.GetBoolean("Comp").BooleanValue();
                             string level = (item.GetString("Level")).ToString();
                             string time = (item.GetString("Time")).ToString();

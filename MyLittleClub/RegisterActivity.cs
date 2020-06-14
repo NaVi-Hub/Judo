@@ -37,6 +37,7 @@ namespace MyLittleClub
         Button LoginButton;
         LinearLayout.LayoutParams MatchParentParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
         LinearLayout.LayoutParams OneTwentyParams = new LinearLayout.LayoutParams(420, 180);
+        LinearLayout.LayoutParams ETparams = new LinearLayout.LayoutParams(500, 140);
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
         LinearLayout.LayoutParams MatchParentParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, 200);
         FirebaseFirestore database;
@@ -96,16 +97,22 @@ namespace MyLittleClub
             NameLoginTV.TextSize = 30;
             NameLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Name Login TextInputEditText
+            TextInputLayout name = new TextInputLayout(this)
+            {
+                Orientation = Orientation.Horizontal,
+                LayoutParameters = WrapContParams,
+            };
             NameLoginET = new TextInputEditText(this);
             NameLoginET.SetBackgroundResource(Resource.Drawable.MyBackground);
-            NameLoginET.LayoutParameters = OneTwentyParams;
+            NameLoginET.LayoutParameters = ETparams;
             NameLoginET.Hint = "Enter Name";
             NameLoginET.TextSize = 30;
             NameLoginET.InputType = InputTypes.TextVariationPersonName;
             NameLoginET.SetSingleLine();
             //Adding views to layout
             NameLoginLayout.AddView(NameLoginTV);
-            NameLoginLayout.AddView(NameLoginET);
+            name.AddView(NameLoginET);
+            NameLoginLayout.AddView(name);
             OverAllLoginLayout.AddView(NameLoginLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -121,8 +128,13 @@ namespace MyLittleClub
             MailLoginTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             MailLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Mail Login TextInputEditText
+            TextInputLayout mail = new TextInputLayout(this)
+            {
+                Orientation = Orientation.Horizontal,
+                LayoutParameters = WrapContParams,
+            };
             MailLoginET = new TextInputEditText(this);
-            MailLoginET.LayoutParameters = OneTwentyParams;
+            MailLoginET.LayoutParameters = ETparams;
             MailLoginET.SetBackgroundResource(Resource.Drawable.MyBackground);
             MailLoginET.Hint = "Enter EMail";
             MailLoginET.InputType = InputTypes.TextVariationEmailAddress;
@@ -130,7 +142,8 @@ namespace MyLittleClub
             MailLoginET.SetSingleLine();
             //Adding views to layout
             MailLoginLayout.AddView(MailLoginTV);
-            MailLoginLayout.AddView(MailLoginET);
+            mail.AddView(MailLoginET);
+            MailLoginLayout.AddView(mail);
             OverAllLoginLayout.AddView(MailLoginLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -146,16 +159,22 @@ namespace MyLittleClub
             SportLoginTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             SportLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the Sport Login TextInputEditText
+            TextInputLayout sport = new TextInputLayout(this)
+            {
+                Orientation = Orientation.Horizontal,
+                LayoutParameters = WrapContParams,
+            };
             SportLoginET = new TextInputEditText(this);
             SportLoginET.SetBackgroundResource(Resource.Drawable.MyBackground);
-            SportLoginET.LayoutParameters = OneTwentyParams;
+            SportLoginET.LayoutParameters = ETparams;
             SportLoginET.Hint = "Sport";
             SportLoginET.TextSize = 30;
             SportLoginET.InputType = InputTypes.TextVariationShortMessage;
             SportLoginET.SetSingleLine();
             //Adding views to layout
             SportLoginLayout.AddView(SportLoginTV);
-            SportLoginLayout.AddView(SportLoginET);
+            sport.AddView(SportLoginET);
+            SportLoginLayout.AddView(sport);
             OverAllLoginLayout.AddView(SportLoginLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -171,16 +190,22 @@ namespace MyLittleClub
             PhoneNumberLoginTV.SetForegroundGravity(Android.Views.GravityFlags.Center);
             PhoneNumberLoginTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             //Defining the PhoneNumber Login TextInputEditText
+            TextInputLayout phon = new TextInputLayout(this)
+            {
+                Orientation = Orientation.Horizontal,
+                LayoutParameters = WrapContParams,
+            };
             PhoneNumberLoginET = new TextInputEditText(this);
             PhoneNumberLoginET.SetBackgroundResource(Resource.Drawable.MyBackground);
-            PhoneNumberLoginET.LayoutParameters = OneTwentyParams;
+            PhoneNumberLoginET.LayoutParameters = ETparams;
             PhoneNumberLoginET.Text = "05";
             PhoneNumberLoginET.TextSize = 30;
             PhoneNumberLoginET.InputType = InputTypes.ClassPhone;
             PhoneNumberLoginET.SetSingleLine();
             //Adding views to layout
             PhoneNumberLoginLayout.AddView(PhoneNumberLoginTV);
-            PhoneNumberLoginLayout.AddView(PhoneNumberLoginET);
+            phon.AddView(PhoneNumberLoginET);
+            PhoneNumberLoginLayout.AddView(phon);
             OverAllLoginLayout.AddView(PhoneNumberLoginLayout);
             //=======================================================================================================================================
             //=======================================================================================================================================
@@ -277,9 +302,11 @@ namespace MyLittleClub
             MailLoginET1.InputType = InputTypes.TextVariationEmailAddress;
             MailLoginET1.TextSize = 30;
             MailLoginET1.SetSingleLine();
+            MailLoginET1.SetBackgroundResource(Resource.Drawable.MyBackground);
             //Adding views to layout
             MailLoginLayout1.AddView(MailLoginTV1);
-            MailLoginLayout1.AddView(MailLoginET1);
+            a.AddView(MailLoginET1);
+            MailLoginLayout1.AddView(a);
             dLayout.AddView(MailLoginLayout1);
             //
             //
