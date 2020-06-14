@@ -91,7 +91,6 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\Katanf.ttf" />
     <None Include="google-services %281%29.json" />
-    <None Include="google-services.json" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="Assets\AboutAssets.txt" />
