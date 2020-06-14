@@ -13,7 +13,6 @@ using Firebase;
 using Firebase.Firestore;
 using Java.Util;
 using Xamarin.Essentials;
-using Android.Gms.Tasks;
 using Android.InputMethodServices;
 using Android.Views;
 using Android.Support.V7.Widget;
@@ -24,6 +23,9 @@ using Android.Graphics.Drawables;
 using Android.Views.Animations;
 using System.Linq;
 using Android.Support.Design.Widget;
+using Android;
+using System.Threading.Tasks;
+using Android.Telephony;
 
 namespace MyLittleClub
 {
@@ -50,10 +52,79 @@ namespace MyLittleClub
             SetContentView(Resource.Layout.RegisterLayout);
             database = MyStuff.database;
             GetEmails();
+            TryToGetPermissions();
         }
+        #region RuntimePermissions
 
+        async Task TryToGetPermissions()
+        {
+            if ((int)Build.VERSION.SdkInt >= 23)
+            {
+                await GetPermissionsAsync();
+                return;
+            }
 
+        }
+        const int RequestLocationId = 0;
+        readonly string[] PermissionsGroupLocation =
+            {
+                            //TODO add more permissions
+                            Manifest.Permission.SendSms,
+                            Manifest.Permission.WriteSms,
+             };
+        async Task GetPermissionsAsync()
+        {
+            const string permission = Manifest.Permission.AccessFineLocation;
 
+            if (CheckSelfPermission(permission) == (int)Android.Content.PM.Permission.Granted)
+            {
+                //TODO change the message to show the permissions name
+                return;
+            }
+            if (ShouldShowRequestPermissionRationale(permission))
+            {
+                //set alert for executing the task
+                Android.App.AlertDialog.Builder alert = new Android.App.AlertDialog.Builder(this);
+                alert.SetTitle("Permissions Needed");
+                alert.SetMessage("The application need SMS permissions to continue");
+                alert.SetPositiveButton("Request Permissions", (senderAlert, args) =>
+                {
+                    RequestPermissions(PermissionsGroupLocation, RequestLocationId);
+                });
+                alert.SetNegativeButton("Cancel", (senderAlert, args) =>
+                {
+                    Toast.MakeText(this, "Cancelled!", ToastLength.Short).Show();
+                });
+                Dialog dialog = alert.Create();
+                dialog.Show();
+                return;
+            }
+            RequestPermissions(PermissionsGroupLocation, RequestLocationId);
+        }
+        public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        {
+            switch (requestCode)
+            {
+                case RequestLocationId:
+                    {
+                        if (grantResults[0] == (int)Android.Content.PM.Permission.Granted)
+                        {
+
+                        }
+                        else
+                        {
+                            //Permission Denied :(
+                            Toast.MakeText(this, "SMS permissions denied", ToastLength.Short).Show();
+
+                        }
+                    }
+                    break;
+            }
+            //base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+        //https://github.com/egarim/XamarinAndroidSnippets/blob/master/XamarinAndroidRuntimePermissions
+        //https://youtu.be/Uzpy3qdYXmE
+        #endregion
         void BuildRegisterScreen()
         {
             //Defining the parent layout
@@ -441,7 +512,11 @@ namespace MyLittleClub
                     DocRef.Set(map);
                     MyStuff.PutToShared(admin);
                     Intent intent1 = new Intent(this, typeof(MainPageActivity));
-                    Toasty.Success(this, "Edited successfully", 5, true);
+                    Toasty.Success(this, "Edited successfully", 5, true).Show();
+                    //
+                    SmsManager sm = SmsManager.Default;
+                    sm.SendTextMessage(PhoneNumberLoginET.Text /*מספר טלפון*/, null, "Welcome to T-POV, " + NameLoginET.Text + "!"/*תכולה*/, null, null);
+                    //
                     StartActivity(intent1);
                 }
             }

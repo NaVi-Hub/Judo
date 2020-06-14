@@ -119,6 +119,7 @@ namespace MyLittleClub
             MainPageOverallLayout.AddView(MainPageShowGroupsbtn);
             MainPageShowGroupsbtn.Click += this.MainPageShowGroupsbtn_Click;
         }
+        //Build Main Page's Views
 
         private void Swi_CheckedChange(object sender, CompoundButton.CheckedChangeEventArgs e)
         {
@@ -144,7 +145,6 @@ namespace MyLittleClub
             Intent i = new Intent(this, typeof(MyService));
             this.StopService(i);
         }
-        //Build Main Page's Views
 
         private void Profile_Click(object sender, EventArgs e)
         {

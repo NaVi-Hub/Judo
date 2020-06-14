@@ -286,11 +286,6 @@ namespace MyLittleClub
             DurationDialogTV.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             DurationDialogTV.TextSize = 30;
             //Edit text
-            TextInputLayout dur = new TextInputLayout(this)
-            {
-                LayoutParameters = WrapContParams,
-                Orientation = Orientation.Horizontal,
-            };
             DurationDialogET = new TextInputEditText(this);
             DurationDialogET.SetBackgroundResource(Resource.Drawable.MyBackground);
             DurationDialogET.Hint = "Duration";
@@ -303,8 +298,7 @@ namespace MyLittleClub
             DialogInputLayout.Orientation = Orientation.Horizontal;
             //addind to layout
             DialogInputLayout.AddView(DurationDialogTV);
-            dur.AddView(DurationDialogET);
-            DialogInputLayout.AddView(dur);
+            DialogInputLayout.AddView(DurationDialogET);
             //Linear Layout
             DurationDialogLayout.AddView(DialogInputLayout);
             //button

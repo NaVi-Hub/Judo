@@ -267,7 +267,7 @@ namespace MyLittleClub
         private bool InputValid(string location, string ageRange, string grouplvl, bool cb)
         {
             int x = -1;
-            if (location != "" && ageRange != "" && grouplvl != "" && AddGroupTimeButton.Text != "Select Time" && AddGroupDateButton.Text != "Select Date")
+            if (location != "" && ageRange != "" && grouplvl != "" && AddGroupTimeButton.Text != "Select Time")
             {
                 return true;
             }
