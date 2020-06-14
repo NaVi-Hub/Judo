@@ -25,14 +25,14 @@ namespace MyLittleClub
         #region Parameters
         FirebaseFirestore database;
         Admin1 admin;
-        Button[] buttons;
+        MyButton[] buttons;
         bool InView = false;
-        Button CurrButton;
-        Button Send;
+        MyButton CurrMyButton;
+        MyButton Send;
         Dialog d1;
         LinearLayout DialogOverLayout, DialogNameLayout, DialogDurationExplenation;
-        TextView DialogNameTextView, DialogExplenationTextView;
-        Button DialogRemoveButton;
+        EditText DialogExplenationTextView, ExDialogTitle;
+        MyButton DialogRemoveMyButton;
         LinearLayout.LayoutParams WrapContParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
         Exercise ab1;
         LinearLayout.LayoutParams BLP = new LinearLayout.LayoutParams(350, 200);
@@ -44,7 +44,7 @@ namespace MyLittleClub
         ViewGroup.LayoutParams vOneTwentyParams = new ViewGroup.LayoutParams(650, 400);
         ViewGroup.LayoutParams vWrap = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
         //
-        LinearLayout Overalllayout, InsideButtonsSVL, InsideTrainingSVL, ScrollViewsLayout;
+        LinearLayout Overalllayout, InsideMyButtonsSVL, InsideTrainingSVL, ScrollViewsLayout;
         ScrollView BtnSV, TrainingSV;
         TextInputEditText DurationDialogET;
         TextView OAdurationTV;
@@ -96,11 +96,11 @@ namespace MyLittleClub
             //
             BtnSV = new ScrollView(this);
             BtnSV.LayoutParameters = LLLP;
-            InsideButtonsSVL = new LinearLayout(this);
-            InsideButtonsSVL.LayoutParameters = LLLP;
-            InsideButtonsSVL.Orientation = Orientation.Vertical;
+            InsideMyButtonsSVL = new LinearLayout(this);
+            InsideMyButtonsSVL.LayoutParameters = LLLP;
+            InsideMyButtonsSVL.Orientation = Orientation.Vertical;
             //
-            buttons = new Button[exes.Count];
+            buttons = new MyButton[exes.Count];
             //
             TrainingSV = new ScrollView(this);
             TrainingSV.LayoutParameters = LLLP;
@@ -108,24 +108,24 @@ namespace MyLittleClub
             InsideTrainingSVL.LayoutParameters = LLLP;
             InsideTrainingSVL.Orientation = Orientation.Vertical;
 
-            TrainingSV.Drag += Button_Drag;
+            TrainingSV.Drag += MyButton_Drag;
             //
             for (int i = 0; i<buttons.Length; i++)
             {
-                buttons[i] = new Button(this);
+                buttons[i] = new MyButton(this, i);
                 buttons[i].LayoutParameters = BLP;
                 buttons[i].Text = exes[i].name;
                 buttons[i].LongClick += this.BuildExerciseActivity_LongClick;
                 buttons[i].Click += this.BuildTrainingActivity_Click;
-                InsideButtonsSVL.AddView(buttons[i]);
+                InsideMyButtonsSVL.AddView(buttons[i]);
             }
             //
-            BtnSV.AddView(InsideButtonsSVL);
+            BtnSV.AddView(InsideMyButtonsSVL);
             ScrollViewsLayout.AddView(BtnSV);
             TrainingSV.AddView(InsideTrainingSVL);
             ScrollViewsLayout.AddView(TrainingSV);
             //
-            Send = new Button(this);
+            Send = new MyButton(this);
             Send.LayoutParameters = BLP;
             Send.Text = "Finish Training";
             Send.Click += this.Send_Click;
@@ -144,17 +144,46 @@ namespace MyLittleClub
         {
             if (InputLegit())
             {
-                if (int.Parse(OAdurationTV.Text) > 50 || int.Parse(OAdurationTV.Text) < 40 )
+                if (OAdurationTV.Text != "")
                 {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                    alert.SetTitle("Alert!");
-                    alert.SetMessage("Are you sure you want to add a group\nwith time setting difrent from the recommended");
-                    alert.SetCancelable(false);
-                    alert.SetIcon(Resource.Drawable.ShameLogo);
-                    alert.SetPositiveButton("YES", (senderAlert, args) =>
+                    if (int.Parse(OAdurationTV.Text) > 50 || int.Parse(OAdurationTV.Text) < 40)
+                    {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                        alert.SetTitle("Alert!");
+                        alert.SetMessage("Are you sure you want to add a group\nwith time setting difrent from the recommended");
+                        alert.SetCancelable(false);
+                        alert.SetIcon(Resource.Drawable.ShameLogo);
+                        alert.SetPositiveButton("YES", (senderAlert, args) =>
+                        {
+                            HashMap map = new HashMap();
+                            Training training = new Training(selectedExercises);
+                            for (int i = 0; i < selectedExercises.Count; i++)
+                            {
+                                map.Put("Ex" + i, selectedExercises[i].name);
+                            }
+                            DocumentReference doref = database.Collection("Users").Document(admin.email).Collection("Trainings").Document(currGroup);
+                            doref.Set(map);
+                            Intent inte = new Intent(this, typeof(MainPageActivity));
+                            inte.PutExtra("Email", admin.email);
+                            StartActivity(inte);
+                            Toasty.Config.Instance
+                               .TintIcon(true)
+                               .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
+                            Toasty.Success(this, "Training Built Successfuly", 10, true).Show();
+                        });
+
+                        alert.SetNegativeButton("NO", (senderAlert, args) =>
+                        {
+                            Dialog d = alert.Create();
+                            d.Dismiss();
+                        });
+
+                        Dialog dialog = alert.Create();
+                        dialog.Show();
+                    }
+                    else
                     {
                         HashMap map = new HashMap();
-                        Training training = new Training(selectedExercises);
                         for (int i = 0; i < selectedExercises.Count; i++)
                         {
                             map.Put("Ex" + i, selectedExercises[i].name);
@@ -168,33 +197,7 @@ namespace MyLittleClub
                            .TintIcon(true)
                            .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
                         Toasty.Success(this, "Training Built Successfuly", 10, true).Show();
-                    });
-
-                    alert.SetNegativeButton("NO", (senderAlert, args) =>
-                    {
-                        Dialog d = alert.Create();
-                        d.Dismiss();
-                    });
-
-                    Dialog dialog = alert.Create();
-                    dialog.Show();
-                }
-                else
-                {
-                    HashMap map = new HashMap();
-                    for (int i = 0; i < selectedExercises.Count; i++)
-                    {
-                        map.Put("Ex" + i, selectedExercises[i].name);
                     }
-                    DocumentReference doref = database.Collection("Users").Document(admin.email).Collection("Trainings").Document(currGroup);
-                    doref.Set(map);
-                    Intent inte = new Intent(this, typeof(MainPageActivity));
-                    inte.PutExtra("Email", admin.email);
-                    StartActivity(inte);
-                    Toasty.Config.Instance
-                       .TintIcon(true)
-                       .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
-                    Toasty.Success(this, "Training Built Successfuly", 10, true).Show();
                 }
             }
             else
@@ -202,7 +205,7 @@ namespace MyLittleClub
                 
             }
         }
-        //Final Send Button
+        //Final Send MyButton
         private bool InputLegit()
         {
             bool tr = false;
@@ -218,9 +221,9 @@ namespace MyLittleClub
             return tr;
         }
         //Input Validation
-        public void Button_Drag(object sender, View.DragEventArgs e)
+        public void MyButton_Drag(object sender, View.DragEventArgs e)
         {
-            Button a = CurrButton;
+            MyButton a = CurrMyButton;
             var evt = e.Event;
             switch(evt.Action)
             {
@@ -243,9 +246,10 @@ namespace MyLittleClub
                     {
                         TrainingSV.SetBackgroundColor(Color.Transparent);
                         InsideTrainingSVL.SetBackgroundColor(Color.Transparent);
-                        Button copy = new Button(CurrButton.Context);
-                        copy.LayoutParameters = CurrButton.LayoutParameters;
-                        copy.Text = CurrButton.Text;
+                        MyButton copy = new MyButton(this);
+                        copy.LayoutParameters = a.LayoutParameters;
+                        copy.Text = a.Text;
+                        copy.Time = a.Time;
                         copy.Click += this.Copy_Click;
                         InsideTrainingSVL.AddView(copy);
                         e.Handled = true;
@@ -263,7 +267,7 @@ namespace MyLittleClub
                     }
                     else
                     {
-                        InsideButtonsSVL.RemoveView(a);
+                        InsideMyButtonsSVL.RemoveView(a);
                         InsideTrainingSVL.AddView(a);
                     }
                     break;
@@ -302,18 +306,18 @@ namespace MyLittleClub
             //Linear Layout
             DurationDialogLayout.AddView(DialogInputLayout);
             //button
-            Button DialogButton = new Button(this);
-            DialogButton.LayoutParameters = vlp;
-            DialogButton.Text = "Add";
-            DialogButton.TextSize = 30;
-            DialogButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
-            DialogButton.Click += this.DialogButton_Click;
-            DurationDialogLayout.AddView(DialogButton);
+            MyButton DialogMyButton = new MyButton(this);
+            DialogMyButton.LayoutParameters = vlp;
+            DialogMyButton.Text = "Add";
+            DialogMyButton.TextSize = 30;
+            DialogMyButton.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
+            DialogMyButton.Click += this.DialogMyButton_Click;
+            DurationDialogLayout.AddView(DialogMyButton);
             DurationDialog.Show();
             MyStuff.showSoftKeyboard(this, DurationDialogET);
         }
         //Build Duration Dialog
-        private void DialogButton_Click(object sender, EventArgs e)
+        private void DialogMyButton_Click(object sender, EventArgs e)
         {
             int a;
             int.TryParse(DurationDialogET.Text, out a);
@@ -322,7 +326,6 @@ namespace MyLittleClub
             if (OAduration <= 50 && OAduration >= 40)
             {
                 OAdurationTV.SetTextColor(Color.LawnGreen);
-                //Insert alertDialog
             }
             else if (OAduration > 50)
             {
@@ -332,12 +335,14 @@ namespace MyLittleClub
             {
                 OAdurationTV.SetTextColor(Color.Black);
             }
+            CurrMyButton.Time = a;
             DurationDialog.Dismiss();
         }
-        //Dialog Button Click
-        public void BuildDialog(object sender)
+        bool h = false;
+        //Dialog MyButton Click
+        public void BuildDialog(object sender, int f)
         {
-            Button b = (Button)sender;
+            MyButton b = (MyButton)sender;
             for (int i = 0; i<exes.Count; i++)
             {
                 if (exes[i].name.Equals(b.Text))
@@ -358,7 +363,7 @@ namespace MyLittleClub
             DialogLayout.Orientation = Orientation.Vertical;
             DialogLayout.SetGravity(GravityFlags.CenterVertical);
             //Dialog TitleTV
-            TextView ExDialogTitle = new TextView(this);
+            ExDialogTitle = new EditText(this);
             ExDialogTitle.SetBackgroundColor(Color.RoyalBlue);
             ExDialogTitle.Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf");
             ExDialogTitle.SetTextColor(Color.DarkRed);
@@ -366,33 +371,112 @@ namespace MyLittleClub
             ExDialogTitle.Text = ab1.name;
             DialogLayout.AddView(ExDialogTitle);
             //
-            DialogExplenationTextView = new TextView(this);
+            DialogExplenationTextView = new EditText(this);
             DialogExplenationTextView.Text = ab1.explenatiotn.ToString();
             DialogExplenationTextView.TextSize = 30;
             DialogExplenationTextView.SetTextColor(Color.Black);
             //
+            if (f == 1)
+            {
+                if (!h)
+                {
+                    for (int i = 0; i < exes.Count; i++)
+                    {
+                        if (buttons[i].Text == b.Text)
+                        {
+                            b.Time = buttons[i].Time;
+                            h = true;
+                        }
+                    }
+                }
+                dur = new EditText(this)
+                {
+                    Text = b.Time.ToString(),
+                    LayoutParameters = OneTwentyParams,
+                    Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+                    TextSize = 35,
+                };
+                dur.SetBackgroundResource(Resource.Drawable.MyBackground);
+                dur.InputType = InputTypes.ClassPhone;
+                //
+            }
+            Save = new MyButton(this)
+            {
+                Text = "Save",
+                LayoutParameters = OneTwentyParams,
+                TextSize = 35,
+                Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
+            };
+            bool a = false;
+            Save.Click += delegate
+                {
+                    OAduration -= b.Time;
+                    b.Time = int.Parse(dur.Text);
+                    OAduration += b.Time;
+                    OAdurationTV.Text = OAduration.ToString();
+                    a = true;
+                    if (OAduration <= 50 && OAduration >= 40)
+                    {
+                        OAdurationTV.SetTextColor(Color.LawnGreen);
+                    }
+                    else if (OAduration > 50)
+                    {
+                        OAdurationTV.SetTextColor(Color.Red);
+                    }
+                    else
+                    {
+                        OAdurationTV.SetTextColor(Color.Black);
+                    }
+                    if (ExDialogTitle.Text != ab1.name)
+                    {
+                        ab1.name = ExDialogTitle.Text;
+                        a = true;
+                        Toasty.Info(this, "Happened2", 2, false).Show();
+                    }
+                    else if (DialogExplenationTextView.Text != ab1.explenatiotn)
+                    {
+                        ab1.explenatiotn = DialogExplenationTextView.Text;
+                        a = true;
+                        Toasty.Info(this, "Happened3", 2, false).Show();
+                    }
+                    if (a == true)
+                    {
+                        HashMap map = new HashMap();
+                        map.Put("Explenation", ab1.explenatiotn);
+                        map.Put("Name", ab1.name);
+                        DocumentReference DocRef = database.Collection("Users").Document(admin.email).Collection("Exercises").Document(ab1.name);
+                        DocRef.Set(map);
+                    }
+                };
             ////Add BitMap
             //
             DialogLayout.AddView(DialogExplenationTextView);
+            if (f == 1)
+            {
+                DialogLayout.AddView(dur);
+            }
+            DialogLayout.AddView(Save);
             ll.AddView(DialogLayout);
             d1.Show();
         }
+        EditText dur;
+        MyButton Save;
         //Builds Ex Dialog
         private void Copy_Click(object sender, EventArgs e)
         {
-            BuildDialog(sender);
+            BuildDialog(sender, 1);
         }
         //Calls BuildDialog(object sender)
         private void BuildTrainingActivity_Click(object sender, EventArgs e)
         {
-            BuildDialog(sender);
+            BuildDialog(sender, 0);
         }
         //Calls BuildDialog(object sender)
         private void BuildExerciseActivity_LongClick(object sender, Android.Views.View.LongClickEventArgs e)
         {
-            CurrButton = (Button)sender;
-            var data = ClipData.NewPlainText("name", CurrButton.Text);
-            CurrButton.StartDrag(data, new View.DragShadowBuilder(CurrButton), null, 0);
+            CurrMyButton = (MyButton)sender;
+            var data = ClipData.NewPlainText("name", CurrMyButton.Text);
+            CurrMyButton.StartDrag(data, new View.DragShadowBuilder(CurrMyButton), null, 0);
         }
         //Start Drag
         public void GetExercises()

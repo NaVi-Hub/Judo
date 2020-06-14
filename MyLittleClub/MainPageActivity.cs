@@ -121,6 +121,7 @@ namespace MyLittleClub
         }
         //Build Main Page's Views
 
+        #region Music Service
         private void Swi_CheckedChange(object sender, CompoundButton.CheckedChangeEventArgs e)
         {
 
@@ -145,12 +146,15 @@ namespace MyLittleClub
             Intent i = new Intent(this, typeof(MyService));
             this.StopService(i);
         }
+        #endregion
 
+        #region Usless Func
         private void Profile_Click(object sender, EventArgs e)
         {
             System.Random rnd = new System.Random();
 ;           Toast.MakeText(this, rnd.Next(1, 11) + "/10", ToastLength.Short).Show();
         }
+        #endregion
 
         private void MainPageShowGroupsbtn_Click(object sender, EventArgs e)
         {

@@ -14,10 +14,21 @@ namespace MyLittleClub
 {
     class MyButton : Button
     {
+        public int Time { get; set; }
         public int id { get; set; }
         public MyButton(Activity c, int id) : base(c)
         {
             this.id = id;
+            this.Time = 0;
+        }
+        public MyButton(Activity c) : base(c)
+        {
+            this.Time = 0;
+        }
+        public MyButton(Activity c, int id, int time) : base(c)
+        {
+            this.id = id;
+            this.Time = time;
         }
     }
 }
