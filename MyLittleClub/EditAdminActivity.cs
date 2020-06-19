@@ -111,6 +111,7 @@ namespace MyLittleClub
                 Typeface = Typeface.CreateFromAsset(Assets, "Katanf.ttf"),
             };
             MailEt.SetBackgroundResource(Resource.Drawable.MyBackground);
+            MailEt.Enabled = false;
             TextInputLayout mail = new TextInputLayout(this)
             {
                 LayoutParameters = WrapContParams,

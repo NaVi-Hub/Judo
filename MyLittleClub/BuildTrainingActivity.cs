@@ -157,11 +157,10 @@ namespace MyLittleClub
                         alert.SetPositiveButton("YES", (senderAlert, args) =>
                         {
                             HashMap map = new HashMap();
+                            Training training = new Training(selectedExercises);
                             for (int i = 0; i < selectedExercises.Count; i++)
                             {
                                 map.Put("Ex" + i, selectedExercises[i].name);
-                                map.Put("Ex" + i + " Explenation", selectedExercises[i].explenatiotn);
-                                map.Put("Ex" + i + " Time", Times[i]);
                             }
                             DocumentReference doref = database.Collection("Users").Document(admin.email).Collection("Trainings").Document(currGroup);
                             doref.Set(map);
@@ -186,11 +185,17 @@ namespace MyLittleClub
                     else
                     {
                         HashMap map = new HashMap();
+                        Training training = new Training(selectedExercises);
+                        for (int i = 0; i < groups.Count -1 ; i++)
+                        {
+                            if (currGroup == Ggroups[i].Location + " " + Ggroups[i].time + " " + Ggroups[i].age)
+                            {
+                                Ggroups[i].CurrentTraining = training;
+                            }
+                        }
                         for (int i = 0; i < selectedExercises.Count; i++)
                         {
                             map.Put("Ex" + i, selectedExercises[i].name);
-                            map.Put("Ex" + i + " Explenation", selectedExercises[i].explenatiotn);
-                            map.Put("Ex" + i + " Time", Times[i]);
                         }
                         DocumentReference doref = database.Collection("Users").Document(admin.email).Collection("Trainings").Document(currGroup);
                         doref.Set(map);
@@ -512,10 +517,10 @@ namespace MyLittleClub
             ));
         }
         //Retreiving Exercies From FireBase
-        public List<String> GetGroups()
+        List<Group> Ggroups;
+        public List<Group> GetGroups()
         {
-            groups = new List<string>();
-            groups.Add("Choose Group");
+            Ggroups = new List<Group>();
             Query query = database.Collection("Users").Document(admin.email).Collection("Groups");
             query.Get().AddOnCompleteListener(new QueryListener((task) =>
             {
@@ -527,16 +532,31 @@ namespace MyLittleClub
                         var document = snapshot.Documents;
                         foreach (DocumentSnapshot item in document)
                         {
-                            groupname = (item.GetString("Location")).ToString() + " " + (item.GetString("Time")).ToString() + " " + (item.GetString("Age")).ToString();
-                            groups.Add(groupname);
+                            string loc = item.GetString("Location");
+                            string tim = item.GetString("Time");
+                            string age = item.GetString("Age");
+                            bool comp = bool.Parse(item.GetBoolean("Comp").ToString());
+                            string lvl = item.GetString("Level");
+                            Group g = new Group(age, lvl, comp, loc);
+                            Ggroups.Add(g);
                         }
                     }
                 }
-                BuildAddExScreen();
+                MakeStringList();
             }));
-            return groups;
+            return Ggroups;
         }
         //Retreiving Groups From FireBase
+        private void MakeStringList()
+        {
+            groups = new List<string>();
+            groups.Add("Choose Group");
+            for (int i = 0; i < Ggroups.Count; i++)
+            {
+                groups.Add(Ggroups[i].Location + " " + Ggroups[i].time + " " + Ggroups[i].age);
+            }
+            BuildAddExScreen();
+        }
         public void OrganizeList(List<Exercise> list)
         {
             list.OrderBy(w => w.name);

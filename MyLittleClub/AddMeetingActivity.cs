@@ -270,6 +270,7 @@ namespace MyLittleClub
                 //add to firebase
                 HashMap map = new HashMap();
                 map.Put("Date", DateBtn.Text);
+                map.Put("Group", LocationET.Text + " " + TimeBtn.Text + " " + AgeET.Text);
                 DocumentReference docref = database.Collection("Users").Document(admin.email).Collection("Meetings").Document();
                 docref.Set(map);
                 HashMap map2 = new HashMap();

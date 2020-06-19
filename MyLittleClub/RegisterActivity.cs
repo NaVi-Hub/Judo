@@ -497,7 +497,9 @@ namespace MyLittleClub
                 //validation of input
                 if (MyStuff.IsValidName(NameLoginET.Text, NameLoginET, this) && MyStuff.IsValidSport(SportLoginET.Text, this) & MyStuff.isValidEmail(MailLoginET.Text, this) && PhoneNumberLoginET.Text.Length == 10 && PhoneNumberLoginET.Text.ToString().All(c => Char.IsLetterOrDigit(c)))
                 {
-                    string image = MyStuff.ConvertBitMapToString(BitProfilePic);
+                    string image = "";
+                    try { image = MyStuff.ConvertBitMapToString(BitProfilePic); }
+                    catch { };
                     Toasty.Config.Instance
                        .TintIcon(true)
                        .SetToastTypeface(Typeface.CreateFromAsset(Assets, "Katanf.ttf"));
